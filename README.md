@@ -22,7 +22,8 @@ Once a user is authenticated, they are directed to a page on the app that shows 
 ### New User Registration
 ```mermaid
 graph LR
-  A((User)) -->|Selects "Registration" button| B(AuthO Form)
+flowchart TD
+  A((User)) -->|Selects Registration button| B(AuthO Form)
   B -->|User fills out form| C{Data validated?}
   C -->|Yes| D(Save Data to MySQL)
   D --> E(Redirect to Main Activity Screen)
