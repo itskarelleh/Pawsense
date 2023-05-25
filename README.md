@@ -49,7 +49,6 @@ graph LR
 
 ### Edit Pet Details
 ```mermaid
-graph LR
 flowchart TD
   A((User)) -->|Selects pet from log| B(Choose 'Edit' button)
   B -->|Choose to update photo| C{Previous photo exists?}
