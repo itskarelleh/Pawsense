@@ -50,7 +50,8 @@ graph LR
 ### Edit Pet Details
 ```mermaid
 graph LR
-  A((User)) -->|Selects pet from log| B(Choose "Edit" button)
+flowchart TD
+  A((User)) -->|Selects pet from log| B(Choose 'Edit' button)
   B -->|Choose to update photo| C{Previous photo exists?}
   C -->|Yes| D(Remove previous photo from S3)
   D --> E(Upload new photo to S3)
