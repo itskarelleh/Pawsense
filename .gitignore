@@ -1,0 +1,17 @@
+# Logs
+logs
+*.log
+
+# Dependency directories
+node_modules/
+.yarn
+# Build artifacts
+build/
+dist/
+
+# Environment variables
+.env
+
+# OS or Editor files
+.DS_Store
+Thumbs.db
