@@ -21,7 +21,6 @@ Once a user is authenticated, they are directed to a page on the app that shows 
 
 ### New User Registration
 ```mermaid
-graph LR
 flowchart TD
   A((User)) -->|Selects Registration button| B(AuthO Form)
   B -->|User fills out form| C{Data validated?}
