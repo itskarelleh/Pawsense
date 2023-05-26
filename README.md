@@ -32,15 +32,17 @@ Once a user is authenticated, they are directed to a page on the app that shows 
 The frontend and backend are separate from each other since both have different programming languages and frameworks.
 
 ### Frontend
-Next.js
-Tailwind.css
+- Next.js (client)
+- Tailwind.css(styling)
+- Cypress(e2e testing)
 
 ### Backend
-Spring Boot
-MySQL
+- Spring Boot (server)
+- MySQL (database)
+- JUnit (unit testing)
 
 ### Auth
-Auth0
+- Auth0
 
 <a name="diagrams"></a>
 
