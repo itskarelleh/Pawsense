@@ -3,7 +3,7 @@
     "mermaid": "^10.2.0"
   },
   "scripts": {
-    "client": "cd pawsense-frontend && yarn dev",
+    "client": "cd frontend && yarn dev",
     "server": "cd pawsense-backend && mwn run",
     "dev": "yarn client && yarn server"
   }
