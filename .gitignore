@@ -15,3 +15,35 @@ dist/
 # OS or Editor files
 .DS_Store
 Thumbs.db
+
+# Next.js
+.next/
+out/
+
+# Spring Boot
+/target/
+/bin/
+/build/
+/logs/
+/.mvn/
+spring-boot-*.jar
+
+# IDE and editor files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS and temporary files
+.DS_Store
+Thumbs.db
+tmp/
+
+# Dependencies and build artifacts
+/node_modules/
+/dist/
+/.gradle/
+*.class
+*.war
+*.jar
