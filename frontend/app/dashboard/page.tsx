@@ -4,6 +4,8 @@ import AddNewPetModal from "@/components/dashboard/AddNewPetModal";
 import { fakePets } from "../../data";
 import Image from 'next/image';
 import DashboardSection from '@/components/DashboardSection';
+import Link from 'next/link';
+import { NavArrowRight } from 'iconoir-react';
 
 interface Pet {
     id: string;
@@ -42,7 +44,9 @@ export default function Page() {
                             {pet.name}
                         </h2>
                     </div>
-                    <button>></button>
+                    <Link href={`/dashboard/pet/${pet.id}`} prefetch={false}>
+                        <button><NavArrowRight /></button>
+                    </Link>
                 </div>
             ))}
         </div>
@@ -54,7 +58,6 @@ export default function Page() {
             <PetsList />
         </DashboardSection>
         {/* <DashboardSection title="Events" actions={<></>}>
-                
         </DashboardSection>  */}
         </>
     )
