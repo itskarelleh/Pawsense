@@ -40,9 +40,10 @@ The frontend and backend are separate from each other since both have different 
 - Spring Boot (server)
 - MySQL (database)
 - JUnit (unit testing)
+- AWS S3 (file storage)
 
 ### Auth
-- Auth0
+- Clerk Dev
 
 <a name="diagrams"></a>
 
@@ -97,3 +98,7 @@ graph LR
   D --> E(Delete Row from MySQL Table)
   C -->|No| E
 ```
+
+## Possible Future Features and Functionality
+
+- Pattern tracking for potential: Track the pattern of a pet's moods 
