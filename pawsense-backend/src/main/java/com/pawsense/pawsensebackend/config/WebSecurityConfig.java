@@ -25,11 +25,8 @@ public class WebSecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.authorizeRequests()
-            .requestMatchers("/api/v1/pets/**")
-            .permitAll()
-            .anyRequest()
-            .authenticated();
+    http.authorizeRequests((auth) -> auth.requestMatchers("/api/v1/pets/**")
+            .permitAll());
     return http.build();
   }
 
