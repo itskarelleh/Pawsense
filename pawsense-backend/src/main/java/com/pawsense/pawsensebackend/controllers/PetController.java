@@ -1,40 +1,42 @@
 package com.pawsense.pawsensebackend.controllers;
 
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.pawsense.pawsensebackend.models.Pet;
+import com.pawsense.pawsensebackend.payload.request.NewPetRequestBody;
+import com.pawsense.pawsensebackend.services.PetService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.Instant;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/v1/pets")
 public class PetController {
 
-    @GetMapping("/testing")
-    public String testRequest() {
-        return "Test was a success!";
-    }
-
+    @Autowired
+    PetService petService;
 
     //get all pets
+    @GetMapping("/currentuser")
+    public ResponseEntity<List<Pet>> getCurrentUserPets(String userId) throws Exception {
+        List<Pet> res = petService.getAllPetsByUserId(userId);
 
+        if(res.size() == 0) return (ResponseEntity<List<Pet>>) ResponseEntity.noContent();
 
-    //get all pets by user id
+        return ResponseEntity.ok().body(res);
+    }
 
-    //get pet by id
+    @PostMapping("/add")
+    public ResponseEntity<Pet> addNewPetForCurrentUser(@RequestBody NewPetRequestBody newPetRequestBody) {
 
-    //get all pets by birthdate
+        Pet createdPet = new Pet(newPetRequestBody.getName(), newPetRequestBody.getType(), newPetRequestBody.getSex(), Instant.now(), newPetRequestBody.getUserId());
+        petService.addNewPet(createdPet);
 
-    //get pet(s) by name
-
-    //add new pet
-
-    //update existing pet data
-
-    //remove pet
-
-    //archive
+        return ResponseEntity.ok().body(createdPet);
+    }
 
 
 }

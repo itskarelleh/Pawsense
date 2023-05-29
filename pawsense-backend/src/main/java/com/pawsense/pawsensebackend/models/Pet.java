@@ -31,8 +31,7 @@ public class Pet {
 
     private String userId;
 
-    public Pet(String id, String name, String type, String sex, Instant addedAt, String userId) {
-        this.id = id;
+    public Pet(String name, String type, String sex, Instant addedAt, String userId) {
         this.name = name;
         this.type = type;
         this.sex = sex;
@@ -40,8 +39,7 @@ public class Pet {
         this.userId = userId;
     }
 
-    public Pet(String id, String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, String[] medications, String currentStatus, Instant addedAt, String userId) {
-        this.id = id;
+    public Pet(String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, String[] medications, String currentStatus, Instant addedAt, String userId) {
         this.name = name;
         this.type = type;
         this.sex = sex;
