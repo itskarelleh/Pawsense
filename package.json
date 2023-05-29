@@ -1,9 +1,10 @@
 {
   "dependencies": {
-    "mermaid": "^10.2.0"
+    "mermaid": "^10.2.0",
+    "react-hook-form": "^7.43.9"
   },
   "scripts": {
-    "client": "cd pawsense-frontend && yarn dev",
+    "client": "cd frontend && yarn dev",
     "server": "cd pawsense-backend && mwn run",
     "dev": "yarn client && yarn server"
   }
