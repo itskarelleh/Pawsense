@@ -1,17 +1,18 @@
 package com.pawsense.pawsensebackend.models;
 
 import jakarta.persistence.*;
-import org.apache.logging.log4j.CloseableThreadContext;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="pets")
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private Long id;
 
     private String name;
 
@@ -23,7 +24,9 @@ public class Pet {
 
     private LocalDate adoptionDate;
 
-    private String[] medications;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "pet_id")
+    private List<Medication> medications = new ArrayList<>();;
 
     private String currentStatus;
 
@@ -39,7 +42,7 @@ public class Pet {
         this.userId = userId;
     }
 
-    public Pet(String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, String[] medications, String currentStatus, Instant addedAt, String userId) {
+    public Pet(String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, List<Medication> medications, String currentStatus, Instant addedAt, String userId) {
         this.name = name;
         this.type = type;
         this.sex = sex;
@@ -51,11 +54,11 @@ public class Pet {
         this.userId = userId;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -99,14 +102,13 @@ public class Pet {
         this.adoptionDate = adoptionDate;
     }
 
-    public String[] getMedications() {
-        return medications;
+    public void addMedication(Medication medication) {
+        medications.add(medication);
     }
 
-    public void setMedications(String[] medications) {
-        this.medications = medications;
+    public void removeMedication(Medication medication) {
+        medications.remove(medication);
     }
-
     public String getCurrentStatus() {
         return currentStatus;
     }

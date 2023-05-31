@@ -1,11 +1,8 @@
-"use client"
-import { useState, useEffect } from 'react';
 import AddNewPetModal from "@/components/dashboard/AddNewPetModal";
-import { fakePets } from "../../data";
-import Image from 'next/image';
 import DashboardSection from '@/components/DashboardSection';
 import Link from 'next/link';
 import { NavArrowRight } from 'iconoir-react';
+import { auth } from '@clerk/nextjs';
 
 interface Pet {
     id: string;
@@ -16,25 +13,27 @@ interface Pet {
     photo: string;
 }
 
-interface PageState {
-    pets: Pet[],
+async function getPets( userId : any ) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/current-user/${userId}`, {
+        method: "GET"
+    });
+
+    if(!res.ok) throw new Error("No pets were found for this user");
+
+    return res.json();
 }
 
 
-export default function Page() {
-    
-    const [ state, setState ] = useState<PageState>({pets: [...fakePets]});
+export default async function Page() {
 
-    function pushToPetsList(pet: Pet) {
-        setState(prev => ({
-            ...prev,
-            pets: [pet],
-        }));
-    }
+    const { userId } = auth();    
+
+    // const pets = await getPets(userId);
+    const pets : any = [];
 
     const PetsList = () => (
         <div className='w-full space-y-4'>
-            {state.pets.map((pet : Pet) => (
+            {pets.map((pet : Pet) => (
                 <div key={pet.id} className='flex flex-row space-x-2 items-center justify-between cursor-pointer p-4 bg-white hover:bg-neutral-200 rounded-full hover:px-8 transition-all ease-in-out'>
                    <div className='flex flex-row space-x-2 items-center'>
                         <figure>
@@ -44,7 +43,7 @@ export default function Page() {
                             {pet.name}
                         </h2>
                     </div>
-                    <Link href={`/dashboard/pet/${pet.id}`} prefetch={false}>
+                    <Link href={`/dashboard/pet`}>
                         <button><NavArrowRight /></button>
                     </Link>
                 </div>
@@ -54,7 +53,7 @@ export default function Page() {
 
     return (
         <>
-        <DashboardSection title="Pets" actions={<AddNewPetModal onSubmit={pushToPetsList} />}>
+        <DashboardSection title="Pets" actions={<AddNewPetModal />}>
             <PetsList />
         </DashboardSection>
         {/* <DashboardSection title="Events" actions={<></>}>

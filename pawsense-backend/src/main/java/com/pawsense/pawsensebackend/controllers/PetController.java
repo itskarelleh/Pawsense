@@ -20,8 +20,8 @@ public class PetController {
     PetService petService;
 
     //get all pets
-    @GetMapping("/currentuser")
-    public ResponseEntity<List<Pet>> getCurrentUserPets(String userId) throws Exception {
+    @GetMapping("/current-user/${id}")
+    public ResponseEntity<List<Pet>> getCurrentUserPets(@RequestParam String userId) throws Exception {
         List<Pet> res = petService.getAllPetsByUserId(userId);
 
         if(res.size() == 0) return (ResponseEntity<List<Pet>>) ResponseEntity.noContent();
@@ -37,6 +37,4 @@ public class PetController {
 
         return ResponseEntity.ok().body(createdPet);
     }
-
-
 }

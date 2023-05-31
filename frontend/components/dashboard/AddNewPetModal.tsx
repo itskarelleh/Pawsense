@@ -1,35 +1,88 @@
-// 'use client'
-import { Fragment, ReactComponentElement, useState } from 'react'
-import { Dialog, Listbox, Transition } from '@headlessui/react'
-import { useForm } from "react-hook-form";
-import Dropzone from 'react-dropzone-uploader';
+"use client"
+import { ChangeEvent, useState } from 'react'
+import { Listbox } from '@headlessui/react'
+import { useForm, Controller } from "react-hook-form";
 import Datepicker from 'react-tailwindcss-datepicker';
-
-
-interface FormData {
-  photo: FileList;
-  name: string;
-  adoptionDate: string;
-  type: string;
-  sex: string;
-}
+import Image from 'next/image';
+import Modal from '../Modal';
 
 const animalTypes = [
-  "cat", "dog", "snake", "tiger", "alligator", "cow", "sheep", "spider", "rabbit", "other"
+  "cat", "dog", "snake", "tiger", "alligator", "cow", "sheep", "spider", "horse", "rabbit", "other", "imaginary",
 ];
 
-export default function AddNewPetModal({ onSubmit } :any ) {
-  
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+function addNewPet(data: any) {
+  console.log("Data: ");
+  console.log(data);
+  // const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/add`, {
+  //   body: {
+  //     userId: userId
+  //   }
+  // });
 
-  let [isOpen, setIsOpen] = useState(false);
-  
-  function closeModal() {
-      setIsOpen(false)
+  // if(!res.ok) throw new Error('Failed to fetch data');
+
+  // return res.json();
+}
+
+export default function AddNewPetModal() {
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const { register, handleSubmit, control, formState: { errors } } = useForm({ defaultValues: {
+    avatar: '',
+    name: '',
+    age: null,
+    type: null,
+    sex: null,
+    adoptionDate: null
+  } });
+
+  const placeholder = "/paw-silhouette.png";
+
+  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+
+        const imageDataUrl = reader.result as string;
+
+        setAvatar(imageDataUrl);
+      }
+
+      reader.readAsDataURL(file);
     }
-  
+  }
+
+  function closeModal() {
+    setIsOpen(false)
+  }
+
   function openModal() {
     setIsOpen(true)
+  }
+
+  function PetAvatarField() {
+
+    return (
+      <div className="flex items-center justify-center relative mb-8">
+        <div className="relative cursor-pointer w-28 h-28 rounded-full overflow-hidden bg-neutral-400">
+          <Image fill
+            className="absolute left-0 top-0 w-full"
+            src={avatar || placeholder}
+            alt="Avatar"
+          />
+          <input
+            {...register('avatar')}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="absolute opacity-0 w-full h-full appearance-none cursor-pointer"
+          />
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -43,91 +96,71 @@ export default function AddNewPetModal({ onSubmit } :any ) {
           +
         </button>
       </div>
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
+      <Modal title="Add New Pet" isOpen={isOpen} openModal={openModal} closeModal={closeModal}>
+        <div className='mt-2'>
+          <form onSubmit={() => {
+            handleSubmit(addNewPet);
+            closeModal();
+          }}>
+            <PetAvatarField />
+            <label htmlFor="name" className='flex flex-col mt-8 mb-2'>
+              Name (required)
+              <input {...register("name", { required: true })} className="border-b-2 border-neutral-400" type="text" id="name" placeholder="Fido" />
+            </label>
+            <label htmlFor="type" className='flex flex-col mb-2'>
+              <AnimalTypeField control={control} />
+            </label>
+            <label htmlFor="adoptionDate" className='flex flex-col mb-2'>
+              Adoption Date
+              {/* <Datepicker {...register("adoptionDate")} /> */}
+            </label>
+            <div className="mt-4">
+              <button
+                className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                onClick={closeModal}
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    Add New Pet
-                  </Dialog.Title>
-                  <div className='mt-2'>
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <label htmlFor="photo" className='flex flex-col mb-2'>
-                      Photo
-                      <input {...register("photo")} className="border-neutral-400" type="file" id="photo" />
-                    </label>
-                    <label htmlFor="name" className='flex flex-col mb-2'>
-                      Name (required)
-                      <input {...register("name", { required: true })} className="border-b-2 border-neutral-400" type="text" id="name" placeholder="Fido" />
-                    </label>
-                    <label htmlFor="type" className='flex flex-col mb-2'>
-                      Type (required)
-                      <Listbox {...register("type")} name='type'>
-                        <Listbox.Button></Listbox.Button>
-                        <Listbox.Options>
-                          {animalTypes.map((type, index) => (
-                            <Listbox.Option key={index} value={type} as={Fragment}>
-                              {type}
-                            </Listbox.Option>
-                          ))}
-                        </Listbox.Options>
-                      </Listbox>
-                    </label>
-                    <label htmlFor="adoptionDate" className='flex flex-col mb-2'>
-                      Adoption Date
-                      <input {...register("adoptionDate")} className="border-neutral-400" type="text" id="adoptionDate" />
-                    </label>
-                    <button type="submit">Submit</button>
-                  </form>
-                  </div>
-                  <div className="mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Cancel
-                    </button>
-                    <button onClick={() => {
-                      onSubmit();
-                      closeModal();
-                    }}
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    >
-                      Add New Pet
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
+                Cancel
+              </button>
+              <button type="submit"
+                className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              >
+                Add New Pet
+              </button>
             </div>
-          </div>
-        </Dialog>
-      </Transition>
+          </form>
+        </div>
+      </Modal>
     </>
   )
 }
+
+const AnimalTypeField = ({ control }: { control: any }) => {
+  return (
+    <div>
+      <label htmlFor="animalType" className="flex flex-col">Animal Type</label>
+      <Controller
+        control={control}
+        name="animalType"
+        render={({ field }) => (
+          <Listbox value={field.value} onChange={field.onChange}>
+            {({ open }) => (
+              <>
+                <Listbox.Button>{field.value || 'Select an animal type'}</Listbox.Button>
+                {open && (
+                  <Listbox.Options>
+                    {animalTypes.map((type, index) => (
+                      <Listbox.Option key={index} value={type}>
+                        {type}
+                      </Listbox.Option>
+                    ))}
+                  </Listbox.Options>
+                )}
+              </>
+            )}
+          </Listbox>
+        )}
+      />
+    </div>
+  );
+};
+
