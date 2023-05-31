@@ -1,8 +1,7 @@
 "use client"
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useState, useRef } from 'react'
 import { Listbox } from '@headlessui/react'
-import { useForm, Controller } from "react-hook-form";
-import Datepicker from 'react-tailwindcss-datepicker';
+import { Formik, Form, Field, FormikValues, useField } from 'formik';
 import Image from 'next/image';
 import Modal from '../Modal';
 
@@ -24,36 +23,26 @@ function addNewPet(data: any) {
   // return res.json();
 }
 
+interface InitialValues {
+  name: string;
+  avatar: File | null;
+  type: string;
+}
 export default function AddNewPetModal() {
 
   const [isOpen, setIsOpen] = useState(false);
-  const [avatar, setAvatar] = useState<string | null>(null);
-  const { register, handleSubmit, control, formState: { errors } } = useForm({ defaultValues: {
-    avatar: '',
+  
+  const initialValues : InitialValues = {
     name: '',
-    age: null,
-    type: null,
-    sex: null,
-    adoptionDate: null
-  } });
+    avatar: null,
+    type: '',
+  } 
 
-  const placeholder = "/paw-silhouette.png";
-
-  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-
-        const imageDataUrl = reader.result as string;
-
-        setAvatar(imageDataUrl);
-      }
-
-      reader.readAsDataURL(file);
-    }
+  const handleSubmit = (values : FormikValues) => {
+    addNewPet(values);
+    closeModal();
   }
+
 
   function closeModal() {
     setIsOpen(false)
@@ -63,28 +52,7 @@ export default function AddNewPetModal() {
     setIsOpen(true)
   }
 
-  function PetAvatarField() {
-
-    return (
-      <div className="flex items-center justify-center relative mb-8">
-        <div className="relative cursor-pointer w-28 h-28 rounded-full overflow-hidden bg-neutral-400">
-          <Image fill
-            className="absolute left-0 top-0 w-full"
-            src={avatar || placeholder}
-            alt="Avatar"
-          />
-          <input
-            {...register('avatar')}
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="absolute opacity-0 w-full h-full appearance-none cursor-pointer"
-          />
-        </div>
-      </div>
-    )
-  }
-
+  
   return (
     <>
       <div className="flex items-center justify-center">
@@ -98,69 +66,118 @@ export default function AddNewPetModal() {
       </div>
       <Modal title="Add New Pet" isOpen={isOpen} openModal={openModal} closeModal={closeModal}>
         <div className='mt-2'>
-          <form onSubmit={() => {
-            handleSubmit(addNewPet);
-            closeModal();
-          }}>
-            <PetAvatarField />
-            <label htmlFor="name" className='flex flex-col mt-8 mb-2'>
-              Name (required)
-              <input {...register("name", { required: true })} className="border-b-2 border-neutral-400" type="text" id="name" placeholder="Fido" />
-            </label>
-            <label htmlFor="type" className='flex flex-col mb-2'>
-              <AnimalTypeField control={control} />
-            </label>
-            <label htmlFor="adoptionDate" className='flex flex-col mb-2'>
-              Adoption Date
-              {/* <Datepicker {...register("adoptionDate")} /> */}
-            </label>
-            <div className="mt-4">
-              <button
-                className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
-              <button type="submit"
-                className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-              >
-                Add New Pet
-              </button>
-            </div>
-          </form>
+        
+        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Form>
+        <PetAvatarField />
+
+        <label htmlFor="name" className='flex flex-col mt-8 mb-2'>
+          Name (required)
+          <Field
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Fido"
+            className="border-b-2 border-neutral-400"
+          />
+        </label>
+
+        <label htmlFor="type" className='flex flex-col mb-2'>
+          <AnimalTypeField />
+        </label>
+
+        <div className="mt-4">
+          <button
+            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            onClick={closeModal}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          >
+            Add New Pet
+          </button>
+        </div>
+      </Form>
+    </Formik>
         </div>
       </Modal>
     </>
   )
 }
 
-const AnimalTypeField = ({ control }: { control: any }) => {
+function AnimalTypeField() {
+  const [field, ,helpers] = useField('animalType');
+
   return (
     <div>
       <label htmlFor="animalType" className="flex flex-col">Animal Type</label>
-      <Controller
-        control={control}
-        name="animalType"
-        render={({ field }) => (
-          <Listbox value={field.value} onChange={field.onChange}>
-            {({ open }) => (
-              <>
-                <Listbox.Button>{field.value || 'Select an animal type'}</Listbox.Button>
-                {open && (
-                  <Listbox.Options>
-                    {animalTypes.map((type, index) => (
-                      <Listbox.Option key={index} value={type}>
-                        {type}
-                      </Listbox.Option>
-                    ))}
-                  </Listbox.Options>
-                )}
-              </>
+      <Listbox value={field.value} onChange={(value) => helpers.setValue(value)}>
+        {({ open }) => (
+          <>
+            <Listbox.Button>{field.value || 'Select an animal type'}</Listbox.Button>
+            {open && (
+              <Listbox.Options>
+                {animalTypes.map((type, index) => (
+                  <Listbox.Option key={index} value={type}>
+                    {type}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
             )}
-          </Listbox>
+          </>
         )}
-      />
+      </Listbox>
     </div>
   );
-};
+}
 
+function PetAvatarField() {
+  const [field, , helpers] = useField('avatar');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const placeholder = "/paw-silhouette.png";
+
+  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const imageDataUrl = reader.result as string;
+        helpers.setValue(imageDataUrl);
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      helpers.setValue(null);
+    }
+  }
+
+  const clearFileInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center relative mb-8">
+      <div className="relative cursor-pointer w-28 h-28 rounded-full overflow-hidden bg-neutral-400">
+        <img className="absolute left-0 top-0 w-full" src={field.value ? URL.createObjectURL(field.value) : placeholder} alt="Avatar" />
+        <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center text-sm text-neutral-700 bg-neutral-200 opacity-75">
+          {field.value ? null : 'Select an image'}
+        </div>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="absolute opacity-0 w-full h-full cursor-pointer"
+          ref={inputRef}
+          onClick={clearFileInput}
+        />
+      </div>
+    </div>
+  );
+}
