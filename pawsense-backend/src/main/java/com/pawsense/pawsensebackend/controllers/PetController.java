@@ -20,7 +20,7 @@ public class PetController {
     PetService petService;
 
     //get all pets
-    @GetMapping("/current-user/${id}")
+    @GetMapping("/current-user/{id}")
     public ResponseEntity<List<Pet>> getCurrentUserPets(@RequestParam String userId) throws Exception {
         List<Pet> res = petService.getAllPetsByUserId(userId);
 

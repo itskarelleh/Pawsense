@@ -8,9 +8,9 @@ interface Pet {
     id: string;
     name: string;
     type: string;
+    avatar: string;
     birthdate: string;
     sex: string;
-    photo: string;
 }
 
 async function getPets( userId : any ) {
@@ -18,18 +18,18 @@ async function getPets( userId : any ) {
         method: "GET"
     });
 
-    if(!res.ok) throw new Error("No pets were found for this user");
+    console.log(res.status);
+
 
     return res.json();
 }
-
 
 export default async function Page() {
 
     const { userId } = auth();    
 
-    // const pets = await getPets(userId);
-    const pets : any = [];
+    const pets : any = await getPets(userId);
+    // const pets : any = [];
 
     const PetsList = () => (
         <div className='w-full space-y-4'>
@@ -54,7 +54,10 @@ export default async function Page() {
     return (
         <>
         <DashboardSection title="Pets" actions={<AddNewPetModal />}>
-            <PetsList />
+            {pets.length <= 0 ? <div className="h-96 w-full flex flex-col justify-center items-center">
+                No pets have been added yet
+            </div>
+             : <PetsList />}
         </DashboardSection>
         {/* <DashboardSection title="Events" actions={<></>}>
         </DashboardSection>  */}

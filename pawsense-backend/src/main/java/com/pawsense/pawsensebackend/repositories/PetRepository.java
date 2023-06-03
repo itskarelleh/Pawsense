@@ -7,12 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalTime;
 import java.util.List;
 
-public interface PetRepository extends JpaRepository<Pet, String> {
-
+public interface PetRepository extends JpaRepository<Pet, Long> {
 
     public List<Pet> findPetsByUserId(String userId);
 
     @Query("SELECT p FROM Pet p WHERE p.id = :id")
-    public String findPetByPetId(String id);
+    public String findPetByPetId(Long id);
 
 }

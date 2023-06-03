@@ -4,18 +4,17 @@ import { Listbox } from '@headlessui/react'
 import { Formik, Form, Field, FormikValues, useField } from 'formik';
 import Image from 'next/image';
 import Modal from '../Modal';
+import { useUser } from '@clerk/nextjs';
+import classnames from 'classnames';
 
 const animalTypes = [
   "cat", "dog", "snake", "tiger", "alligator", "cow", "sheep", "spider", "horse", "rabbit", "other", "imaginary",
 ];
 
-function addNewPet(data: any) {
-  console.log("Data: ");
-  console.log(data);
-  // const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/add`, {
-  //   body: {
-  //     userId: userId
-  //   }
+function addNewPet(data : any) {
+  alert(JSON.stringify(data));
+  // const res = fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/add`, {
+  //   body: data
   // });
 
   // if(!res.ok) throw new Error('Failed to fetch data');
@@ -27,15 +26,21 @@ interface InitialValues {
   name: string;
   avatar: File | null;
   type: string;
+  userId: string | undefined;
 }
+
 export default function AddNewPetModal() {
 
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useUser();
+
+  
   
   const initialValues : InitialValues = {
     name: '',
     avatar: null,
     type: '',
+    userId: user?.id
   } 
 
   const handleSubmit = (values : FormikValues) => {
@@ -59,7 +64,7 @@ export default function AddNewPetModal() {
         <button
           type="button"
           onClick={openModal}
-          className="rounded-full bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          className="rounded-full h-10 w-10 bg-cyan-500 hover:bg-purple-400 px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
           +
         </button>
@@ -71,7 +76,7 @@ export default function AddNewPetModal() {
       <Form>
         <PetAvatarField />
 
-        <label htmlFor="name" className='flex flex-col mt-8 mb-2'>
+        <label htmlFor="name" className='flex flex-col mt-8 mb-2 text-sm'>
           Name (required)
           <Field
             type="text"
@@ -109,11 +114,11 @@ export default function AddNewPetModal() {
 }
 
 function AnimalTypeField() {
-  const [field, ,helpers] = useField('animalType');
+  const [field, ,helpers] = useField('type');
 
   return (
     <div>
-      <label htmlFor="animalType" className="flex flex-col">Animal Type</label>
+      <label htmlFor="animalType" className="flex flex-col text-sm">Animal Type</label>
       <Listbox value={field.value} onChange={(value) => helpers.setValue(value)}>
         {({ open }) => (
           <>
@@ -135,6 +140,7 @@ function AnimalTypeField() {
 }
 
 function PetAvatarField() {
+  const [ avatar, setAvatar ] = useState(null);
   const [field, , helpers] = useField('avatar');
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -148,9 +154,11 @@ function PetAvatarField() {
       reader.onload = () => {
         const imageDataUrl = reader.result as string;
         helpers.setValue(imageDataUrl);
+        setAvatar(file);
       };
 
       reader.readAsDataURL(file);
+
     } else {
       helpers.setValue(null);
     }
@@ -163,21 +171,21 @@ function PetAvatarField() {
   };
 
   return (
-    <div className="flex items-center justify-center relative mb-8">
+    <div className="flex flex-col items-center justify-center relative mb-8">
       <div className="relative cursor-pointer w-28 h-28 rounded-full overflow-hidden bg-neutral-400">
-        <img className="absolute left-0 top-0 w-full" src={field.value ? URL.createObjectURL(field.value) : placeholder} alt="Avatar" />
-        <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center text-sm text-neutral-700 bg-neutral-200 opacity-75">
-          {field.value ? null : 'Select an image'}
-        </div>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          className="absolute opacity-0 w-full h-full cursor-pointer"
-          ref={inputRef}
-          onClick={clearFileInput}
-        />
+        <img className="absolute left-0 top-0 w-full" src={field.value ? URL.createObjectURL(avatar) : placeholder} alt="Avatar" />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="absolute opacity-0 w-full h-full cursor-pointer"
+            ref={inputRef}
+            onClick={clearFileInput}
+          />
       </div>
+      <label className='text-sm mt-4'>
+          Select an image
+        </label>
     </div>
   );
 }

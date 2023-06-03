@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-
+  //TODO: add a jwtDecoder
   @Bean
   @Lazy
   public AuthenticationEntryPoint authenticationEntryPoint() {

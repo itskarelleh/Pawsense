@@ -1,9 +1,9 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Outfit } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs';
-const inter = Inter({ subsets: ['latin'] })
+const outfit = Outfit({ style: 'normal', subsets: ['latin']});
 import 'react-dropzone-uploader/dist/styles.css'
-  
+
 export const metadata = {
   title: 'Pawsense',
   description: 'Ensuring that your pets live their best lives',
@@ -16,11 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          {children}
+        <html lang="en">
+          <body className={outfit.className}>
+            {children}
           </body>
-      </html>
+        </html>
     </ClerkProvider>
   )
 }
