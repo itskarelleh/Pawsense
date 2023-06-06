@@ -2,10 +2,8 @@
 import { ChangeEvent, useState, useRef } from 'react'
 import { Listbox } from '@headlessui/react'
 import { Formik, Form, Field, FormikValues, useField } from 'formik';
-import Image from 'next/image';
 import Modal from '../Modal';
 import { useUser } from '@clerk/nextjs';
-import classnames from 'classnames';
 
 const animalTypes = [
   "cat", "dog", "snake", "tiger", "alligator", "cow", "sheep", "spider", "horse", "rabbit", "other", "imaginary",
@@ -33,8 +31,6 @@ export default function AddNewPetModal() {
 
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
-
-  
   
   const initialValues : InitialValues = {
     name: '',
@@ -140,7 +136,7 @@ function AnimalTypeField() {
 }
 
 function PetAvatarField() {
-  const [ avatar, setAvatar ] = useState(null);
+  const [ avatar, setAvatar ] = useState<File | null>(null);
   const [field, , helpers] = useField('avatar');
   const inputRef = useRef<HTMLInputElement>(null);
 

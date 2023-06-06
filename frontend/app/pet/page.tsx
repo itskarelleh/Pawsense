@@ -1,3 +1,4 @@
+"use client"
 import { Tab } from '@headlessui/react';
 import { useState } from 'react';
 import { fakePets, fakeEvents } from "@/data"

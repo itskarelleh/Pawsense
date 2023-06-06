@@ -102,4 +102,7 @@ graph LR
 ## Possible Future Features and Functionality
 
 - Pattern tracking for potential: Track the pattern of a pet's moods 
+
 - Onboarding: It never hurts to ensure that a user understands the app and its features instead of letting them figure it out on their own.
+
+- Social Feed: One way that users could help their pets live their best lives is to 

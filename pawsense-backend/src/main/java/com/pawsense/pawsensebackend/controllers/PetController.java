@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/v1/pets")
 public class PetController {
 
@@ -20,8 +20,8 @@ public class PetController {
     PetService petService;
 
     //get all pets
-    @GetMapping("/current-user/{id}")
-    public ResponseEntity<List<Pet>> getCurrentUserPets(@RequestParam String userId) throws Exception {
+    @GetMapping("/current-user/{userId}")
+    public ResponseEntity<List<Pet>> getCurrentUserPets(@PathVariable String userId) {
         List<Pet> res = petService.getAllPetsByUserId(userId);
 
         if(res.size() == 0) return (ResponseEntity<List<Pet>>) ResponseEntity.noContent();

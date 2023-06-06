@@ -34,6 +34,9 @@ public class Pet {
 
     private String userId;
 
+    public Pet() {
+
+    }
     public Pet(String name, String type, String sex, Instant addedAt, String userId) {
         this.name = name;
         this.type = type;

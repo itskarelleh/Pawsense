@@ -12,7 +12,7 @@ export default function DashboardNavbar() {
                     <ul>
                         
                     </ul>
-                    <UserButton />
+                    <UserButton afterSignOutUrl="/" />
                 </div>    
             </div>                
         </nav>
