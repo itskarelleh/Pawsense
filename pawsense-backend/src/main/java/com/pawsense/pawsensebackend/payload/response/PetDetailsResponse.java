@@ -1,11 +1,10 @@
-package com.pawsense.pawsensebackend.payload.request;
+package com.pawsense.pawsensebackend.payload.response;
 
-import com.pawsense.pawsensebackend.models.Pet;
-
-import java.time.Instant;
 import java.time.LocalDate;
 
-public class NewPetRequestBody {
+public class PetDetailsResponse {
+
+    private Long id;
 
     private String name;
 
@@ -25,17 +24,8 @@ public class NewPetRequestBody {
 
     private String avatar;
 
-    public NewPetRequestBody(String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, String userId, String avatar) {
-        this.name = name;
-        this.type = type;
-        this.sex = sex;
-        this.birthDate = birthDate;
-        this.adoptionDate = adoptionDate;
-        this.userId = userId;
-        this.avatar = avatar;
-    }
-
-    public NewPetRequestBody(String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, double weight, String size, String userId, String avatar) {
+    public PetDetailsResponse(Long id, String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, double weight, String size, String userId, String avatar) {
+        this.id = id;
         this.name = name;
         this.type = type;
         this.sex = sex;
@@ -45,6 +35,14 @@ public class NewPetRequestBody {
         this.size = size;
         this.userId = userId;
         this.avatar = avatar;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -115,7 +113,7 @@ public class NewPetRequestBody {
         return avatar;
     }
 
-    public void setAvatar(String photo) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 }

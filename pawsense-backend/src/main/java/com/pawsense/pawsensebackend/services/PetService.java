@@ -28,6 +28,19 @@ public class PetService {
         petRepository.save(pet);
     }
 
+    public Pet findPetById(Long id) {
+        return petRepository.findPetByPetId(id);
+    }
+
+    public Pet updatePetDetails(Long id) {
+
+        Pet foundPet = petRepository.findPetByPetId(id);
+
+//        if(foundPet == null) {
+//            ????
+//        }
+        return petRepository.save(foundPet);
+    }
     //upload pet photo and save to database
 
 

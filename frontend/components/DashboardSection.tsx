@@ -1,5 +1,4 @@
-
-export default function DashboardSection({ title, actions, children } : { title: string, actions: React.ReactElement, children: React.ReactNode }) {
+export default async function DashboardSection({ title, actions, children } : { title: string, actions: React.ReactElement, children: React.ReactNode }) {
 
     return (
         <section className="mb-8">
