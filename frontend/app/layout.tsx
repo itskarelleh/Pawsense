@@ -1,7 +1,8 @@
 import './globals.css'
+import 'react-toastify/dist/ReactToastify.css';
 import { Outfit } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs';
-
+import { ToastContainer } from 'react-toastify';
 const outfit = Outfit({ style: 'normal', subsets: ['latin']});
 
 export const metadata = {
@@ -17,8 +18,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
         <html lang="en">
+          <ToastContainer />
           <body className={outfit.className}>
-            <main className="flex min-h-screen flex-col items-center justify-between p-24">
+            <main>
               {children}
             </main>   
           </body>

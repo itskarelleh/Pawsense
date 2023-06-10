@@ -4,6 +4,7 @@ import { NavArrowRight } from 'iconoir-react';
 import { auth } from '@clerk/nextjs';
 import Link from 'next/link';
 import { NextResponse } from "next/server";
+import PetAvatar from "@/components/PetAvatar";
 
 interface Pet {
     id: string;
@@ -49,9 +50,7 @@ export default async function Home() {
             {pets.map((pet: Pet) => (
                 <div key={pet.id} className='flex flex-row space-x-2 items-center justify-between cursor-pointer p-4 bg-white hover:bg-neutral-200 rounded-full hover:px-8 transition-all ease-in-out'>
                     <div className='flex flex-row space-x-2 items-center'>
-                        <figure>
-                            {/* <img className="rounded-full w-10" src={pet.avatar}  alt={pet.name} /> */}
-                        </figure>
+                        <PetAvatar />
                         <h2 className="text-lg font-semibold">
                             {pet.name}
                         </h2>
@@ -66,16 +65,15 @@ export default async function Home() {
 
     return (
         <>
-            <h1>Pawsense</h1>
-            <DashboardSection title="Pets" actions={<></>}>
+            <DashboardSection title="Pets" actions={<AddNewPetModal />}>
                 {pets.length <= 0 ? <div className="h-96 w-full flex flex-col justify-center items-center">
                     No pets have been added yet
                 </div>
                     : <PetsList />
                 }
             </DashboardSection>
-            {/* <DashboardSection title="Events" actions={<></>}>
-          </DashboardSection>  */}
+            <DashboardSection title="Events" actions={<></>}>
+          </DashboardSection> 
         </>
     )
 }

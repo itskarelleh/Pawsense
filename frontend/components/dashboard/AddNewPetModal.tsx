@@ -1,24 +1,12 @@
 "use client"
+import { Plus } from 'iconoir-react';
 import { ChangeEvent, useState, useRef } from 'react'
 import { Listbox } from '@headlessui/react'
 import { Formik, Form, Field, FormikValues, useField } from 'formik';
 import Modal from '../Modal';
 import { useUser } from '@clerk/nextjs';
-
-const animalTypes = [
-  "cat", "dog", "snake", "tiger", "alligator", "cow", "sheep", "spider", "horse", "rabbit", "other", "imaginary",
-];
-
-function addNewPet(data : any) {
-  alert(JSON.stringify(data));
-  // const res = fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/add`, {
-  //   body: data
-  // });
-
-  // if(!res.ok) throw new Error('Failed to fetch data');
-
-  // return res.json();
-}
+import { ActionButton } from '../inputs';
+import { addNewPet } from '@/actions';
 
 interface InitialValues {
   name: string;
@@ -27,11 +15,15 @@ interface InitialValues {
   userId: string | undefined;
 }
 
+const animalTypes = [
+  "cat", "dog", "snake", "tiger", "alligator", "cow", "sheep", "spider", "horse", "rabbit", "other", "imaginary",
+];
+
 export default function AddNewPetModal() {
 
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
-  
+
   const initialValues : InitialValues = {
     name: '',
     avatar: null,
@@ -52,18 +44,15 @@ export default function AddNewPetModal() {
   function openModal() {
     setIsOpen(true)
   }
-
   
   return (
-    <>
+    <div>
       <div className="flex items-center justify-center">
-        <button
-          type="button"
+        <ActionButton
           onClick={openModal}
-          className="rounded-full h-10 w-10 bg-cyan-500 hover:bg-purple-400 px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
-          +
-        </button>
+          <Plus />
+        </ActionButton>
       </div>
       <Modal title="Add New Pet" isOpen={isOpen} openModal={openModal} closeModal={closeModal}>
         <div className='mt-2'>
@@ -105,7 +94,7 @@ export default function AddNewPetModal() {
     </Formik>
         </div>
       </Modal>
-    </>
+    </div>
   )
 }
 

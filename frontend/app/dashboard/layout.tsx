@@ -7,7 +7,6 @@ export default function DashboardLayout({ children } : { children: React.ReactNo
         <>
             <DashboardNavbar />
             {children}
-        
         </>
     )
 }
