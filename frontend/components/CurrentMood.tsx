@@ -1,7 +1,10 @@
+"use client";
+import { useState } from 'react';
 import { moodOptions  } from "@/data"
 import { Popover } from "@headlessui/react"
 
-export default function CurrentMood({ mood } : any) {
+export default function CurrentMood({ mood, handleMoodChange } : any) {
+    
     return (
         <Popover>
             <Popover.Button className="text-sm font-medium w-full flex flex-row justify-between items-center">

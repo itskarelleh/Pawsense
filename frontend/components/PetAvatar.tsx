@@ -1,18 +1,23 @@
 "use client"
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
-import { thumbnail } from "@cloudinary/url-gen/actions/resize";
+import { fill, thumbnail } from "@cloudinary/url-gen/actions/resize";
+import {byRadius} from "@cloudinary/url-gen/actions/roundCorners";
 
-export default function PetAvatar() {
-    const cld = new Cloudinary({ 
+export default function PetAvatar({ imgId, width, height, radius, format } 
+    : { imgId : string, width: number | string, height: number | string, radius: number, format: string }) 
+    {
+        const cld = new Cloudinary({ 
         cloud: {
-            cloudName: 'dwvdml8mi'
+            cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
         }
     });
 
-    const img = cld.image('/samples/animals/kitten-playing');
+    const img = cld.image(imgId);
 
-    img.resize(thumbnail().width(150).height(150)).format('jpg');
+    img.resize(fill().width(width).height(height))
+    .roundCorners(byRadius(radius))
+    .format(format);
 
     return (
         <div>

@@ -2,6 +2,9 @@
 const nextConfig = {
     experimental: {
         serverActions: true,
+    },
+    serverRuntimeConfig: {
+        maxRequestBodySize: '4mb',
     }
 }
 

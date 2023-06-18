@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name="pets")
@@ -30,32 +28,29 @@ public class Pet {
 
     private String avatar;
 
-    private String userId;
-
-    private String currentStatus;
+    private String mood;
 
     private Instant addedAt;
 
     private Instant lastUpdatedAt;
 
+    private String userId;
 
     public Pet() {
 
     }
 
-    public Pet(String name, String type, String sex, double weight, LocalDate birthDate, String avatar, String userId, Instant addedAt, Instant lastUpdatedAt) {
+    public Pet(String name, String type, String sex, String avatar, String userId, Instant addedAt, Instant lastUpdatedAt) {
         this.name = name;
         this.type = type;
         this.sex = sex;
-        this.weight = weight;
-        this.birthDate = birthDate;
         this.avatar = avatar;
         this.userId = userId;
         this.addedAt = addedAt;
         this.lastUpdatedAt = lastUpdatedAt;
     }
 
-    public Pet(Long id, String name, String type, String sex, double weight, String size, LocalDate birthDate, LocalDate adoptionDate, String avatar, String userId, String currentStatus, Instant addedAt, Instant lastUpdatedAt) {
+    public Pet(Long id, String name, String type, String sex, double weight, String size, LocalDate birthDate, LocalDate adoptionDate, String avatar, String userId, String mood, Instant addedAt, Instant lastUpdatedAt) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -66,7 +61,7 @@ public class Pet {
         this.adoptionDate = adoptionDate;
         this.avatar = avatar;
         this.userId = userId;
-        this.currentStatus = currentStatus;
+        this.mood = mood;
         this.addedAt = addedAt;
         this.lastUpdatedAt = lastUpdatedAt;
     }
@@ -151,12 +146,12 @@ public class Pet {
         this.adoptionDate = adoptionDate;
     }
 
-    public String getCurrentStatus() {
-        return currentStatus;
+    public String getMood() {
+        return mood;
     }
 
-    public void setCurrentStatus(String currentStatus) {
-        this.currentStatus = currentStatus;
+    public void setMood(String mood) {
+        this.mood = mood;
     }
 
     public Instant getAddedAt() {
