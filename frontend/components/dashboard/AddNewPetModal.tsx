@@ -17,7 +17,7 @@ interface InitialValues {
 }
 
 const animalTypes = [
-  "cat", "dog", "raccoon", "turtle", "snake", "tiger", "alligator", "cow", "sheep", "spider", "horse", "rabbit", "other", "imaginary",
+  "cat", "dog", "raccoon", "turtle", "snake", "tiger", "alligator", "cow", "human", "sheep", "spider", "hedgehog", "fox", "fish", "octopus", "horse", "rabbit", "other", "imaginary",
 ];
 
 export default function AddNewPetModal() {
@@ -32,8 +32,6 @@ export default function AddNewPetModal() {
     avatar: null,
     userId: user?.id
   } 
-
-  console.log(user && user?.id);
 
   const uploadImage = async( values : any ) => {
     if(values.avatar === undefined || values.avatar === '' || values.avatar === null) return null;
@@ -74,15 +72,19 @@ export default function AddNewPetModal() {
       <Modal title="Add New Pet" isOpen={isOpen} openModal={openModal} closeModal={closeModal}>
         <div className='mt-2'>
         <Formik initialValues={initialValues} onSubmit={async (values, actions) => {
-          
-
+        
           const avatarRes = await uploadImage(values);
-          
+        
           const modifiedBody = {...values, avatar: avatarRes, userId: user?.id }
-          console.log(modifiedBody);
-
+        
           const res = await addNewPet(modifiedBody);
-          console.log(res);
+
+          const d = await res.json();
+
+          console.log(d);
+
+          closeModal();
+          
        }}>
         {props => (
       <form onSubmit={props.handleSubmit}>
@@ -94,7 +96,7 @@ export default function AddNewPetModal() {
             id="name"
             name="name"
             placeholder="Fido"
-            className="border-b-2 border-neutral-400"
+            className="border-b-2 border-neutral-400 focus:bg-cyan-100"
           />
         </label>
 
@@ -135,9 +137,9 @@ function AnimalTypeField() {
       <Listbox value={field.value} onChange={(value) => helpers.setValue(value)}>
         {({ open }) => (
           <div className="cursor-pointer relative mt-1 border-b-2 border-neutral-400">
-            <Listbox.Button className="flex flex-col mt-8 mb-2 text-sm">{field.value || 'Select an animal type'}</Listbox.Button>
+            <Listbox.Button className="flex flex-col mt-8 mb-2 text-sm w-full">{field.value || 'Select an animal type'}</Listbox.Button>
             {open && (
-              <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-40">
+              <Listbox.Options className="scrollbar scrollbar-thumb-cyan-200 scrollbar-thin absolute mt-1 max-h-44 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-40">
                 {animalTypes.map((type, index) => (
                   <Listbox.Option className="hover:bg-cyan-100 cursor-pointer" key={index} value={type}>
                     {type}
@@ -152,66 +154,13 @@ function AnimalTypeField() {
   );
 }
 
-// function PetAvatarField() {
-//   const [ avatar, setAvatar ] = useState<File | null>(null);
-  
-//   const [field, , helpers] = useField('avatar');
-//   const inputRef = useRef<HTMLInputElement>(null);
-
-//   const placeholder = "/paw-silhouette.png";
-
-//   function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
-//     const file = e.target.files?.[0];
-
-//     if (file) {
-//         helpers.setValue(file);
-//         setAvatar(file);
-//         console.log(file);
-//     } else {
-//       helpers.setValue(null);
-//     }
-//   }
-
-//   const clearFileInput = () => {
-//     if (inputRef.current) {
-//       inputRef.current.value = '';
-//       setAvatar(null);
-//     }
-//   };
-
-//   return (
-//     <div className='w-full flex flex-col items-center justify-center'>
-//       <div className="w-24 h-24 flex flex-col items-center justify-center relative mb-8">
-//       {field.value && 
-//         <button onClick={clearFileInput} className='bg-red-300 rounded-full w-6 h-6 absolute z-40 bottom-[2px] right-[2px] flex flex-col items-center justify-center' title="Remove image">
-//           <Cancel className='w-full text-white font-semibold' />
-//         </button>
-//         }
-//       <div className="relative cursor-pointer w-full h-full rounded-full overflow-hidden bg-neutral-400">
-//         <img className="absolute left-0 top-0 w-full" src={field.value ? URL.createObjectURL(avatar) : placeholder} alt="Avatar" />
-//           <input
-//             type="file"
-//             accept="image/*"
-//             onChange={handleFileChange}
-//             className="absolute opacity-0 w-full h-full cursor-pointer"
-//             ref={inputRef}
-//             onClick={clearFileInput}
-//           />
-//       </div>
-//     </div>
-//       <label className='text-sm -mt-4'>
-//           Select an image
-//         </label>
-//     </div>
-//   );
-// }
 function PetAvatarField() {
   const [avatar, setAvatar] = useState<File | null>(null);
 
   const [field, , helpers] = useField('avatar');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const placeholder = "/paw-silhouette.png";
+  const placeholder = process.env.THUMBNAIL_PLACEHOLDER;
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -219,7 +168,6 @@ function PetAvatarField() {
     if (file) {
       helpers.setValue(file);
       setAvatar(file);
-      console.log(file);
     } else {
       helpers.setValue(null);
     }
@@ -283,7 +231,6 @@ function SexRadioGroup() {
     </>
 )
 
-
   return (
     <Field name="sex">
       {({ field: { value }, form: { setFieldValue } }) => (
@@ -292,7 +239,7 @@ function SexRadioGroup() {
           <div className="flex flex-row space-x-2 w-full [&>div]:w-1/4">
             <RadioGroup.Option value="F">
               {({ checked }) => (
-                <label className={`text-center flex flex-col items-center justify-center p-2 ${checked ? 'bg-pink-200' : ''}`}>
+                <label className={`cursor-pointer text-center flex flex-col items-center justify-center p-2 ${checked ? 'bg-pink-200' : ''}`}>
                   <Field type="radio" name="sex" value="F" className="sr-only" />
                   <Female />
                   Female
@@ -301,7 +248,7 @@ function SexRadioGroup() {
             </RadioGroup.Option>
             <RadioGroup.Option value="M">
               {({ checked }) => (
-                <label className={`text-center flex flex-col items-center justify-center p-2 ${checked ? 'bg-blue-200' : ''}`}>
+                <label className={`cursor-pointer text-center flex flex-col items-center justify-center p-2 ${checked ? 'bg-blue-200' : ''}`}>
                   <Field type="radio" name="sex" value="M" className="sr-only" />
                   <Male />
                   Male
@@ -310,7 +257,7 @@ function SexRadioGroup() {
             </RadioGroup.Option>
             <RadioGroup.Option value="I">
               {({ checked }) => (
-                <label className={`relative text-center flex flex-col items-center justify-center p-2 ${checked ? 'bg-purple-200' : ''}`}>
+                <label className={`cursor-pointer relative text-center flex flex-col items-center justify-center p-2 ${checked ? 'bg-purple-200' : ''}`}>
                   <Field type="radio" name="sex" value="I" className="sr-only" />
                   <Intersex />
                   Intersex
@@ -319,7 +266,7 @@ function SexRadioGroup() {
             </RadioGroup.Option>
             <RadioGroup.Option value="?">
               {({ checked }) => (
-                <label className={`text-center flex flex-col items-center justify-center p-2 ${checked ? 'bg-yellow-200' : ''}`}>
+                <label className={`cursor-pointer text-center flex flex-col items-center justify-center p-2 ${checked ? 'bg-yellow-200' : ''}`}>
                   <Field type="radio" name="sex" value="?" className="sr-only" />
                   <QuestionMark />
                   Unknown

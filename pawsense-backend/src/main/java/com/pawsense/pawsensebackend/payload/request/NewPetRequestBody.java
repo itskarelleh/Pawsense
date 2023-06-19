@@ -25,27 +25,27 @@ public class NewPetRequestBody {
 
     private String avatar;
 
-    public NewPetRequestBody(String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, String userId, String avatar) {
-        this.name = name;
-        this.type = type;
-        this.sex = sex;
-        this.birthDate = birthDate;
-        this.adoptionDate = adoptionDate;
-        this.userId = userId;
-        this.avatar = avatar;
-    }
-
-    public NewPetRequestBody(String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, double weight, String size, String userId, String avatar) {
-        this.name = name;
-        this.type = type;
-        this.sex = sex;
-        this.birthDate = birthDate;
-        this.adoptionDate = adoptionDate;
-        this.weight = weight;
-        this.size = size;
-        this.userId = userId;
-        this.avatar = avatar;
-    }
+//    public NewPetRequestBody(String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, String userId, String avatar) {
+//        this.name = name;
+//        this.type = type;
+//        this.sex = sex;
+//        this.birthDate = birthDate;
+//        this.adoptionDate = adoptionDate;
+//        this.userId = userId;
+//        this.avatar = avatar;
+//    }
+//
+//    public NewPetRequestBody(String name, String type, String sex, LocalDate birthDate, LocalDate adoptionDate, double weight, String size, String userId, String avatar) {
+//        this.name = name;
+//        this.type = type;
+//        this.sex = sex;
+//        this.birthDate = birthDate;
+//        this.adoptionDate = adoptionDate;
+//        this.weight = weight;
+//        this.size = size;
+//        this.userId = userId;
+//        this.avatar = avatar;
+//    }
 
     public String getName() {
         return name;

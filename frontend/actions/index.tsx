@@ -65,12 +65,16 @@ export async function addNewPet( data : any ) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/add`, {
         method: "POST",
         headers: {
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
         },
-        body: data
+        body: JSON.stringify(data)
     });
+
+    const d = await res.json();
     
     if(!res.ok) throw new Error('Failed to fetch data');
     
-    return await res.json();
+    return d;
+    // return await res.json();
 }

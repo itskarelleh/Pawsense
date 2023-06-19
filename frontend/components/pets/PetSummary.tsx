@@ -13,7 +13,8 @@ export interface Pet {
 
 
 export default function PetSummary({ pet }: { pet: Pet }) {
-
+    
+    const placeholder = ""
     return (
         <div key={pet.id} className='flex flex-row space-x-2 items-center justify-between cursor-pointer p-4 bg-white hover:bg-neutral-200 rounded-full transition-all ease-in-out'>
             <div className='flex flex-row space-x-2 items-center'>

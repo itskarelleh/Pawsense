@@ -30,7 +30,8 @@ public class WebSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         //noinspection removal
         http.authorizeHttpRequests(auth ->
-                auth.requestMatchers("/api/v1/pets/**").permitAll()
+                auth.requestMatchers("/api/v1/pets/**").authenticated()
+
         ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 //    @Bean
 //    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {

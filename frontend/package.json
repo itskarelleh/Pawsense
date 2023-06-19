@@ -35,6 +35,7 @@
     "typescript": "5.1.3"
   },
   "devDependencies": {
-    "dayjs": "^1.11.7"
+    "dayjs": "^1.11.7",
+    "tailwind-scrollbar": "^3.0.4"
   }
 }
