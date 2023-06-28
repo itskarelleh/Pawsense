@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.pawsense.pawsensebackend.repositories;
 
 import com.pawsense.pawsensebackend.models.Event;
@@ -28,4 +29,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 //    @Modifying
 //    @Query("DELETE FROM Event e WHERE user_id = :userId")
 //    void deleteAllByUserId(@Param("userId") String userId);
+=======
+package com.pawsense.pawsensebackend.repositories;public class EventRepository {
+>>>>>>> cd4994410045b91ab88b90744ee7aae9bde1022d
 }

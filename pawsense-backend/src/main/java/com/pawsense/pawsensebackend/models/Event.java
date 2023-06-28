@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.pawsense.pawsensebackend.models;
 
 import jakarta.persistence.*;
@@ -153,4 +154,7 @@ public class Event {
     public void setLastModifiedAt(Instant lastModifiedAt) {
         this.lastModifiedAt = lastModifiedAt;
     }
+=======
+package com.pawsense.pawsensebackend.models;public class Event {
+>>>>>>> cd4994410045b91ab88b90744ee7aae9bde1022d
 }

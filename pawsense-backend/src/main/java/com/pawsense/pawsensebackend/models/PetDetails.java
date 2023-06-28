@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.pawsense.pawsensebackend.models;
 
 import jakarta.persistence.*;
@@ -106,4 +107,7 @@ public class PetDetails {
     public void setPet(Pet pet) {
         this.pet = pet;
     }
+=======
+package com.pawsense.pawsensebackend.models;public class PetDetails {
+>>>>>>> cd4994410045b91ab88b90744ee7aae9bde1022d
 }

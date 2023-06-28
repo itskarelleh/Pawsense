@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.pawsense.pawsensebackend.controllers;
 
 import com.pawsense.pawsensebackend.models.Event;
@@ -55,4 +56,7 @@ public class EventController {
 //        return ResponseEntity.ok("Event has been deleted");
 //    }
 
+=======
+package com.pawsense.pawsensebackend.controllers;public class EventController {
+>>>>>>> cd4994410045b91ab88b90744ee7aae9bde1022d
 }

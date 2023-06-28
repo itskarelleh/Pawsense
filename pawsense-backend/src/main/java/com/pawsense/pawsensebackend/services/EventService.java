@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.pawsense.pawsensebackend.services;
 
 import com.pawsense.pawsensebackend.models.Event;
@@ -74,4 +75,7 @@ public class EventService {
 
 
 
+=======
+package com.pawsense.pawsensebackend.services;public class EventService {
+>>>>>>> cd4994410045b91ab88b90744ee7aae9bde1022d
 }

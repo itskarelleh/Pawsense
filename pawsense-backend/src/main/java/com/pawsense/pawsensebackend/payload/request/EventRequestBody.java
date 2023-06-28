@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.pawsense.pawsensebackend.payload.request;
 
 import com.pawsense.pawsensebackend.models.Pet;
@@ -100,4 +101,7 @@ public class EventRequestBody {
     public Instant getLastModifiedAt() {
         return lastModifiedAt;
     }
+=======
+package com.pawsense.pawsensebackend.payload.request;public class EventRequestBody {
+>>>>>>> cd4994410045b91ab88b90744ee7aae9bde1022d
 }
