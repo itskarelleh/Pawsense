@@ -1,10 +1,9 @@
-"use server"
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
+'use server'
+import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs';
+import { uploadImage } from '@/functions';
 
 export async function getPets() {
-  'use server'
-
   const { userId, getToken } = auth();
 
   if (!userId) NextResponse.redirect("/sign-in");
@@ -20,16 +19,11 @@ export async function getPets() {
   );
 
   const data = await res.json();
-  const pets = data;
 
-  console.log(pets);
-
-  return pets;
+  return data;
 }
 
 export async function getPetById(petId : string) {
-  'use server'
-
   const { userId, getToken } = auth();
 
   if (!userId) NextResponse.redirect("/sign-in");
@@ -50,31 +44,65 @@ export async function getPetById(petId : string) {
   return pet;
 }
 
-// export async function uploadToCloudinary(file : File) {
-    // "user server"
-
-// };
-
-export async function addNewPet( data : any ) {
-    "use server"
+export async function addNewPet( values : any ) {
 
     const { getToken } = auth();
 
     const token = await getToken();
-    
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/add`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(values)
     });
 
-    const d = await res.json();
+    const data = await res.json();
     
     if(!res.ok) throw new Error('Failed to fetch data');
     
+    return data;
+}
+
+export async function editPet(data : Object) {
+
+    const { getToken } = auth();
+
+    const token = await getToken();
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/add`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(data) 
+    });
+
+    const d = await res.json();
+
     return d;
-    // return await res.json();
+
+}
+
+export async function deletePet(petId : string) {
+    
+    const { getToken } = auth();
+
+    const token = await getToken();
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/delete/${petId}`, {
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+    });
+
+    const d = await res.json();
+
+    return d;
+
 }

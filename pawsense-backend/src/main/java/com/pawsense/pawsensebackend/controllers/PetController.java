@@ -1,10 +1,8 @@
 package com.pawsense.pawsensebackend.controllers;
 
-
 import com.pawsense.pawsensebackend.models.Pet;
+import com.pawsense.pawsensebackend.models.PetDetails;
 import com.pawsense.pawsensebackend.payload.request.NewPetRequestBody;
-import com.pawsense.pawsensebackend.payload.request.PetMoodRequest;
-import com.pawsense.pawsensebackend.payload.response.PetDetailsResponse;
 import com.pawsense.pawsensebackend.services.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,47 +25,60 @@ public class PetController {
     public ResponseEntity<List<Pet>> getCurrentUserPets(@PathVariable String userId) {
         List<Pet> res = petService.getAllPetsByUserId(userId);
 
-        if(res.size() == 0) return (ResponseEntity<List<Pet>>) ResponseEntity.noContent();
-
         return ResponseEntity.ok().body(res);
     }
 
     @GetMapping("/{petId}")
-    public ResponseEntity<PetDetailsResponse> getPetDetailsById(@PathVariable String petId) {
-        Pet foundPet = petService.findPetById(Long.parseLong(petId));
+    public ResponseEntity<Pet> getPetById(@PathVariable String petId) {
+        Pet pet = petService.findPetById(Long.parseLong(petId));
 
-        return ResponseEntity.ok().body(new PetDetailsResponse(foundPet.getId(), foundPet.getName(), foundPet.getType(), foundPet.getSex(), foundPet.getBirthDate(), foundPet.getAdoptionDate(), foundPet.getWeight(), foundPet.getSize(), foundPet.getUserId(), foundPet.getAvatar()));
+        return ResponseEntity.ok().body(pet);
+    }
+
+    @GetMapping("/details/{petId}")
+    public ResponseEntity<PetDetails> getPetDetailsById(@PathVariable String petId) {
+        PetDetails petDetails = petService.findPetDetails(Long.parseLong(petId));
+
+        return ResponseEntity.ok().body(petDetails);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Pet> addNewPetForCurrentUser(@RequestBody NewPetRequestBody newPetRequestBody) {
-        Pet createdPet = new Pet(newPetRequestBody.getName(), newPetRequestBody.getType(), newPetRequestBody.getSex(), newPetRequestBody.getAvatar(), newPetRequestBody.getUserId(), Instant.now(), Instant.now());
+    public ResponseEntity<Pet> addNewPetForCurrentUser(@RequestBody Pet pet) {
 
-        petService.addNewPet(createdPet);
+        Pet created = petService.addNewPet(pet);
 
-        return new ResponseEntity<>(createdPet, HttpStatus.CREATED);
+        return new ResponseEntity<>(created, HttpStatus.OK);
     }
 
-    @PutMapping("/update-mood/{petId}")
-    public ResponseEntity<Pet> updatePetMood(@PathVariable String petId, @RequestBody PetMoodRequest petMood) {
-        Pet pet = petService.updatePetMood(Long.parseLong(petId), petMood.getMood());
+    @PutMapping("/edit/{petId}")
+    public ResponseEntity<Pet> editExistingPet(@PathVariable String petId, @RequestBody Pet pet) throws Exception {
+        Pet foundPet = petService.findPetById(Long.valueOf(petId));
 
-        if(pet != null) {
-            return new ResponseEntity<>(pet, HttpStatus.OK);
-        }
+        if(foundPet == null) return ResponseEntity.notFound().build();
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Pet updated = petService.updatePetDetails(foundPet);
 
+        return ResponseEntity.ok().body(updated);
     }
 
-//    @PutMapping("/edit/${petId}")
-//    public ResponseEntity<Pet> editExisitingPet(@PathVariable String petId, @RequestBody Pet pet) throws Exception {
-//        Pet foundPet = petService.findPetById(Long.valueOf(petId));
-//
-//        if(foundPet == null) return ResponseEntity.notFound().build();
-//
-//        Pet updated = petService.updatePetDetails(foundPet);
-//
-//        return ResponseEntity.ok().body(updated);
-//    }
+    @PutMapping("/edit/avatar/{petId}")
+    public ResponseEntity<?> updatePetAvatar(@PathVariable String petId, @RequestBody String avatarId) throws Exception {
+
+        Pet foundPet = petService.findPetById(Long.parseLong(petId));
+
+        foundPet.setAvatar(avatarId);
+
+        return ResponseEntity.ok().body(petService.updatePet(foundPet));
+    }
+
+    @DeleteMapping("/delete/{petId}")
+    public ResponseEntity<?> removePetFromDB(@PathVariable String petId) {
+        Pet foundPet = petService.findPetById(Long.valueOf(petId));
+
+        if(foundPet == null) return ResponseEntity.notFound().build();
+
+        petService.deletePet(foundPet);
+
+        return ResponseEntity.ok("Pet has been removed");
+    }
 }

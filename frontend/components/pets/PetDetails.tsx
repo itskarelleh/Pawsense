@@ -19,8 +19,7 @@ export default function PetDetails({ pet } : { pet : any }) {
             <header className="md:col-end-5 flex flex-col">
                 <h1 className='text-3xl font-bold'>{pet && pet.name}</h1>
                 {/* TODO: still working on pet avatar and cloudinary */}
-                <PetAvatar imgId="/samples/animals/cat" width={250} height={250} format='jpg' radius={0} />
-                <CurrentMood mood={pet && pet.mood} />
+                <PetAvatar imgId="/pets/zfo2tzlds17ne1xcx0fu" width={250} height={250} format='jpg' radius={0} />
             </header>
             <section className='md:col-start-6 md:col-end-12'>
                 <Tab.Group>

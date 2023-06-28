@@ -1,10 +1,10 @@
-import { get } from "cypress/types/lodash";
 import { Pet } from "./PetSummary";
 import PetSummary from "./PetSummary";
-import { getPets } from "@/actions";
+import { getPets } from "@/server_actions";
 
 export default async function PetList() {
 
+    const selection : String[] = [];
     const pets : any = await getPets();
 
     if(pets.length == 0) return (
@@ -16,7 +16,7 @@ export default async function PetList() {
    return (
     <div className='w-full space-y-4'>
         {pets && pets.map((pet: Pet) => (
-            <PetSummary pet={pet} />
+            <PetSummary pet={pet} selection={selection} />
         ))}
     </div>
    )

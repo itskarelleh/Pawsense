@@ -10,5 +10,8 @@ module.exports = {
   },
   plugins: [
     require('tailwind-scrollbar'),
+    require("@tailwindcss/forms")({
+      strategy: 'base',
+    })
   ],
 }

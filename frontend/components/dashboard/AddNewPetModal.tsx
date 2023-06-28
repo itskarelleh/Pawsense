@@ -1,18 +1,22 @@
 "use client"
 import { Plus, Female, Male, QuestionMark, Cancel } from 'iconoir-react';
-import { ChangeEvent, useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { Listbox } from '@headlessui/react'
-import { Formik, Field, useField } from 'formik';
+import { Formik, Field, useField, FormikValues } from 'formik';
 import Modal from '../Modal';
 import { useUser } from '@clerk/nextjs';
 import { ActionButton } from '../inputs';
-import { addNewPet } from '@/actions';
-import { RadioGroup } from '@headlessui/react'
+import { addNewPet } from '@/server_actions';
+import { uploadImage } from '@/functions';
+import { RadioGroup } from '@headlessui/react';
+import { toast } from 'react-toastify';
+import CustomToast from '../CustomToast';
+
 interface InitialValues {
   name: string;
   type: string;
   sex: string;
-  avatar: File | string | null;
+  avatar: any;
   userId: string | undefined;
 }
 
@@ -21,8 +25,8 @@ const animalTypes = [
 ];
 
 export default function AddNewPetModal() {
-  //TODO: make isOpen false by default
-  const [isOpen, setIsOpen] = useState(true);
+
+  const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
 
   const initialValues : InitialValues = {
@@ -32,32 +36,32 @@ export default function AddNewPetModal() {
     avatar: null,
     userId: user?.id
   } 
-
-  const uploadImage = async( values : any ) => {
-    if(values.avatar === undefined || values.avatar === '' || values.avatar === null) return null;
-
-    const formData = new FormData();
-
-    formData.append("file", values.avatar);
-    formData.append("upload_preset", "jpttrz2h");
-
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
-      method: "POST",
-      body: formData
-    });
-          
-    const avatarData = await res.json();
-
-    return avatarData.public_id;
-
-  }
   
   function closeModal() {
-    setIsOpen(false)
+    setIsOpen(prev => !prev);
   }
 
   function openModal() {
     setIsOpen(true)
+  }
+
+  async function handleSubmit(values : FormikValues | any) {
+    
+    const img = await uploadImage(values.avatar);
+
+    const publicId = img.public_id;
+
+    const body = {name: values.name, type: values.type, sex: values.sex, avatar: publicId, userId: values.userId }
+
+    const newPet = await addNewPet(body);
+    
+    toast.success(
+      <CustomToast>
+        {newPet.name} has been added! <a href={`/pet/${newPet.id}`}>View new profile</a>
+      </CustomToast>
+    )
+    
+    closeModal();
   }
   
   return (
@@ -71,21 +75,7 @@ export default function AddNewPetModal() {
       </div>
       <Modal title="Add New Pet" isOpen={isOpen} openModal={openModal} closeModal={closeModal}>
         <div className='mt-2'>
-        <Formik initialValues={initialValues} onSubmit={async (values, actions) => {
-        
-          const avatarRes = await uploadImage(values);
-        
-          const modifiedBody = {...values, avatar: avatarRes, userId: user?.id }
-        
-          const res = await addNewPet(modifiedBody);
-
-          const d = await res.json();
-
-          console.log(d);
-
-          closeModal();
-          
-       }}>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {props => (
       <form onSubmit={props.handleSubmit}>
         <PetAvatarField />
@@ -96,7 +86,7 @@ export default function AddNewPetModal() {
             id="name"
             name="name"
             placeholder="Fido"
-            className="border-b-2 border-neutral-400 focus:bg-cyan-100"
+            className="border-l-0 border-r-0 border-t-0 border-b-2 border-neutral-400 focus:bg-cyan-100"
           />
         </label>
 
@@ -129,11 +119,11 @@ export default function AddNewPetModal() {
 }
 
 function AnimalTypeField() {
+
   const [field, ,helpers] = useField('type');
 
   return (
     <div className=''>
-      {/* <label htmlFor="animalType" className="flex flex-col text-sm sr-only">Animal Type</label> */}
       <Listbox value={field.value} onChange={(value) => helpers.setValue(value)}>
         {({ open }) => (
           <div className="cursor-pointer relative mt-1 border-b-2 border-neutral-400">
@@ -160,7 +150,7 @@ function PetAvatarField() {
   const [field, , helpers] = useField('avatar');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const placeholder = process.env.THUMBNAIL_PLACEHOLDER;
+  const placeholder = "/default-thumbnail.png";
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -219,7 +209,6 @@ function PetAvatarField() {
     </div>
   );
 }
-
 
 function SexRadioGroup() {
 

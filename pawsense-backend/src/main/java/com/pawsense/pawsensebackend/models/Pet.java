@@ -1,9 +1,9 @@
 package com.pawsense.pawsensebackend.models;
 
 import jakarta.persistence.*;
-
 import java.time.Instant;
-import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="pets")
@@ -18,23 +18,23 @@ public class Pet {
 
     private String sex;
 
-    private double weight;
-
-    private String size;
-
-    private LocalDate birthDate;
-
-    private LocalDate adoptionDate;
-
     private String avatar;
-
-    private String mood;
 
     private Instant addedAt;
 
     private Instant lastUpdatedAt;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pet_details_id")
+    private PetDetails petDetails;
+
     private String userId;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "pet_event",
+    joinColumns = @JoinColumn(name = "pet_id"),
+    inverseJoinColumns = @JoinColumn(name = "event_id"))
+    private Set<Event> events = new HashSet<>();
 
     public Pet() {
 
@@ -46,22 +46,6 @@ public class Pet {
         this.sex = sex;
         this.avatar = avatar;
         this.userId = userId;
-        this.addedAt = addedAt;
-        this.lastUpdatedAt = lastUpdatedAt;
-    }
-
-    public Pet(Long id, String name, String type, String sex, double weight, String size, LocalDate birthDate, LocalDate adoptionDate, String avatar, String userId, String mood, Instant addedAt, Instant lastUpdatedAt) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.sex = sex;
-        this.weight = weight;
-        this.size = size;
-        this.birthDate = birthDate;
-        this.adoptionDate = adoptionDate;
-        this.avatar = avatar;
-        this.userId = userId;
-        this.mood = mood;
         this.addedAt = addedAt;
         this.lastUpdatedAt = lastUpdatedAt;
     }
@@ -98,14 +82,6 @@ public class Pet {
         this.sex = sex;
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
     public String getAvatar() {
         return avatar;
     }
@@ -114,44 +90,12 @@ public class Pet {
         this.avatar = avatar;
     }
 
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
     public Instant getLastUpdatedAt() {
         return lastUpdatedAt;
     }
 
     public void setLastUpdatedAt(Instant lastUpdatedAt) {
         this.lastUpdatedAt = lastUpdatedAt;
-    }
-
-    public LocalDate getAdoptionDate() {
-        return adoptionDate;
-    }
-
-    public void setAdoptionDate(LocalDate adoptionDate) {
-        this.adoptionDate = adoptionDate;
-    }
-
-    public String getMood() {
-        return mood;
-    }
-
-    public void setMood(String mood) {
-        this.mood = mood;
     }
 
     public Instant getAddedAt() {
@@ -168,5 +112,21 @@ public class Pet {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
+
+    public PetDetails getPetDetails() {
+        return petDetails;
+    }
+
+    public void setPetDetails(PetDetails petDetails) {
+        this.petDetails = petDetails;
     }
 }

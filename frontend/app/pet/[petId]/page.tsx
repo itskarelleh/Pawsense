@@ -1,6 +1,6 @@
 "use server"
 import PetDetails from '@/components/pets/PetDetails';
-import { getPetById } from '@/actions';
+import { getPetById } from '@/server_actions';
 
 export default async function PetPage({ params }: { params: { petId: string } }) {
     const { petId } = params;
