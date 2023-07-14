@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.pawsense.pawsensebackend.payload.request;
 
 import com.pawsense.pawsensebackend.models.Pet;
@@ -19,10 +18,10 @@ public class EventRequestBody {
 
     private LocalDate endsAt;
 
-
     private String userId;
 
-    private Set<Pet> attendees;
+//    private Set<Pet> attendees;
+    private Set<Long> attendeesIds;
 
     private boolean isPublic;
 
@@ -78,12 +77,12 @@ public class EventRequestBody {
         this.userId = userId;
     }
 
-    public Set<Pet> getAttendees() {
-        return attendees;
+    public Set<Long> getAttendeesIds() {
+        return attendeesIds;
     }
 
-    public void setAttendees(Set<Pet> attendees) {
-        this.attendees = attendees;
+    public void setAttendeesIds(Set<Long> attendeesIds) {
+        this.attendeesIds = attendeesIds;
     }
 
     public boolean isPublic() {
@@ -101,7 +100,4 @@ public class EventRequestBody {
     public Instant getLastModifiedAt() {
         return lastModifiedAt;
     }
-=======
-package com.pawsense.pawsensebackend.payload.request;public class EventRequestBody {
->>>>>>> cd4994410045b91ab88b90744ee7aae9bde1022d
 }

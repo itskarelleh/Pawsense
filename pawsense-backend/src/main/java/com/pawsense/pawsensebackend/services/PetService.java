@@ -7,6 +7,7 @@ import com.pawsense.pawsensebackend.repositories.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -22,20 +23,15 @@ public class PetService {
         return petRepository.findPetsByUserId(userId);
     }
 
-    //get all pet details
-
     public Pet addNewPet(Pet pet) {
         //create a new pet details object
-//        PetDetails petDetails = new PetDetails();
-//
-//        //save pet to pet details
-//        pet.getPetDetails().setPet(pet);
-//
-//
-//        //save petdetails to pet
-//        petDetails.getPet().setPetDetails(petDetails);
-        //save pet
+        PetDetails petDetails = new PetDetails(0.00, "?", null, null, Instant.now(), Instant.now(), pet);
 
+        pet.getPetDetails().setPet(pet);
+
+        petDetails.getPet().setPetDetails(petDetails);
+
+        petDetailsRepository.save(petDetails);
 
         return petRepository.save(pet);
     }

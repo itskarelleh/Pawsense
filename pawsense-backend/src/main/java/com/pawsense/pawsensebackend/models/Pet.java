@@ -1,12 +1,13 @@
 package com.pawsense.pawsensebackend.models;
 
 import jakarta.persistence.*;
+
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="pets")
+@Table(name = "pets")
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +25,14 @@ public class Pet {
 
     private Instant lastUpdatedAt;
 
+    private String userId;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pet_details_id")
     private PetDetails petDetails;
 
-    private String userId;
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Medication> medications = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "pet_event",
@@ -48,6 +52,20 @@ public class Pet {
         this.userId = userId;
         this.addedAt = addedAt;
         this.lastUpdatedAt = lastUpdatedAt;
+    }
+
+    public Pet(Long id, String name, String type, String sex, String avatar, Instant addedAt, Instant lastUpdatedAt, String userId, PetDetails petDetails, Set<Medication> medications, Set<Event> events) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.sex = sex;
+        this.avatar = avatar;
+        this.addedAt = addedAt;
+        this.lastUpdatedAt = lastUpdatedAt;
+        this.userId = userId;
+        this.petDetails = petDetails;
+        this.medications = medications;
+        this.events = events;
     }
 
     public Long getId() {
@@ -90,20 +108,20 @@ public class Pet {
         this.avatar = avatar;
     }
 
-    public Instant getLastUpdatedAt() {
-        return lastUpdatedAt;
-    }
-
-    public void setLastUpdatedAt(Instant lastUpdatedAt) {
-        this.lastUpdatedAt = lastUpdatedAt;
-    }
-
     public Instant getAddedAt() {
         return addedAt;
     }
 
     public void setAddedAt(Instant addedAt) {
         this.addedAt = addedAt;
+    }
+
+    public Instant getLastUpdatedAt() {
+        return lastUpdatedAt;
+    }
+
+    public void setLastUpdatedAt(Instant lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt;
     }
 
     public String getUserId() {
@@ -114,19 +132,27 @@ public class Pet {
         this.userId = userId;
     }
 
-    public Set<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<Event> events) {
-        this.events = events;
-    }
-
     public PetDetails getPetDetails() {
         return petDetails;
     }
 
     public void setPetDetails(PetDetails petDetails) {
         this.petDetails = petDetails;
+    }
+
+    public Set<Medication> getMedications() {
+        return medications;
+    }
+
+    public void setMedications(Set<Medication> medications) {
+        this.medications = medications;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
     }
 }

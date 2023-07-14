@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.pawsense.pawsensebackend.models;
 
 import jakarta.persistence.*;
@@ -30,8 +29,7 @@ public class PetDetails {
     @OneToOne(mappedBy = "petDetails")
     private Pet pet;
 
-    public PetDetails(Long id, double weight, String size, LocalDate birthDate, LocalDate adoptionDate, Instant addedAt, Instant lastUpdatedAt, Pet pet) {
-        this.id = id;
+    public PetDetails(double weight, String size, LocalDate birthDate, LocalDate adoptionDate, Instant addedAt, Instant lastUpdatedAt, Pet pet) {
         this.weight = weight;
         this.size = size;
         this.birthDate = birthDate;
@@ -107,7 +105,4 @@ public class PetDetails {
     public void setPet(Pet pet) {
         this.pet = pet;
     }
-=======
-package com.pawsense.pawsensebackend.models;public class PetDetails {
->>>>>>> cd4994410045b91ab88b90744ee7aae9bde1022d
 }

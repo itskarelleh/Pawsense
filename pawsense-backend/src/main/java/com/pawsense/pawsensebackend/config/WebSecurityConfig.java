@@ -16,17 +16,6 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-
-    @Value("spring.security.oauth2.resourceserver.jwk-set-uri")
-    private String jwks;
-
-//    @Value("spring.security.oauth2.resourceserver.jwt.issuer-uri")
-//    private String issuer;
-
-//    @Bean
-//    ReactiveJwtDecoder jwtDecoder() {
-//        return ReactiveJwtDecoders.fromIssuerLocation(issuer);
-//    }
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //noinspection removal
@@ -39,8 +28,19 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+}
 
-    //    @Bean
+//    @Value("spring.security.oauth2.resourceserver.jwk-set-uri")
+//    private String jwks;
+
+//    @Value("spring.security.oauth2.resourceserver.jwt.issuer-uri")
+//    private String issuer;
+
+//    @Bean
+//    ReactiveJwtDecoder jwtDecoder() {
+//        return ReactiveJwtDecoders.fromIssuerLocation(issuer);
+//    }
+//    @Bean
 //    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 //        http.authorizeExchange(exchanges -> exchanges
 //                        .pathMatchers("/api/v1/pets/**").authenticated()
@@ -50,4 +50,3 @@ public class WebSecurityConfig {
 //                                jwt.jwkSetUri(jwks)
 //                        )
 //                );
-}

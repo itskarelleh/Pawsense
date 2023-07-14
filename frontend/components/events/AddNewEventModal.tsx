@@ -1,10 +1,11 @@
 "use client"
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { Plus } from "iconoir-react";
 import Modal from "../Modal";
 import { ActionButton } from "../inputs";
-import { Pet } from "../pets/PetSummary";
+import { Pet } from "../pets";
+import PetCombobox from "../pets/PetCombobox";
 import { Field, Formik, FormikHelpers, FormikValues } from 'formik';
 import { useUser } from "@clerk/nextjs";
 import DatePicker from 'react-datepicker';
@@ -21,12 +22,12 @@ interface InitialValues {
     "isPublic": boolean;
 }
 
-export default function AddNewEventModal() {
+export default function AddNewEventModal({ pets } : { pets: any }) {
 
     //on load, get user location, if permission is granted
 
     const { user } = useUser();
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
@@ -39,7 +40,7 @@ export default function AddNewEventModal() {
         "type": "",
         "startsAt": null,
         "endsAt": null,
-        "attendees": null,
+        "attendees": [],
         "userId": user?.id,
         "isPublic": false
     }
@@ -72,11 +73,10 @@ export default function AddNewEventModal() {
                                         <DatePicker showTimeSelect selected={endDate} onChange={(date: any) => setEndDate(date)} />
                                     </label>
                                 </div>
-                                <label>
+                                {/* <label>
                                     Location
-                                    {/** TODO: add autocomplete field and if valid, show a Map component */}
-                                    {/* <Map address="1148 Prospect Street, Ewing Township, NJ" /> */}
-                                </label>
+                                    <Map address="1148 Prospect Street, Ewing Township, NJ" />
+                                </label> */}
                                 <label htmlFor="description" className="flex flex-col mt-8 mb-2 text-sm">
                                     Description / Details
                                     <Field as="textarea" name="description" rows={5}
@@ -84,7 +84,8 @@ export default function AddNewEventModal() {
                                     />
                                 </label>
                                 <label htmlFor="attendees">
-                                    {/* //TODO: implement an autocomplete for pets */}
+                                    Pets that are attending
+                                    <PetCombobox pets={pets} />
                                 </label>
                             </form>
                         )}

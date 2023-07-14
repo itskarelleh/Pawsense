@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.pawsense.pawsensebackend.repositories;
 
 import com.pawsense.pawsensebackend.models.PetDetails;
@@ -11,7 +10,4 @@ public interface PetDetailsRepository extends JpaRepository<PetDetails, Long> {
 
     PetDetails findByPetId(Long petId);
 
-=======
-package com.pawsense.pawsensebackend.repositories;public interface PetDetailsRepository {
->>>>>>> cd4994410045b91ab88b90744ee7aae9bde1022d
 }

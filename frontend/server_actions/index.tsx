@@ -44,6 +44,26 @@ export async function getPetById(petId : string) {
   return pet;
 }
 
+export async function getPetDetails(petId : string) {
+    const { getToken } = auth();
+
+    const token = await getToken();
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/details/${petId}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}`}
+    })
+
+    const data = await res.json();
+
+    return data;
+
+}
+
+export async function getAllMedicationsForPet(petId : string) {
+    return [];
+}
+
 export async function addNewPet( values : any ) {
 
     const { getToken } = auth();
@@ -104,5 +124,14 @@ export async function deletePet(petId : string) {
     const d = await res.json();
 
     return d;
+
+}
+
+//EVENTS
+export async function getAllEventsForUser() {
+    
+}
+
+export async function getAllEventsForPet(petId : string) {
 
 }

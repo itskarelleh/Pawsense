@@ -40,3 +40,16 @@ export async function addNewPet( values : any ) {
     
     return data;
 }
+
+export async function getAssetByPublicId(publicId : string) {
+    const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/fetch/public_id/${publicId}`;
+    const response = await fetch(url, {
+        method: "GET"
+    });
+  
+    if (response.status === 200) {
+      return await response.json();
+    } else {
+      throw new Error(`Error fetching asset: ${response.status}`);
+    }
+}

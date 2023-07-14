@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.pawsense.pawsensebackend.controllers;
 
 import com.pawsense.pawsensebackend.models.Event;
@@ -9,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.util.Set;
 import java.util.Optional;
 
 @RestController
@@ -19,24 +19,30 @@ public class EventController {
     @Autowired
     EventService eventService;
 
-//    @GetMapping("/current-user/all")
-//    public ResponseEntity<?> getAllPetEventsForCurrentUser(String userId) {
+//    @GetMapping("/current-user/{userId}")
+//    public ResponseEntity<?> getAllPetEventsForCurrentUser(@PathVariable String userId) {
 //        return ResponseEntity.ok().body(eventService.getPetEventsByUserId(userId));
 //    }
 
-    @GetMapping("/{eventId}")
+    @GetMapping("/pet/{petId}")
+    public ResponseEntity<Set<Event>> getAllPetEventsForPet(@PathVariable String petId) {
+        return ResponseEntity.ok().body(eventService.getEventsByPetId(Long.parseLong(petId)));
+    }
+
+    @GetMapping("/event/{eventId}")
     public ResponseEntity<Optional<Event>> getEvent(@PathVariable String eventId) {
             return ResponseEntity.ok().body(eventService.getEvent(Long.parseLong(eventId)));
     }
 
     @PostMapping("/new")
     public ResponseEntity<Event> postNewEvent(@RequestBody EventRequestBody eventRequestBody) {
-        Event event = new Event(eventRequestBody.getTitle(), eventRequestBody.getDescription(), eventRequestBody.getType(),
-                eventRequestBody.getStartsAt(), eventRequestBody.getEndsAt(), eventRequestBody.getAttendees(), eventRequestBody.getUserId(),
-                eventRequestBody.isPublic(), Instant.now(), Instant.now());
-
-        return ResponseEntity.ok().body(eventService.createNewEvent(event));
+        return ResponseEntity.ok().body(eventService.createNewEvent(eventRequestBody));
     }
+
+//    @PostMapping("/archive/{eventId}")
+//    public ResponseEntity<Event> archiveEvent(@PathVariable String eventId) {
+//
+//    }
 
 //    @PutMapping("/update/{eventId}")
 //    public ResponseEntity<Event> updateEvent(@RequestBody EventRequestBody eventRequestBody, @PathVariable String eventId) {
@@ -55,8 +61,4 @@ public class EventController {
 //
 //        return ResponseEntity.ok("Event has been deleted");
 //    }
-
-=======
-package com.pawsense.pawsensebackend.controllers;public class EventController {
->>>>>>> cd4994410045b91ab88b90744ee7aae9bde1022d
 }
