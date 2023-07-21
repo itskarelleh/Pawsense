@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Outfit } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs';
 import { ToastContainer } from 'react-toastify';
-const outfit = Outfit({ style: 'normal', subsets: ['latin']});
+import { nunito_sans } from './fonts';
 
 export const metadata = {
   title: 'Pawsense',
@@ -19,7 +19,7 @@ export default function RootLayout({
     <ClerkProvider>
         <html lang="en">
           <ToastContainer />
-          <body className={outfit.className}>
+          <body className={nunito_sans.className}>
             <main>
               {children}
             </main>   

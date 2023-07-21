@@ -4,10 +4,12 @@ import com.pawsense.pawsensebackend.models.Pet;
 import com.pawsense.pawsensebackend.models.PetDetails;
 import com.pawsense.pawsensebackend.repositories.PetDetailsRepository;
 import com.pawsense.pawsensebackend.repositories.PetRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -23,17 +25,18 @@ public class PetService {
         return petRepository.findPetsByUserId(userId);
     }
 
+    @Transactional
     public Pet addNewPet(Pet pet) {
-        //create a new pet details object
-        PetDetails petDetails = new PetDetails(0.00, "?", null, null, Instant.now(), Instant.now(), pet);
+        // Create a new pet details object
+        PetDetails petDetails = new PetDetails(0.00, "?", null, null, false, new HashSet<>(), new HashSet<>(), Instant.now(), Instant.now(), pet);
 
-        pet.getPetDetails().setPet(pet);
-
-        petDetails.getPet().setPetDetails(petDetails);
+        pet.setPetDetails(petDetails);
+        petDetails.setPet(pet);
 
         petDetailsRepository.save(petDetails);
+        petRepository.save(pet);
 
-        return petRepository.save(pet);
+        return pet;
     }
 
     public Pet findPetById(Long id) {
@@ -51,6 +54,7 @@ public class PetService {
     public Pet updatePet(Pet pet) {
         return petRepository.save(pet);
     }
+
     public void deletePet(Pet pet) {
         petRepository.delete(pet);
     }

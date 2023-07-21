@@ -29,15 +29,15 @@ public class Pet {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pet_details_id")
-    private PetDetails petDetails;
+    private PetDetails petDetails = new PetDetails();
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Medication> medications = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "pet_event",
-    joinColumns = @JoinColumn(name = "pet_id"),
-    inverseJoinColumns = @JoinColumn(name = "event_id"))
+            joinColumns = @JoinColumn(name = "pet_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id"))
     private Set<Event> events = new HashSet<>();
 
     public Pet() {
@@ -154,5 +154,26 @@ public class Pet {
 
     public void setEvents(Set<Event> events) {
         this.events = events;
+    }
+
+    public void addMedication(Medication medication) {
+        medications.add(medication);
+        medication.setPet(this);
+    }
+
+    // Convenience method to remove a medication from the pet
+    public void removeMedication(Medication medication) {
+        medications.remove(medication);
+        medication.setPet(null);
+    }
+
+    // Convenience method to add an event to the pet
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+
+    // Convenience method to remove an event from the pet
+    public void removeEvent(Event event) {
+        events.remove(event);
     }
 }

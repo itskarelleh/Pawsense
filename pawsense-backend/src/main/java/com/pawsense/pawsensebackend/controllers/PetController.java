@@ -4,6 +4,7 @@ import com.pawsense.pawsensebackend.models.Pet;
 import com.pawsense.pawsensebackend.models.PetDetails;
 import com.pawsense.pawsensebackend.payload.request.NewPetRequestBody;
 import com.pawsense.pawsensebackend.services.PetService;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,11 +44,11 @@ public class PetController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Pet> addNewPetForCurrentUser(@RequestBody Pet pet) {
+    public ResponseEntity<Pet> addNewPetForCurrentUser(@RequestBody NewPetRequestBody petRequestBody) {
+        Pet pet = new Pet(petRequestBody.getName(), petRequestBody.getType(), petRequestBody.getSex(),
+                petRequestBody.getAvatar(), petRequestBody.getUserId(), Instant.now(), Instant.now());
 
-        Pet created = petService.addNewPet(pet);
-
-        return new ResponseEntity<>(created, HttpStatus.OK);
+        return ResponseEntity.ok().body(petService.addNewPet(pet));
     }
 
     @PutMapping("/edit/{petId}")

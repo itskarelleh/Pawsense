@@ -3,31 +3,70 @@
 @tailwind utilities;
 
 @layer base {
+    html {
+        @apply text-neutral-600;
+    }
     h1 {
-        @apply text-4xl font-light;
+        @apply text-4xl font-bold;
     }
 
     h2 {
-        @apply text-3xl font-semibold;
+        @apply text-3xl font-semibold text-neutral-800;
     }
 
     h3 {
-        @apply text-2xl font-medium;
+        @apply text-2xl font-medium text-neutral-700;
     }
 
     h4 {
-        @apply text-xl;
+        @apply text-xl text-neutral-700;
     }
 
     h5 {
-        @apply text-lg;
+        @apply text-lg text-neutral-700;
     }
 
     input[type="text"] {
-        @apply border-b-2;
+        @apply border border-neutral-400 rounded-md;
+    }
+
+    textarea {
+        @apply rounded-sm border border-neutral-200 resize-none max-h-40;
     }
     
     ::selection {
         @apply bg-orange-300;
+    }
+
+    label {
+        @apply mt-8 mb-2 text-sm flex flex-col;
+    }
+
+    
+}
+
+@layer components {
+    .input-text {
+        @apply border border-neutral-400 rounded-md text-sm border-none;
+    }
+    
+    .rect-button {
+        @apply inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+    }
+
+    .tab-default {
+        @apply w-full py-2.5 text-sm font-medium leading-5 text-neutral-800;
+    }
+
+    .tab-focus {
+        @apply ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2;
+    }
+
+    .tab-active {
+        @apply bg-white shadow-[0px_-2px_5px_rgba(0,0,0,0.1)] rounded-t-md text-neutral-900;
+    }
+
+    .button {
+        @apply rounded-full px-4 py-2 bg-sky-400 hover:bg-rose-400 text-white;
     }
 }

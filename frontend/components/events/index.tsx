@@ -3,6 +3,7 @@ import { Pet } from "../pets"
 import { H3 } from "../typography"
 
 export interface Event {
+    id: number | string,
     title: string,
     description: string,
     type: string,

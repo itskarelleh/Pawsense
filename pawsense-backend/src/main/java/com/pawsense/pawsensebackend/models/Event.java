@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,9 +22,9 @@ public class Event {
 
     private String type;
 
-    private LocalDate startsAt;
+    private LocalDateTime startsAt;
 
-    private LocalDate endsAt;
+    private LocalDateTime endsAt;
 
     @ManyToMany(mappedBy = "events")
     private Set<Pet> attendees = new HashSet<>();
@@ -38,7 +39,7 @@ public class Event {
 
     public Event() { }
 
-    public Event(String title, String description, String type, LocalDate startsAt, LocalDate endsAt, Set<Pet> attendees, String userId, boolean isPublic, Instant createdAt, Instant lastModifiedAt) {
+    public Event(String title, String description, String type, LocalDateTime startsAt, LocalDateTime endsAt, Set<Pet> attendees, String userId, boolean isPublic, Instant createdAt, Instant lastModifiedAt) {
         this.title = title;
         this.description = description;
         this.type = type;
@@ -107,19 +108,19 @@ public class Event {
         isPublic = aPublic;
     }
 
-    public LocalDate getStartsAt() {
+    public LocalDateTime getStartsAt() {
         return startsAt;
     }
 
-    public void setStartsAt(LocalDate startsAt) {
+    public void setStartsAt(LocalDateTime startsAt) {
         this.startsAt = startsAt;
     }
 
-    public LocalDate getEndsAt() {
+    public LocalDateTime getEndsAt() {
         return endsAt;
     }
 
-    public void setEndsAt(LocalDate endsAt) {
+    public void setEndsAt(LocalDateTime endsAt) {
         this.endsAt = endsAt;
     }
 

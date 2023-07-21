@@ -16,16 +16,26 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //noinspection removal
         http.authorizeHttpRequests(auth ->
-                auth.requestMatchers("/api/v1/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/**").permitAll()
+                auth.requestMatchers("/api/v1/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/pets/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/events/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/medications/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/pets/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/events/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/medications/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/pets/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/events/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/medications/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/pets/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/events/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/medications/**").authenticated()
         ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
-
+//                .csrf().disable();
         return http.build();
     }
 }

@@ -2,18 +2,34 @@ package com.pawsense.pawsensebackend.services;
 
 
 import com.pawsense.pawsensebackend.models.Medication;
+import com.pawsense.pawsensebackend.models.Pet;
 import com.pawsense.pawsensebackend.repositories.MedicationRepository;
+import com.pawsense.pawsensebackend.repositories.PetRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
+@Service
 public class MedicationService {
 
     @Autowired
     MedicationRepository medicationRepository;
 
-    public Medication addNewMedication(Medication medication) {
+    @Autowired
+    PetRepository petRepository;
+
+    public Set<Medication> getAllMedicationsForPetById(Long petId) {
+        return medicationRepository.findAllByPetId(petId);
+    }
+    public Medication addNewMedication(Medication medication, Pet pet) {
+
+        pet.getMedications().add(medication);
+        petRepository.save(pet);
+
         return medicationRepository.save(medication);
     }
 

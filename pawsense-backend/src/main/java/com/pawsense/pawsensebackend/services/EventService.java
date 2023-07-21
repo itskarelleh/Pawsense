@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 
 @Service
 public class EventService {
@@ -41,9 +41,11 @@ public class EventService {
     public Event createNewEvent(EventRequestBody requestBody){
 
         Set<Long> attendeesIds = requestBody.getAttendeesIds();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
 
-        Event event = new Event(requestBody.getTitle(), requestBody.getDescription(), requestBody.getType(),
-                requestBody.getStartsAt(), requestBody.getEndsAt(), new HashSet<>(), requestBody.getUserId(),
+        Event event = new Event(
+                requestBody.getTitle(), requestBody.getDescription(), requestBody.getType(),
+                LocalDateTime.parse(requestBody.getStartsAt(), formatter), LocalDateTime.parse(requestBody.getEndsAt(), formatter), new HashSet<>(), requestBody.getUserId(),
                 requestBody.isPublic(), Instant.now(), Instant.now()
         );
 

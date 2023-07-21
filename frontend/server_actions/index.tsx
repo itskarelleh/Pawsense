@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 import { uploadImage } from '@/functions';
 
+
+//get methods
 export async function getPets() {
   const { userId, getToken } = auth();
 
@@ -64,6 +66,17 @@ export async function getAllMedicationsForPet(petId : string) {
     return [];
 }
 
+//EVENTS
+export async function getAllEventsForUser() {
+    
+}
+
+export async function getAllEventsForPet(petId : string) {
+
+}
+
+//post methods
+
 export async function addNewPet( values : any ) {
 
     const { getToken } = auth();
@@ -80,12 +93,37 @@ export async function addNewPet( values : any ) {
     });
 
     const data = await res.json();
+
+    console.log(res.status);
     
     if(!res.ok) throw new Error('Failed to fetch data');
     
     return data;
 }
 
+export async function addNewMedication(values : any) {
+    const { getToken } = auth();
+
+    const token = await getToken();
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/medications/add`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(values)
+    });
+
+    if(!res.ok) throw new Error('Failed to fetch data');
+    const data = await res.json();
+
+    return data;
+
+}
+
+
+//put/patch methods
 export async function editPet(data : Object) {
 
     const { getToken } = auth();
@@ -107,6 +145,8 @@ export async function editPet(data : Object) {
 
 }
 
+
+//delete methods
 export async function deletePet(petId : string) {
     
     const { getToken } = auth();
@@ -124,14 +164,5 @@ export async function deletePet(petId : string) {
     const d = await res.json();
 
     return d;
-
-}
-
-//EVENTS
-export async function getAllEventsForUser() {
-    
-}
-
-export async function getAllEventsForPet(petId : string) {
 
 }

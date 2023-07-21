@@ -15,7 +15,7 @@ import PetCombobox from './PetCombobox';
 async function PetList({ pets } : { pets : any}) {
 
     const selection : String[] = [];
-
+    
     if(pets.length == 0) return (
         <div className="h-96 w-full flex flex-col justify-center items-center">
             No pets have been added yet
@@ -25,7 +25,7 @@ async function PetList({ pets } : { pets : any}) {
    return (
     <div className='w-full space-y-4'>
         {pets && pets.map((pet: Pet) => (
-            <PetSummary pet={pet} selection={selection} />
+            <PetSummary key={pet.id} pet={pet} selection={selection} />
         ))}
     </div>
    )
@@ -36,13 +36,13 @@ async function PetList({ pets } : { pets : any}) {
  * 
  * @returns a summary of a pet
  */
-function PetSummary({ pet, selection } : { pet: Pet, selection: String[] }) {
+function PetSummary({ pet, selection, key } : { pet: Pet, selection: String[], key: any }) {
     
     const placeholder = "/default-thumbnail.png";
     const checkboxName = "pet" + pet.id;
     
     return (
-        <div key={pet.id} className='flex flex-row space-x-2 items-center justify-between cursor-pointer p-2 bg-white hover:bg-neutral-200 rounded-full transition-all ease-in-out'>
+        <div key={key} className='flex flex-row space-x-2 items-center justify-between cursor-pointer p-2 bg-white hover:bg-neutral-200 rounded-full transition-all ease-in-out'>
             <div className='ml-4 flex flex-row space-x-2 items-center'>
                 <input type="checkbox" name={checkboxName} className='form-checkbox rounded-full bg-cyan-100' />
                 {pet.avatar == '' || pet.avatar == null ? 
@@ -73,18 +73,17 @@ function PetSexAndTypeField({ sex, type } : { sex: string, type: string }) {
     return (
         <span className='flex flex-row'>
           {sex == "M" && (
-           <> <Male /> Male</>
+           <> <Male /> <span className="sr-only">male</span></>
           )}
           {sex == "F" && (
-           <> <Female /> Female</>
+           <> <Female /> <span className="sr-only">female</span></>
           )}
           {sex == "I" && (
-           <> <Intersex /> Intersex</>
+           <> <Intersex /><span className="sr-only">intersex</span></>
           )}
           {sex == "?" && (
-           <> <QuestionMark /> ?</>
-          )}
-          {type && type}
+           <> <QuestionMark /> <span className="sr-only">unknown sex</span></>
+          )} <span className="ml-1 capitalize">{type && type}</span>
         </span>
     )
 }

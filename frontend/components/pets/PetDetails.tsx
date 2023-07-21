@@ -5,35 +5,27 @@ import classNames from 'classnames';
 import PetAvatar from '../PetAvatar';
 import { useState } from 'react';
 import { EditPencil } from 'iconoir-react';
-import { H1, H2, H3 } from '@/components/typography/index';
 import AddNewEventModal from '../events/AddNewEventModal';
-import { AddNewMedicationModal, Medication } from '../medications';
+import { AddNewMedicationModal, Medication, MedicationSummary } from '../medications';
 import { Pet, Details, PetSexAndTypeField } from '.';
-import { Event, EventDetails, EventList, EventSummary } from '../events';
+import { Event, EventSummary } from '../events';
 
-export default function PetDetails({ pet, pets, details, medications, events } : { pet : Pet, pets: Pet[], details: Details, medications: any, events: any  }) {
+export default function PetDetails({ pet, details, medications, events } : { pet : Pet, details: Details, medications: any, events: any  }) {
     
     return (
         <>
-        <div className="grid grid-cols-1 md:grid-cols-12">
-            <header className="md:col-end-5 flex flex-row lg:flex-col mb-8">
-                <PetAvatar imgId={pet.avatar} width={150} height={150} format='jpg' radius={360} />
-                <div>
-                    <H1>{pet && pet.name}</H1>
-                    {pet.nicknames && pet.nicknames}
-                    <PetSexAndTypeField type={pet.type} sex={pet.sex} />
-                </div>
-            </header>
-            <section className='md:col-start-6 md:col-end-12'>
+        <div className="w-screen grid grid-cols-1 md:grid-cols-12 gap-4">
+            <PetProfileHeader pet={pet} />
+            <section className='md:t-4 md:col-start-5 col-span-8 bg-white min-h-screen'>
                 <Tab.Group>
-                    <Tab.List className="flex space-x-l  bg-neutral-100 shadow-inner">
+                    <Tab.List className="pt-4 flex space-x-l  bg-neutral-100">
                         <Tab className={({ selected }) =>
                             classNames(
-                                'w-full py-2.5 text-sm font-medium leading-5 text-neutral-800',
-                                'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                                'tab-default',
+                                'tab-focus',
                                 selected
-                                    ? 'bg-neutral-50 rounded-t-md text-neutral-900'
-                                    : 'text-cyan-100 hover:bg-white/[0.12]'
+                                    ? 'tab-active'
+                                    : ''
                             )
                         }
                         >
@@ -41,11 +33,11 @@ export default function PetDetails({ pet, pets, details, medications, events } :
                         </Tab>
                         <Tab className={({ selected }) =>
                             classNames(
-                                'w-full py-2.5 text-sm font-medium leading-5 text-neutral-800',
-                                'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                                'tab-default',
+                                'tab-focus',
                                 selected
-                                    ? 'bg-neutral-50 rounded-t-md text-neutral-900'
-                                    : 'text-cyan-100 hover:bg-white/[0.12]'
+                                    ? 'tab-active'
+                                    : ''
                             )
                         }
                         >
@@ -53,11 +45,11 @@ export default function PetDetails({ pet, pets, details, medications, events } :
                         </Tab>
                         <Tab className={({ selected }) =>
                             classNames(
-                                'w-full py-2.5 text-sm font-medium leading-5 text-cyan-600',
-                                'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+                                'tab-default',
+                                'tab-focus',
                                 selected
-                                    ? 'bg-neutral-50 rounded-t-md text-neutral-900'
-                                    : 'text-neutral-800'
+                                    ? 'tab-active'
+                                    : ''
                             )
                         }
                         >
@@ -77,14 +69,14 @@ export default function PetDetails({ pet, pets, details, medications, events } :
                             'ring-white ring-opacity-60 ring-offset-2 ring-offset-pink-400 focus:outline-none focus:ring-2'
                         )}
                         >
-                            <EventsPanel events={events} />
+                            <EventsPanel events={events} petId={pet.id} />
                         </Tab.Panel>
                         <Tab.Panel className={classNames(
                             'rounded-xl p-3',
                             'ring-white ring-opacity-60 ring-offset-2 ring-offset-pink-400 focus:outline-none focus:ring-2'
                         )}
                         >
-
+                            <MedicationsPanel medications={medications} pet={pet} />
                         </Tab.Panel>
                     </Tab.Panels>
                 </Tab.Group>
@@ -94,15 +86,33 @@ export default function PetDetails({ pet, pets, details, medications, events } :
     )
 }
 
+
+function PetProfileHeader({ pet } :  { pet : Pet }) {
+
+    return (
+        <header className="grid grid-cols-12 md:grid-cols-1 md:col-end-4 mb-8 md:mb-0 p-10 gap-8 md:gap-2">
+            <div className="col-span-5 md:col-span-1 flex flex-col items-center justify-center">
+                <div className="w-30 md:w-44">
+                    <PetAvatar imgId={pet.avatar} width={500} height={500} format='jpg' isRounded />
+                </div>
+            </div>
+            <div className="col-span-7 md:col-span-1 md:flex md:flex-col md:items-center">
+                <div className="flex flex-row items-center space-x-4">
+                    <h1>{pet && pet.name}</h1>
+                    <PetSexAndTypeField type={pet.type} sex={pet.sex} />
+                </div>
+                {pet.nicknames && pet.nicknames}
+            </div>
+        </header>
+    )
+}
 function PetAboutPanel({ about, name } : { about : any, name: string }) {
     
     const { adoptionDate, birthDate, weight, size, bio } = about;
-    const [ isEditing, setIsEditing ] = useState(false);
     
     return (
-        <div className='p-8'>
-            
-            <div className="flex flex-row space-x-4 w-full justify-between">
+        <div className='p-8 mb-4'>
+            <div className="flex flex-row space-x-4 w-full justify-between mb-8">
                 <h2>About</h2>
                 
                 <button title={`Edit details about ${name}`} className='transition-all ease-in-out text-xl text-center rounded-full w-10 h-10 hover:bg-cyan-200'>
@@ -124,79 +134,44 @@ function PetAboutPanel({ about, name } : { about : any, name: string }) {
                 <span className="flex flex-row">Size: {size ? size : '?'}</span>
             </div>
            </div>
-
-           <section>
-                <header>
-                <H2>Photos of {name}</H2>
-                
-                <button title={`Edit details about ${name}`} className='transition-all ease-in-out text-xl text-center rounded-full w-10 h-10 hover:bg-cyan-200'>
-                    <EditPencil className='m-auto'/>
-                </button>
-                </header>
-                <div className='grid grid-cols-3 gap-4'>
-                    <div className='bg-neutral-300 h-auto'>
-                        img
-                    </div>
-                    <div className='bg-neutral-300 h-auto'>
-                        img
-                    </div>
-                    <div className='bg-neutral-300 h-auto'>
-                        img
-                    </div>
-                    <div className='bg-neutral-300 h-auto'>
-                        img
-                    </div>
-                    <div className='bg-neutral-300 h-auto'>
-                        img
-                    </div>
-                    <div className='bg-neutral-300 h-auto'>
-                        img
-                    </div>
-                </div>
-           </section>
         </div>
     )
 }
 
-function NoEventsFound ({ pets } : { pets: Pet[] }) {
-    return (
+
+function EventsPanel({ events, petId } : { events : any, petId : string }) {
+
+    if(!events || events.length == 0) return (
         <div className='p-8'>
             <h3>No events for this pet have been created yet.</h3>
-            <AddNewEventModal pets={pets} />
+            <AddNewEventModal preselectedPets={[petId]} />
         </div>
-    )
-}
-
-function EventsPanel({ events, pets } : { events : any, pets : any }) {
-
-    if(!events || events.length == 0) return <NoEventsFound pets={pets} />; 
+    ) 
 
     return (
         <section>
             {events && events.map((event : Event) => (
-                <EventSummary event={event} />
+                <EventSummary key={event.id} event={event} />
             ))}
         </section>
     )
 }
 
-function NoMedicationsFound({ petName, petId } : { petName : string, petId: string }) {
-    
-    return (
+
+function MedicationsPanel({ medications, pet } : { medications: any, pet: Pet }) {
+
+    if(medications.length === 0) return (
         <div className="p-8">
-            <H3>No Medications have been added for ${petName}</H3>
-            <AddNewMedicationModal petId={petId} />
+            <h3>No Medications have been added for {pet.name}</h3>
+            <AddNewMedicationModal pet={pet} />
         </div>
     )
-}
-
-function MedicationPanel({ medications } : { medications: any }) {
-
-    if(!medications) return <NoMedicationsFound petName={''} />
  
     return (
         <>
-        
+            {medications && medications.map((medication : Medication) => (
+                <MedicationSummary key={medication.id} medication={medication} />
+            ))}
         </>
     )
 }

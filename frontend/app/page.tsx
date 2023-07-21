@@ -6,6 +6,7 @@ export default function Home() {
   const { userId } = auth();
 
   if(userId) redirect("/dashboard");
+  
     return (
         <>
         <h1>Pawsense</h1>

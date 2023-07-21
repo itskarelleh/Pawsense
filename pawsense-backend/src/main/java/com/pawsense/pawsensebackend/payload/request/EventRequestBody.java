@@ -1,9 +1,6 @@
 package com.pawsense.pawsensebackend.payload.request;
 
-import com.pawsense.pawsensebackend.models.Pet;
-
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Set;
 
 public class EventRequestBody {
@@ -14,9 +11,9 @@ public class EventRequestBody {
 
     private String type;
 
-    private LocalDate startsAt;
+    private String startsAt;
 
-    private LocalDate endsAt;
+    private String endsAt;
 
     private String userId;
 
@@ -53,19 +50,19 @@ public class EventRequestBody {
         this.type = type;
     }
 
-    public LocalDate getStartsAt() {
+    public String getStartsAt() {
         return startsAt;
     }
 
-    public void setStartsAt(LocalDate startsAt) {
+    public void setStartsAt(String startsAt) {
         this.startsAt = startsAt;
     }
 
-    public LocalDate getEndsAt() {
+    public String getEndsAt() {
         return endsAt;
     }
 
-    public void setEndsAt(LocalDate endsAt) {
+    public void setEndsAt(String endsAt) {
         this.endsAt = endsAt;
     }
 

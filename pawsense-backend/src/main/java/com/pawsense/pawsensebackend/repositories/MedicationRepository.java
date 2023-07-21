@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface MedicationRepository extends JpaRepository<Medication, Long> {
 
@@ -14,4 +15,6 @@ public interface MedicationRepository extends JpaRepository<Medication, Long> {
     @Query("DELETE FROM Medication m WHERE m = :medication")
     void deleteMedication(@Param("medication") Optional<Medication> medication);
 
+    @Query("SELECT m FROM Medication m WHERE m.pet.id = :petId")
+    Set<Medication> findAllByPetId(@Param("petId") Long petId);
 }
