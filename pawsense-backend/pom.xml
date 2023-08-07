@@ -36,9 +36,9 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
-			<scope>runtime</scope>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.27</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -75,7 +75,36 @@
 			<artifactId>spring-security-oauth2-jose</artifactId>
 			<version>6.1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.7</version>
+		</dependency>
 	</dependencies>
+	<configuration>
+
+		<!-- Appender for console logging -->
+		<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			</encoder>
+		</appender>
+
+		<!-- Appender for file logging -->
+		<appender name="file" class="ch.qos.logback.core.FileAppender">
+			<file>logs/application.log</file>
+			<encoder>
+				<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			</encoder>
+		</appender>
+
+		<!-- Root logger configuration -->
+		<root level="INFO">
+			<appender-ref ref="console" />
+			<appender-ref ref="file" />
+		</root>
+
+	</configuration>
 	<build>
 		<plugins>
 			<plugin>

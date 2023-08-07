@@ -41,7 +41,7 @@ async function EventList({ events } : { events : Event[] }) {
     if(events.length === 0) {
         return (
             <div className="w-full h-36 flex flex-col items-center justify-center">
-                <H3>No upcoming events</H3>
+                No upcoming events
             </div>
         )
     }
@@ -50,7 +50,7 @@ async function EventList({ events } : { events : Event[] }) {
         <>
             {events && events.map((event : Event) => {
                 <>
-                
+                    <EventSummary key={event.id} event={event} />
                 </>
             })}
         </>

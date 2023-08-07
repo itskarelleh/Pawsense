@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.util.Set;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,13 +18,13 @@ public class EventController {
     @Autowired
     EventService eventService;
 
-//    @GetMapping("/current-user/{userId}")
-//    public ResponseEntity<?> getAllPetEventsForCurrentUser(@PathVariable String userId) {
-//        return ResponseEntity.ok().body(eventService.getPetEventsByUserId(userId));
-//    }
+    @GetMapping("/current-user/{userId}")
+    public ResponseEntity<List<Event>> getAllEventsByUser(@PathVariable String userId) {
+        return ResponseEntity.ok().body(eventService.getEventsCreatedByUser(userId));
+    }
 
     @GetMapping("/pet/{petId}")
-    public ResponseEntity<Set<Event>> getAllPetEventsForPet(@PathVariable String petId) {
+    public ResponseEntity<List<Event>> getAllPetEventsForPet(@PathVariable String petId) {
         return ResponseEntity.ok().body(eventService.getEventsByPetId(Long.parseLong(petId)));
     }
 
@@ -34,7 +33,7 @@ public class EventController {
             return ResponseEntity.ok().body(eventService.getEvent(Long.parseLong(eventId)));
     }
 
-    @PostMapping("/new")
+    @PostMapping("/add")
     public ResponseEntity<Event> postNewEvent(@RequestBody EventRequestBody eventRequestBody) {
         return ResponseEntity.ok().body(eventService.createNewEvent(eventRequestBody));
     }

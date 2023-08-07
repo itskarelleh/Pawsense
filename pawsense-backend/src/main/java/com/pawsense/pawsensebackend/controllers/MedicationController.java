@@ -9,33 +9,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/medications")
 public class MedicationController {
 
-
     @Autowired
     MedicationService medicationService;
 
     @Autowired
     PetRepository petRepository;
-    //TODO: get all medications for pets by current user
+
+    @GetMapping("/current-user/{userId}")
+    public ResponseEntity<List<Medication>> getMedicationsByCurrentUser(@PathVariable String userId) {
+        return ResponseEntity.ok().body(medicationService.getMedicationsCreatedByUser(userId));
+    }
 
     //TODO: get all medications for pets by organization
 
     //TODO: get medication by id
 
-    //TODO: get medications for pet by pet id
-
     @GetMapping("/all/{petId}")
-    public ResponseEntity<Set<Medication>> getMedicationsForPet(Long petId) {
+    public ResponseEntity<List<Medication>> getMedicationsForPet(@PathVariable Long petId) {
         return ResponseEntity.ok().body(medicationService.getAllMedicationsForPetById(petId));
     }
 
-    //TODO: add a new mediation for a pet
     @PostMapping("/add")
     public ResponseEntity<Medication> addNewMedicationForPet(@RequestBody NewMedicationRequestBody medicationRequestBody) throws Exception {
         Pet pet = petRepository.findPetByPetId(Long.parseLong(medicationRequestBody.getPetId()));
@@ -44,7 +45,7 @@ public class MedicationController {
 
         Medication medication = new Medication(medicationRequestBody.getName(), medicationRequestBody.getBrand(),
                 medicationRequestBody.getInstructions(), pet, medicationRequestBody.getUserId(),
-                Instant.now(), Instant.now());
+                LocalDateTime.now(), LocalDateTime.now());
 
         return ResponseEntity.ok().body(medicationService.addNewMedication(medication, pet));
 

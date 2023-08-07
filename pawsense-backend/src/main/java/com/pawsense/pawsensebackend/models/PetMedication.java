@@ -3,9 +3,8 @@ package com.pawsense.pawsensebackend.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "pet_events")
-public class PetEvent {
-
+@Table(name = "pet_medications")
+public class PetMedication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,16 +14,16 @@ public class PetEvent {
     private Pet pet;
 
     @ManyToOne
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @JoinColumn(name = "medication_id")
+    private Medication medication;
 
-    public PetEvent() {
+    public PetMedication() {
+
     }
-
-    public PetEvent(Long id, Pet pet, Event event) {
+    public PetMedication(Long id, Pet pet, Medication medication) {
         this.id = id;
         this.pet = pet;
-        this.event = event;
+        this.medication = medication;
     }
 
     public Long getId() {
@@ -43,12 +42,11 @@ public class PetEvent {
         this.pet = pet;
     }
 
-    public Event getEvent() {
-        return event;
+    public Medication getMedication() {
+        return medication;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setMedication(Medication medication) {
+        this.medication = medication;
     }
-
 }

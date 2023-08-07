@@ -1,25 +1,35 @@
-package com.pawsense.pawsensebackend.payload.request;
+package com.pawsense.pawsensebackend.payload.response;
 
-import com.pawsense.pawsensebackend.models.Pet;
+public class PetSummaryResponse {
 
-import java.time.Instant;
-import java.time.LocalDate;
-
-public class NewPetRequestBody {
+    private Long id;
 
     private String name;
 
     private String type;
-
-    private String breed;
-
-    private String color;
 
     private String sex;
 
     private String avatar;
 
     private String userId;
+
+    public PetSummaryResponse(Long id, String name, String type, String sex, String avatar, String userId) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.sex = sex;
+        this.avatar = avatar;
+        this.userId = userId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -35,22 +45,6 @@ public class NewPetRequestBody {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getBreed() {
-        return breed;
-    }
-
-    public void setBreed(String breed) {
-        this.breed = breed;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public String getSex() {

@@ -3,10 +3,11 @@ import PetAvatar from "../PetAvatar";
 import { getPets } from "@/server_actions";
 import { Female, Male, NavArrowRight, QuestionMark } from 'iconoir-react';
 import Link from 'next/link';
-import PetDetails from './PetDetails';
+import PetProfile from './PetProfile';
 import Intersex from '../Intersex';
 import PetCombobox from './PetCombobox';
-
+import { Medication } from '../medications';
+import { Event } from '../events';
 /**
  * Gets all the pets by current user and 
  * return them as a list of avatars
@@ -24,7 +25,7 @@ async function PetList({ pets } : { pets : any}) {
     
    return (
     <div className='w-full space-y-4'>
-        {pets && pets.map((pet: Pet) => (
+        {pets.map((pet: Pet) => (
             <PetSummary key={pet.id} pet={pet} selection={selection} />
         ))}
     </div>
@@ -44,7 +45,7 @@ function PetSummary({ pet, selection, key } : { pet: Pet, selection: String[], k
     return (
         <div key={key} className='flex flex-row space-x-2 items-center justify-between cursor-pointer p-2 bg-white hover:bg-neutral-200 rounded-full transition-all ease-in-out'>
             <div className='ml-4 flex flex-row space-x-2 items-center'>
-                <input type="checkbox" name={checkboxName} className='form-checkbox rounded-full bg-cyan-100' />
+                <input type="checkbox" name={checkboxName} className='form-checkbox rounded-full bg-sky-100' />
                 {pet.avatar == '' || pet.avatar == null ? 
                 <figure className='w-[50px] h-[50px] rounded-full overflow-hidden'>
                     <img src={placeholder} className='w-full' alt={pet.name} />
@@ -88,6 +89,18 @@ function PetSexAndTypeField({ sex, type } : { sex: string, type: string }) {
     )
 }
 
+export interface PetBio {
+    id: number | string | undefined;
+    weight: number | undefined;
+    size: string | undefined;
+    about: string | undefined;
+    birthDate: string | undefined;
+    adoptionDate: string | undefined;
+    isFosterPet: boolean | undefined;
+    traits: string[] | null | undefined;
+    photoIds: string[] | null | undefined;
+}
+
 export interface Pet {
     id: number;
     name: string;
@@ -96,6 +109,9 @@ export interface Pet {
     avatar: string;
     userId: string;
     sex: string;
+    bio: PetBio | null | undefined;
+    medications: Medication[] | null | undefined;
+    events: Event[] | null | undefined;
 }
 
 export interface Details {

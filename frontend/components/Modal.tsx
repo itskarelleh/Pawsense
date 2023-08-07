@@ -18,7 +18,7 @@ export default function Modal({ title, isOpen, closeModal, children } : any) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-neutral-200" />
+            <div className="fixed inset-0 bg-neutral-200/50" />
           </Transition.Child>
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center">
@@ -29,14 +29,12 @@ export default function Modal({ title, isOpen, closeModal, children } : any) {
                 enterTo="opacity-100 scale-100"
                 leave="ease-in duration-200"
                 leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-screen min-h-screen transform overflow-hidden bg-white p-6 text-left align-middle transition-all">
-                  <div className="mb-8 flex flex-row justify-between items-center">
+                leaveTo="opacity-0 scale-95">
+                <Dialog.Panel className="w-auto transform overflow-hidden box p-6 text-left align-middle transition-all">
+                  <div className="flex flex-row justify-between items-center">
                   <Dialog.Title
                     as="h3"
-                    className="text-3xl font-medium leading-6 text-gray-900"
-                  >
+                    className="text-3xl font-medium leading-6 text-gray-900">
                     {title}
                   </Dialog.Title>
                   <button onClick={closeModal} className="text-2xl font-light ">

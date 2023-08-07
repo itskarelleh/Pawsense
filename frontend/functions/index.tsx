@@ -1,5 +1,8 @@
 import { auth } from "@clerk/nextjs";
 
+// export async function replaceImage(file: any) {
+// }
+
 export async function uploadImage(file: any) {
 
     console.log("uploadImage values: " + file);

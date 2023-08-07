@@ -2,9 +2,9 @@ package com.pawsense.pawsensebackend.models;
 
 import jakarta.persistence.*;
 
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pets")
@@ -13,40 +13,54 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "type")
     private String type;
+    @Column(name = "breed")
+    private String breed;
 
+    @Column(name = "color")
+    private String color;
+
+    @Column(name = "sex")
     private String sex;
 
+    @Column(name = "avatar")
     private String avatar;
 
-    private Instant addedAt;
 
-    private Instant lastUpdatedAt;
+    @Column(name = "addedAt", columnDefinition = "timestamp with time zone")
+    private LocalDateTime addedAt;
+
+    @Column(name = "lastUpdatedAt", columnDefinition = "timestamp with time zone")
+    private LocalDateTime lastUpdatedAt;
 
     private String userId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "pet_details_id")
-    private PetDetails petDetails = new PetDetails();
+    @OneToOne(cascade = CascadeType.MERGE) // Use CascadeType.MERGE instead of CascadeType.ALL
+    @JoinColumn(name = "pet_bio_id")
+    private PetBio petBio;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Medication> medications = new HashSet<>();
+    private List<Medication> medications = new ArrayList<>();
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "pet_event",
             joinColumns = @JoinColumn(name = "pet_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id"))
-    private Set<Event> events = new HashSet<>();
+    private List<Event> events = new ArrayList<>();
 
     public Pet() {
 
     }
 
-    public Pet(String name, String type, String sex, String avatar, String userId, Instant addedAt, Instant lastUpdatedAt) {
+    public Pet(String name, String type, String breed, String color, String sex, String avatar, String userId, LocalDateTime addedAt, LocalDateTime lastUpdatedAt) {
         this.name = name;
         this.type = type;
+        this.breed = breed;
+        this.color = color;
         this.sex = sex;
         this.avatar = avatar;
         this.userId = userId;
@@ -54,16 +68,15 @@ public class Pet {
         this.lastUpdatedAt = lastUpdatedAt;
     }
 
-    public Pet(Long id, String name, String type, String sex, String avatar, Instant addedAt, Instant lastUpdatedAt, String userId, PetDetails petDetails, Set<Medication> medications, Set<Event> events) {
-        this.id = id;
+    public Pet(String name, String type, String sex, String avatar, String userId, LocalDateTime addedAt, LocalDateTime lastUpdatedAt, PetBio petBio, List<Medication> medications, List<Event> events) {
         this.name = name;
         this.type = type;
         this.sex = sex;
         this.avatar = avatar;
+        this.userId = userId;
         this.addedAt = addedAt;
         this.lastUpdatedAt = lastUpdatedAt;
-        this.userId = userId;
-        this.petDetails = petDetails;
+        this.petBio = petBio;
         this.medications = medications;
         this.events = events;
     }
@@ -108,19 +121,19 @@ public class Pet {
         this.avatar = avatar;
     }
 
-    public Instant getAddedAt() {
+    public LocalDateTime getAddedAt() {
         return addedAt;
     }
 
-    public void setAddedAt(Instant addedAt) {
+    public void setAddedAt(LocalDateTime addedAt) {
         this.addedAt = addedAt;
     }
 
-    public Instant getLastUpdatedAt() {
+    public LocalDateTime getLastUpdatedAt() {
         return lastUpdatedAt;
     }
 
-    public void setLastUpdatedAt(Instant lastUpdatedAt) {
+    public void setLastUpdatedAt(LocalDateTime lastUpdatedAt) {
         this.lastUpdatedAt = lastUpdatedAt;
     }
 
@@ -132,27 +145,27 @@ public class Pet {
         this.userId = userId;
     }
 
-    public PetDetails getPetDetails() {
-        return petDetails;
+    public PetBio getPetBio() {
+        return petBio;
     }
 
-    public void setPetDetails(PetDetails petDetails) {
-        this.petDetails = petDetails;
+    public void setPetBio(PetBio petBio) {
+        this.petBio = petBio;
     }
 
-    public Set<Medication> getMedications() {
+    public List<Medication> getMedications() {
         return medications;
     }
 
-    public void setMedications(Set<Medication> medications) {
+    public void setMedications(List<Medication> medications) {
         this.medications = medications;
     }
 
-    public Set<Event> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(Set<Event> events) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 

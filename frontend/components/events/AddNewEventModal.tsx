@@ -9,6 +9,9 @@ import PetCombobox from "../pets/PetCombobox";
 import { Field, Formik, FormikHelpers, FormikValues, useField } from 'formik';
 import { useUser } from "@clerk/nextjs";
 import { Listbox } from "@headlessui/react";
+import CustomToast from "../CustomToast";
+import { toast } from "react-toastify";
+import { addNewEvent } from "@/server_actions";
 
 interface InitialValues {
     "title": string;
@@ -27,7 +30,22 @@ export default function AddNewEventModal({ preselectedPets }: { preselectedPets:
     const { user } = useUser();
     const [isOpen, setIsOpen ] = useState(false);
 
-    const toggleModal = () => setIsOpen(prev => !prev);
+    const closeModal = () => setIsOpen(false);
+
+    const handleSubmit = async (values : FormikValues) => {
+      
+      try {
+        const res = await addNewEvent(values);
+        toast.success(<CustomToast>
+          New event added successfully!
+          <a href="/event/${res.event-name}">View</a>
+        </CustomToast>)
+        closeModal();
+      } catch (err) {
+        toast.error("Failed to add new event");
+      }
+
+    }
 
     const initialValues: InitialValues = {
         "title": "",
@@ -43,15 +61,13 @@ export default function AddNewEventModal({ preselectedPets }: { preselectedPets:
     return (
         <div>
             <div className="flex items-center justify-center">
-                <ActionButton onClick={toggleModal}>
+                <ActionButton onClick={() => setIsOpen(true)}>
                     <Plus />
                 </ActionButton>
             </div>
-            <Modal title="Add New Event" isOpen={isOpen} closeModal={toggleModal}>
+            <Modal title="Add New Event" isOpen={isOpen} closeModal={closeModal}>
                 <div className="mt-2">
-                    <Formik initialValues={initialValues} onSubmit={function (values: FormikValues, formikHelpers: FormikHelpers<FormikValues>): void | Promise<any> {
-                        throw new Error("Function not implemented.");
-                    }}>
+                    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
                         {props => (
                             <form onSubmit={props.handleSubmit}>
                                 <label htmlFor="title" className="flex flex-col">
@@ -108,9 +124,9 @@ function EventTypeSelectField() {
       <Listbox.Button>{field.value}</Listbox.Button>
       <Listbox.Options className="w-full">
         {eventTypeOptions.map((eventTypeOption) => (
-              <Listbox.Option className="capitalize text-gray-900 dark:text-gray-100" value={eventTypeOption}>
-                {eventTypeOption}
-              </Listbox.Option>
+          <Listbox.Option className="capitalize text-gray-900 dark:text-gray-100" value={eventTypeOption}>
+            {eventTypeOption}
+          </Listbox.Option>
         ))}
       </Listbox.Options>
     </Listbox>

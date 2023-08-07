@@ -3,20 +3,22 @@ package com.pawsense.pawsensebackend.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.Instant;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "pet_details")
-public class PetDetails {
+public class PetBio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private double weight;
+
+    @Column(name = "about", length = 4000)
+    private String about;
 
     private String size;
 
@@ -26,24 +28,31 @@ public class PetDetails {
 
     private boolean isFosterPet;
 
-    @Column(name="traits")
+    @ElementCollection // Use ElementCollection for collections
     private Set<String> traits = new HashSet<>();
 
-    @Column(name = "photoIds")
+    @ElementCollection // Use ElementCollection for collections
     private Set<String> photoIds = new HashSet<>();
 
-    private Instant addedAt;
+    @Column(nullable = false)
+    private LocalDateTime addedAt;
 
-    private Instant lastUpdatedAt;
+    @Column(nullable = false)
+    private LocalDateTime lastUpdatedAt;
 
-    @OneToOne(mappedBy = "petDetails")
+    @OneToOne(mappedBy = "petBio")
     private Pet pet;
 
-    public PetDetails(double weight, String size, LocalDate birthDate, LocalDate adoptionDate,
-                      boolean isFosterPet, Set<String> traits, Set<String> photoIds,
-                      Instant addedAt, Instant lastUpdatedAt, Pet pet) {
+    public PetBio() {
+
+    }
+
+    public PetBio(double weight, String size, String about, LocalDate birthDate, LocalDate adoptionDate,
+                  boolean isFosterPet, Set<String> traits, Set<String> photoIds,
+                  LocalDateTime addedAt, LocalDateTime lastUpdatedAt, Pet pet) {
         this.weight = weight;
         this.size = size;
+        this.about = about;
         this.birthDate = birthDate;
         this.adoptionDate = adoptionDate;
         this.isFosterPet = isFosterPet;
@@ -52,10 +61,6 @@ public class PetDetails {
         this.addedAt = addedAt;
         this.lastUpdatedAt = lastUpdatedAt;
         this.pet = pet;
-    }
-
-    public PetDetails() {
-
     }
 
     public Long getId() {
@@ -80,6 +85,14 @@ public class PetDetails {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     public LocalDate getBirthDate() {
@@ -122,19 +135,19 @@ public class PetDetails {
         this.photoIds = photoIds;
     }
 
-    public Instant getAddedAt() {
+    public LocalDateTime getAddedAt() {
         return addedAt;
     }
 
-    public void setAddedAt(Instant addedAt) {
+    public void setAddedAt(LocalDateTime addedAt) {
         this.addedAt = addedAt;
     }
 
-    public Instant getLastUpdatedAt() {
+    public LocalDateTime getLastUpdatedAt() {
         return lastUpdatedAt;
     }
 
-    public void setLastUpdatedAt(Instant lastUpdatedAt) {
+    public void setLastUpdatedAt(LocalDateTime lastUpdatedAt) {
         this.lastUpdatedAt = lastUpdatedAt;
     }
 

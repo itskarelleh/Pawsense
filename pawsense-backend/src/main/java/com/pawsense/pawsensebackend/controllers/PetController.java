@@ -1,17 +1,18 @@
 package com.pawsense.pawsensebackend.controllers;
 
 import com.pawsense.pawsensebackend.models.Pet;
-import com.pawsense.pawsensebackend.models.PetDetails;
+import com.pawsense.pawsensebackend.models.PetBio;
 import com.pawsense.pawsensebackend.payload.request.NewPetRequestBody;
+import com.pawsense.pawsensebackend.payload.request.PetBioRequestBody;
+import com.pawsense.pawsensebackend.payload.response.PetSummaryResponse;
 import com.pawsense.pawsensebackend.services.PetService;
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -20,46 +21,43 @@ public class PetController {
 
     @Autowired
     PetService petService;
-    //get all pets
 
     @GetMapping("/current-user/{userId}")
-    public ResponseEntity<List<Pet>> getCurrentUserPets(@PathVariable String userId) {
-        List<Pet> res = petService.getAllPetsByUserId(userId);
-
-        return ResponseEntity.ok().body(res);
+    public ResponseEntity<List<PetSummaryResponse>> getCurrentUserPets(@PathVariable String userId) {
+        try {
+            List<PetSummaryResponse> res = petService.getAllPetsByUserId(userId);
+            return ResponseEntity.ok().body(res);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/{petId}")
-    public ResponseEntity<Pet> getPetById(@PathVariable String petId) {
-        Pet pet = petService.findPetById(Long.parseLong(petId));
-
-        return ResponseEntity.ok().body(pet);
-    }
-
-    @GetMapping("/details/{petId}")
-    public ResponseEntity<PetDetails> getPetDetailsById(@PathVariable String petId) {
-        PetDetails petDetails = petService.findPetDetails(Long.parseLong(petId));
-
-        return ResponseEntity.ok().body(petDetails);
+    public ResponseEntity<Pet> getPetProfileById(@PathVariable String petId) {
+        try {
+            Pet pet = petService.findPetById(Long.parseLong(petId));
+            return ResponseEntity.ok().body(pet);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("/add")
     public ResponseEntity<Pet> addNewPetForCurrentUser(@RequestBody NewPetRequestBody petRequestBody) {
-        Pet pet = new Pet(petRequestBody.getName(), petRequestBody.getType(), petRequestBody.getSex(),
-                petRequestBody.getAvatar(), petRequestBody.getUserId(), Instant.now(), Instant.now());
-
-        return ResponseEntity.ok().body(petService.addNewPet(pet));
+        return ResponseEntity.ok().body(petService.addNewPet(petRequestBody));
     }
 
-    @PutMapping("/edit/{petId}")
-    public ResponseEntity<Pet> editExistingPet(@PathVariable String petId, @RequestBody Pet pet) throws Exception {
-        Pet foundPet = petService.findPetById(Long.valueOf(petId));
+    @PutMapping("/update-bio/{petId}")
+    public ResponseEntity<?> updatePetBio(@PathVariable String petId, @RequestBody PetBioRequestBody petBioRequestBody) {
 
-        if(foundPet == null) return ResponseEntity.notFound().build();
-
-        Pet updated = petService.updatePetDetails(foundPet);
-
-        return ResponseEntity.ok().body(updated);
+        try {
+            PetBio petBio = petService.updatePetBio(Long.parseLong(petId), petBioRequestBody);
+            return ResponseEntity.ok().body(petBio);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PutMapping("/edit/avatar/{petId}")

@@ -2,35 +2,41 @@ package com.pawsense.pawsensebackend.models;
 
 import jakarta.persistence.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "medications")
 public class Medication {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Use GenerationType.IDENTITY for PostgreSQL
     private Long id;
+
+    @Column(nullable = false) // Add nullable=false to ensure the column is not nullable
     private String name;
 
     private String brand;
 
+    @Column(length = 4000) // Adjust the length as needed for instructions
     private String instructions;
 
     @ManyToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
+    @Column(nullable = false) // enforce non-nullability
     private String createdBy;
 
-    private Instant createdAt;
+    @Column(nullable = false, columnDefinition = "timestamp with time zone") // enforce non-nullability
+    private LocalDateTime createdAt;
 
-    private Instant lastModifiedAt;
+    @Column(nullable = false, columnDefinition = "timestamp with time zone") // enforce non-nullability
+    private LocalDateTime lastModifiedAt;
 
     public Medication() { }
 
     public Medication(String name, String brand, String instructions,
-                      Pet pet, String createdBy, Instant createdAt, Instant lastModifiedAt) {
+                      Pet pet, String createdBy, LocalDateTime createdAt, LocalDateTime lastModifiedAt) {
         this.name = name;
         this.brand = brand;
         this.instructions = instructions;
@@ -80,19 +86,19 @@ public class Medication {
         this.createdBy = createdBy;
     }
 
-    public Instant getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Instant createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Instant getLastModifiedAt() {
+    public LocalDateTime getLastModifiedAt() {
         return lastModifiedAt;
     }
 
-    public void setLastModifiedAt(Instant lastModifiedAt) {
+    public void setLastModifiedAt(LocalDateTime lastModifiedAt) {
         this.lastModifiedAt = lastModifiedAt;
     }
 

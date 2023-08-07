@@ -1,9 +1,8 @@
 package com.pawsense.pawsensebackend.payload.response;
 
-import java.time.Instant;
 import java.time.LocalDate;
 
-public class PetDetailsResponse {
+public class PetBioResponse {
 
     private double weight;
 
