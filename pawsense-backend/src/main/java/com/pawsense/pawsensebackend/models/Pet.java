@@ -52,6 +52,12 @@ public class Pet {
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> events = new ArrayList<>();
 
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<Note> notes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.MERGE, orphanRemoval = true)
+    List<Mood> moods = new ArrayList<>();
+
     public Pet() {
 
     }
@@ -68,7 +74,9 @@ public class Pet {
         this.lastUpdatedAt = lastUpdatedAt;
     }
 
-    public Pet(String name, String type, String sex, String avatar, String userId, LocalDateTime addedAt, LocalDateTime lastUpdatedAt, PetBio petBio, List<Medication> medications, List<Event> events) {
+    public Pet(String name, String type, String sex, String avatar, String userId,
+               LocalDateTime addedAt, LocalDateTime lastUpdatedAt, PetBio petBio,
+               List<Medication> medications, List<Event> events, List<Note> notes, List<Mood> moods) {
         this.name = name;
         this.type = type;
         this.sex = sex;
@@ -79,6 +87,8 @@ public class Pet {
         this.petBio = petBio;
         this.medications = medications;
         this.events = events;
+        this.notes = notes;
+        this.moods = moods;
     }
 
     public Long getId() {
@@ -103,6 +113,22 @@ public class Pet {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getBreed() {
+        return breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getSex() {
@@ -169,6 +195,14 @@ public class Pet {
         this.events = events;
     }
 
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
     public void addMedication(Medication medication) {
         medications.add(medication);
         medication.setPet(this);
@@ -189,4 +223,15 @@ public class Pet {
     public void removeEvent(Event event) {
         events.remove(event);
     }
+
+    public void addMood(Mood mood) {
+        moods.add(mood);
+        mood.setPet(this);
+    }
+
+    public void removeMedication(Mood mood) {
+        moods.remove(mood);
+        mood.setPet(null);
+    }
+
 }

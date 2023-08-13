@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { moodOptions  } from "@/data"
-import { Popover } from "@headlessui/react"
+import { Listbox, Popover } from "@headlessui/react"
 
 export default function CurrentMood({ mood, handleMoodChange } : any) {
     
@@ -13,11 +13,11 @@ export default function CurrentMood({ mood, handleMoodChange } : any) {
                 </span>
             </Popover.Button>
             <Popover.Panel>
-                {moodOptions.map((mood) => (
-                    <button value={mood.value}>
-                        {mood.label}
-                    </button>
-                ))}
+                <Listbox>
+                    <Listbox.Button>
+                        {mood}
+                    </Listbox.Button>
+                </Listbox>
             </Popover.Panel>
         </Popover>
     )

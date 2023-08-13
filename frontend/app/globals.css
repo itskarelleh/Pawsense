@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer base {
+
     html {
         @apply text-neutral-600;
     }

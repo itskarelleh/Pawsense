@@ -8,6 +8,8 @@ import Intersex from '../Intersex';
 import PetCombobox from './PetCombobox';
 import { Medication } from '../medications';
 import { Event } from '../events';
+import { Mood } from '../moods';
+import { Note } from '../notes';
 /**
  * Gets all the pets by current user and 
  * return them as a list of avatars
@@ -106,12 +108,16 @@ export interface Pet {
     name: string;
     nicknames: string;
     type: string;
+    breed: string;
+    color: string;
     avatar: string;
     userId: string;
     sex: string;
     bio: PetBio | null | undefined;
     medications: Medication[] | null | undefined;
     events: Event[] | null | undefined;
+    notes: Note[] | null | undefined;
+    moods: Mood[] | null | undefined;
 }
 
 export interface Details {

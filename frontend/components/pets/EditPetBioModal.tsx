@@ -21,9 +21,10 @@ interface PetAboutInitialValues {
     isFosterPet: boolean;
     traits: string[];
     photoIds: string[];
+    petId: string | number
 }
 
-export default function EditPetBioModal({ title, bio, handleSubmit }: EditPetBioModalProps) {
+export default function EditPetBioModal({ title, bio, petId, handleSubmit }: EditPetBioModalProps) {
     const { weight, size, about, birthDate, adoptionDate, isFosterPet } = bio;
     const [isEditing, setIsEditing] = useState<boolean>(true);
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -40,7 +41,8 @@ export default function EditPetBioModal({ title, bio, handleSubmit }: EditPetBio
         adoptionDate: adoptionDate || null,
         isFosterPet: isFosterPet || false,
         traits: [],
-        photoIds: []
+        photoIds: [],
+        petId: petId
     };
 
     // Track the form's dirty state
@@ -123,8 +125,8 @@ export default function EditPetBioModal({ title, bio, handleSubmit }: EditPetBio
                 </Formik>
                 <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)} title="Cancel changes?">
                     <div className="flex flex-row">
-                        <button className="bg-green-600 hover:bg-neutral-800">Yes</button>
-                        <button onClick={() => setIsOpen(false)} className="bg-red-600 hover:bg-neutral-800">No</button>
+                        <button className="">Yes</button>
+                        <button onClick={() => setIsOpen(false)} className="">No</button>
                     </div>
                 </Modal>
             </Modal>

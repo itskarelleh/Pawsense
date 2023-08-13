@@ -53,6 +53,8 @@ function AddNewMedicationModal({ pet } : { pet : Pet }) {
                 </CustomToast>
               );
               
+              
+              
               closeModal();
         } else {
             toast.error(
@@ -60,6 +62,8 @@ function AddNewMedicationModal({ pet } : { pet : Pet }) {
                   Something went wrong! Please try again.
                 </CustomToast>
             );
+
+            console.log(medication);
         }
 
         

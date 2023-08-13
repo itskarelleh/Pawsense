@@ -1,5 +1,5 @@
 import React, { useState, useRef, ReactNode, ButtonHTMLAttributes } from 'react';
-import { Formik, Field, useField, FormikValues } from 'formik';
+import { Formik, Field, useField, FormikValues, ErrorMessage } from 'formik';
 import { RadioGroup, Listbox } from '@headlessui/react';
 import Intersex from './Intersex';
 import { Plus, Female, Male, QuestionMark, Cancel } from 'iconoir-react';
@@ -17,31 +17,6 @@ export const ActionButton: React.FC<ActionButtonProps> = ({ children, ...props }
   </button>
 );
 
-export function AnimalTypeField() {
-
-  const [field, , helpers] = useField('type');
-
-  return (
-    <div className=''>
-      <Listbox value={field.value} onChange={(value) => helpers.setValue(value)}>
-        {({ open }) => (
-          <div className="cursor-pointer relative mt-1 border-b-2 border-neutral-400">
-            <Listbox.Button className="flex flex-col mt-8 mb-2 text-sm w-full">{field.value || 'Select an animal type'}</Listbox.Button>
-            {open && (
-              <Listbox.Options className="scrollbar scrollbar-thumb-sky-200 scrollbar-thin absolute mt-1 max-h-44 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-40">
-                {animalTypes.map((type, index) => (
-                  <Listbox.Option className="hover:bg-sky-100 cursor-pointer" key={index} value={type}>
-                    {type}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            )}
-          </div>
-        )}
-      </Listbox>
-    </div>
-  );
-}
 
 export function PetAvatarField() {
   const [avatar, setAvatar] = useState<File | null>(null);
@@ -104,7 +79,9 @@ export function PetAvatarField() {
           />
         </div>
       </div>
-      <label className="text-sm -mt-4">Select an image</label>
+      <>
+        <label className="text-sm -mt-4">Select an image</label>
+      </>
     </div>
   );
 }
@@ -112,6 +89,7 @@ export function PetAvatarField() {
 export function SexRadioGroup() {
 
   return (
+    <div>
     <Field name="sex">
       {({ field: { value }, form: { setFieldValue } } : { field: { value : any }, form: { setFieldValue : any }}) => (
         <RadioGroup value={value} onChange={setFieldValue} className="w-full">
@@ -157,5 +135,7 @@ export function SexRadioGroup() {
         </RadioGroup>
       )}
     </Field>
+    <ErrorMessage name="sex" className='text-xs text-red-500' />
+    </div>
   );
 }

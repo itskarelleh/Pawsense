@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "pet_details")
+@Table(name = "pet_bios")
 public class PetBio {
 
     @Id
@@ -43,9 +43,7 @@ public class PetBio {
     @OneToOne(mappedBy = "petBio")
     private Pet pet;
 
-    public PetBio() {
-
-    }
+    public PetBio() { }
 
     public PetBio(double weight, String size, String about, LocalDate birthDate, LocalDate adoptionDate,
                   boolean isFosterPet, Set<String> traits, Set<String> photoIds,

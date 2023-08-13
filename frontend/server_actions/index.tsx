@@ -162,8 +162,8 @@ export async function updatePetBio(data : Object) {
 
     const token = await getToken();
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/add`, {
-        method: "POST",
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/update-bio/${values.petId}`, {
+        method: "PUT",
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
