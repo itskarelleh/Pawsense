@@ -14,8 +14,8 @@ public interface MedicationRepository extends JpaRepository<Medication, Long> {
 //    Optional<Medication> delete(Optional<Medication> medication);
     Optional<Medication> findById(Long id);
     @Query("SELECT m FROM Medication m WHERE m.pet.id = :petId")
-    List<Medication> findAllByPetId(@Param("petId") Long petId);
+    Set<Medication> findAllByPetId(@Param("petId") Long petId);
 
     @Query("SELECT m FROM Medication m WHERE m.createdBy = :userId")
-    List<Medication> findAllByUserId(@Param("userId") String userId);
+    Set<Medication> findAllByUserId(@Param("userId") String userId);
 }

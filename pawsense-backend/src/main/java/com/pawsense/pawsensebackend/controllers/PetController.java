@@ -1,7 +1,6 @@
 package com.pawsense.pawsensebackend.controllers;
 
 import com.pawsense.pawsensebackend.models.Pet;
-import com.pawsense.pawsensebackend.models.PetBio;
 import com.pawsense.pawsensebackend.payload.request.NewPetRequestBody;
 import com.pawsense.pawsensebackend.payload.request.PetBioRequestBody;
 import com.pawsense.pawsensebackend.payload.response.PetSummaryResponse;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin("*")
@@ -22,9 +22,9 @@ public class PetController {
     PetService petService;
 
     @GetMapping("/current-user/{userId}")
-    public ResponseEntity<List<PetSummaryResponse>> getCurrentUserPets(@PathVariable String userId) {
+    public ResponseEntity<Set<PetSummaryResponse>> getCurrentUserPets(@PathVariable String userId) {
         try {
-            List<PetSummaryResponse> res = petService.getAllPetsByUserId(userId);
+            Set<PetSummaryResponse> res = petService.getAllPetsByUserId(userId);
             return ResponseEntity.ok().body(res);
         } catch(Exception e) {
             e.printStackTrace();
@@ -33,11 +33,21 @@ public class PetController {
     }
 
     @GetMapping("/{petId}")
-    public ResponseEntity<Pet> getPetProfileById(@PathVariable String petId) {
+    public ResponseEntity<Pet> getPetById(@PathVariable String petId) {
         try {
             Pet pet = petService.findPetById(Long.parseLong(petId));
             return ResponseEntity.ok().body(pet);
         } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/profile/{petId}")
+    public ResponseEntity<?> getPetProfile(@PathVariable String petId) {
+        try {
+            return ResponseEntity.ok().body(petService.findPetProfile(Long.parseLong(petId)));
+        } catch(Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -51,12 +61,7 @@ public class PetController {
     @PutMapping("/update-bio/{petId}")
     public ResponseEntity<?> updatePetBio(@PathVariable String petId, @RequestBody PetBioRequestBody petBioRequestBody) {
 
-        try {
-            PetBio petBio = petService.updatePetBio(Long.parseLong(petId), petBioRequestBody);
-            return ResponseEntity.ok().body(petBio);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return ResponseEntity.ok().body(petService.updatePetBio(Long.parseLong(petId), petBioRequestBody));
     }
 
     @PutMapping("/edit/avatar/{petId}")

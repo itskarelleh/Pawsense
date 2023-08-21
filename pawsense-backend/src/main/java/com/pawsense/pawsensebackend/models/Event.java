@@ -3,7 +3,6 @@ package com.pawsense.pawsensebackend.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +33,7 @@ public class Event {
     @JoinTable(name = "pet_event",
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "pet_id"))
-    private List<Pet> attendees = new ArrayList<>();
+    private Set<Pet> attendees = new HashSet<>();
 
     @Column(name="user_id")
     private String userId;
@@ -50,7 +49,7 @@ public class Event {
 
     public Event() { }
 
-    public Event(String title, String description, String type, LocalDateTime startsAt, LocalDateTime endsAt, List<Pet> attendees, String userId, boolean isPublic, LocalDateTime createdAt, LocalDateTime lastModifiedAt) {
+    public Event(String title, String description, String type, LocalDateTime startsAt, LocalDateTime endsAt, Set<Pet> attendees, String userId, boolean isPublic, LocalDateTime createdAt, LocalDateTime lastModifiedAt) {
         this.title = title;
         this.description = description;
         this.type = type;
@@ -103,11 +102,11 @@ public class Event {
         this.endsAt = endsAt;
     }
 
-    public List<Pet> getAttendees() {
+    public Set<Pet> getAttendees() {
         return attendees;
     }
 
-    public void setAttendees(List<Pet> attendees) {
+    public void setAttendees(Set<Pet> attendees) {
         this.attendees = attendees;
     }
 

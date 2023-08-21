@@ -1,10 +1,12 @@
 package com.pawsense.pawsensebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -13,19 +15,25 @@ public class PetBio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "weight")
     private double weight;
 
     @Column(name = "about", length = 4000)
     private String about;
 
+    @Column(name = "size")
     private String size;
 
+    @Column(name="birthDate")
     private LocalDate birthDate;
 
+    @Column(name = "adoptionDate")
     private LocalDate adoptionDate;
 
+    @Column(name = " isFosterPet")
     private boolean isFosterPet;
 
     @ElementCollection // Use ElementCollection for collections
@@ -40,10 +48,18 @@ public class PetBio {
     @Column(nullable = false)
     private LocalDateTime lastUpdatedAt;
 
-    @OneToOne(mappedBy = "petBio")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pet_id")
+    @JsonBackReference
     private Pet pet;
 
     public PetBio() { }
+
+    public PetBio(LocalDateTime addedAt, LocalDateTime lastUpdatedAt, Pet pet) {
+        this.addedAt = addedAt;
+        this.lastUpdatedAt = lastUpdatedAt;
+        this.pet = pet;
+    }
 
     public PetBio(double weight, String size, String about, LocalDate birthDate, LocalDate adoptionDate,
                   boolean isFosterPet, Set<String> traits, Set<String> photoIds,
@@ -155,5 +171,35 @@ public class PetBio {
 
     public void setPet(Pet pet) {
         this.pet = pet;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PetBio petBio = (PetBio) o;
+        return Objects.equals(id, petBio.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "PetBio{" +
+                "id=" + id +
+                ", weight=" + weight +
+                ", about='" + about + '\'' +
+                ", size='" + size + '\'' +
+                ", birthDate=" + birthDate +
+                ", adoptionDate=" + adoptionDate +
+                ", isFosterPet=" + isFosterPet +
+                ", traits=" + traits +
+                ", photoIds=" + photoIds +
+                ", addedAt=" + addedAt +
+                ", lastUpdatedAt=" + lastUpdatedAt +
+                '}';
     }
 }

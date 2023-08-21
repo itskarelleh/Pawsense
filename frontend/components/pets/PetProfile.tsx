@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 
 export default function PetProfile({ pet }: { pet: Pet }) {
 
-    const { bio, events, medications, notes, moods } = pet;
+    const { petBio, events, medications, notes, moods } = pet;
 
     return (
         <>
@@ -79,7 +79,7 @@ export default function PetProfile({ pet }: { pet: Pet }) {
                                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-pink-400 focus:outline-none focus:ring-2'
                             )}
                             >
-                                <PetAboutPanel bio={bio} name={pet.name} />
+                                <PetAboutPanel id={pet.id} bio={petBio} name={pet.name} />
                             </Tab.Panel>
                             <Tab.Panel className={classNames(
                                 'rounded-xl p-3',
@@ -150,12 +150,11 @@ function TabPanel({ title, actions, children } : { title: string, actions : Reac
     )
 }
 
-
 function NotesPanel({ notes, name } : { notes : Note[] | undefined | null, name : string }) {
 
     return (
         <TabPanel title="Notes" actions={<></>}>
-            {notes.length === 0 || notes === undefined || notes === null  ? (
+            {notes === undefined || notes === null  ? (
             <h3>No notes for {name}</h3>
             ) : (
                 <NotesList notes={notes} />
@@ -164,16 +163,15 @@ function NotesPanel({ notes, name } : { notes : Note[] | undefined | null, name 
     )
 }
 
-function PetAboutPanel({ bio, name }: { bio?: PetBio, name: string }) {
+function PetAboutPanel({ bio, name, id }: { bio?: PetBio, name: string, id: string | number }) {
 
     const bioData: PetBio = bio || {};
 
-    const { about, adoptionDate, birthDate, weight, size } = bioData
-
+    const { about, adoptionDate, birthDate, weight, size } = bioData;
     
     async function handleSubmit(values : FormikValues | any) {
-        
         try {
+            console.log(values)
             const res = await updatePetBio(values);
             toast.success("Pet bio updated successfully");
         } catch(e) {
@@ -182,7 +180,7 @@ function PetAboutPanel({ bio, name }: { bio?: PetBio, name: string }) {
     }
 
     return (
-        <TabPanel title={`${name}'s Bio`} actions={<><EditPetBioModal title={`Editing ${name}'s Details`} bio={bioData} handleSubmit={handleSubmit} /></>}>
+        <TabPanel title={`${name}'s Bio`} actions={<><EditPetBioModal title={`Editing ${name}'s Details`} bio={bioData} petId={id} handleSubmit={handleSubmit} /></>}>
             <p className='w-full'>
                 {about ? about : `${name} does not have a bio yet.`}
             </p>
@@ -198,7 +196,6 @@ function PetAboutPanel({ bio, name }: { bio?: PetBio, name: string }) {
         </TabPanel>
     )
 }
-
 
 function EventsPanel({ events, petId }: { events: any, petId: string | number }) {
 

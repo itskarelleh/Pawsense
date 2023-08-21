@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class MedicationService {
@@ -20,11 +21,11 @@ public class MedicationService {
     @Autowired
     PetRepository petRepository;
 
-    public List<Medication> getMedicationsCreatedByUser(String userId) {
+    public Set<Medication> getMedicationsCreatedByUser(String userId) {
         return medicationRepository.findAllByUserId(userId);
     }
 
-    public List<Medication> getAllMedicationsForPetById(Long petId) {
+    public Set<Medication> getAllMedicationsForPetById(Long petId) {
         return medicationRepository.findAllByPetId(petId);
     }
 

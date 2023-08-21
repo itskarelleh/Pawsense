@@ -46,12 +46,12 @@ export async function getPetById(petId : string) {
   return pet;
 }
 
-export async function getPetDetails(petId : string) {
+export async function getPetProfile(petId : string) {
     const { getToken } = auth();
 
     const token = await getToken();
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/details/${petId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/profile/${petId}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}`}
     })
@@ -134,6 +134,7 @@ export async function addNewMedication(values : any) {
 }
 
 export async function addNewEvent(values : any) {
+    
     const { getToken } = auth();
 
     const token = await getToken();
@@ -152,17 +153,17 @@ export async function addNewEvent(values : any) {
     const data = await response.json();
 
     return data;
-}
+} 
 
 
 //put/patch methods
-export async function updatePetBio(data : Object) {
+export async function updatePetBio(data : any) {
 
     const { getToken } = auth();
 
     const token = await getToken();
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/update-bio/${values.petId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/update-bio/${data.petId}`, {
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',
@@ -170,6 +171,8 @@ export async function updatePetBio(data : Object) {
         },
         body: JSON.stringify(data) 
     });
+
+    // if(!res.ok) throw new Error('Failed to fetch data');
 
     const d = await res.json();
 

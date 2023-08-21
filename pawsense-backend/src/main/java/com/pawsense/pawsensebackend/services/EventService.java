@@ -25,13 +25,13 @@ public class EventService {
 //        return eventRepository.findAllByUserId(userId);
 //    }
 
-    public List<Event> getEventsByPetId(Long petId) {
+    public Set<Event> getEventsByPetId(Long petId) {
         Pet pet = petRepository.findPetByPetId(petId);
 
         return pet.getEvents();
     }
 
-    public List<Event> getEventsCreatedByUser(String userId) {
+    public Set<Event> getEventsCreatedByUser(String userId) {
         return eventRepository.findAllByUserId(userId);
     }
 
@@ -46,7 +46,7 @@ public class EventService {
 
         Event event = new Event(
                 requestBody.getTitle(), requestBody.getDescription(), requestBody.getType(),
-                LocalDateTime.parse(requestBody.getStartsAt(), formatter), LocalDateTime.parse(requestBody.getEndsAt(), formatter), new ArrayList<>(), requestBody.getUserId(),
+                LocalDateTime.parse(requestBody.getStartsAt(), formatter), LocalDateTime.parse(requestBody.getEndsAt(), formatter), new HashSet<>(), requestBody.getUserId(),
                 requestBody.isPublic(), LocalDateTime.now(), LocalDateTime.now()
         );
 

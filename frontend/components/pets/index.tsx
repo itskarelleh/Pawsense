@@ -104,7 +104,7 @@ export interface PetBio {
 }
 
 export interface Pet {
-    id: number;
+    id: string | number;
     name: string;
     nicknames: string;
     type: string;
@@ -113,7 +113,6 @@ export interface Pet {
     avatar: string;
     userId: string;
     sex: string;
-    bio: PetBio | null | undefined;
     medications: Medication[] | null | undefined;
     events: Event[] | null | undefined;
     notes: Note[] | null | undefined;

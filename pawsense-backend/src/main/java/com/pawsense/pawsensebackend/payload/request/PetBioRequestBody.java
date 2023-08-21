@@ -9,6 +9,7 @@ public class PetBioRequestBody {
 
     private String size;
 
+    private String about;
     private LocalDate birthDate;
 
     private LocalDate adoptionDate;
@@ -33,6 +34,14 @@ public class PetBioRequestBody {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
     }
 
     public LocalDate getBirthDate() {

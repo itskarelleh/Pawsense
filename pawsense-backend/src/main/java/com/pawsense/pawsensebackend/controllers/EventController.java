@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @CrossOrigin("*")
@@ -19,12 +20,12 @@ public class EventController {
     EventService eventService;
 
     @GetMapping("/current-user/{userId}")
-    public ResponseEntity<List<Event>> getAllEventsByUser(@PathVariable String userId) {
+    public ResponseEntity<Set<Event>> getAllEventsByUser(@PathVariable String userId) {
         return ResponseEntity.ok().body(eventService.getEventsCreatedByUser(userId));
     }
 
     @GetMapping("/pet/{petId}")
-    public ResponseEntity<List<Event>> getAllPetEventsForPet(@PathVariable String petId) {
+    public ResponseEntity<Set<Event>> getAllPetEventsForPet(@PathVariable String petId) {
         return ResponseEntity.ok().body(eventService.getEventsByPetId(Long.parseLong(petId)));
     }
 

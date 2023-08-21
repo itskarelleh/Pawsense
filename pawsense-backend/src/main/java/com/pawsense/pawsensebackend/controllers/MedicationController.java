@@ -24,7 +24,7 @@ public class MedicationController {
     PetRepository petRepository;
 
     @GetMapping("/current-user/{userId}")
-    public ResponseEntity<List<Medication>> getMedicationsByCurrentUser(@PathVariable String userId) {
+    public ResponseEntity<Set<Medication>> getMedicationsByCurrentUser(@PathVariable String userId) {
         return ResponseEntity.ok().body(medicationService.getMedicationsCreatedByUser(userId));
     }
 
@@ -33,7 +33,7 @@ public class MedicationController {
     //TODO: get medication by id
 
     @GetMapping("/all/{petId}")
-    public ResponseEntity<List<Medication>> getMedicationsForPet(@PathVariable Long petId) {
+    public ResponseEntity<Set<Medication>> getMedicationsForPet(@PathVariable Long petId) {
         return ResponseEntity.ok().body(medicationService.getAllMedicationsForPetById(petId));
     }
 

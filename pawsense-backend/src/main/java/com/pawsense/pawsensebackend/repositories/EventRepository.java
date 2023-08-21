@@ -11,11 +11,11 @@ import java.util.Set;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
-//    @Query("SELECT e FROM Event e JOIN e.attendees a WHERE a.id = :petId")
-//    List<Event> findAllByPetId(Long petId);
+    @Query("SELECT e FROM Event e JOIN e.attendees a WHERE a.id = :petId")
+    Set<Event> findAllByPetId(Long petId);
 
     @Query("SELECT e FROM Event e WHERE userId = :userId")
-    List<Event> findAllByUserId(String userId);
+    Set<Event> findAllByUserId(String userId);
 
 
 //    void deleteById(Long eventId);

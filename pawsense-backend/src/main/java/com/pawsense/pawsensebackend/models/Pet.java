@@ -1,13 +1,23 @@
 package com.pawsense.pawsensebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "pets")
+@NamedEntityGraph(name = "pet-with-related-data",
+    attributeNodes = {
+        @NamedAttributeNode("petBio"),
+        @NamedAttributeNode("medications"),
+        @NamedAttributeNode("events"),
+        @NamedAttributeNode("notes"),
+        @NamedAttributeNode("moods")
+})
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,24 +49,27 @@ public class Pet {
 
     private String userId;
 
-    @OneToOne(cascade = CascadeType.MERGE) // Use CascadeType.MERGE instead of CascadeType.ALL
-    @JoinColumn(name = "pet_bio_id")
+    @OneToOne(
+            mappedBy = "pet",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
+    @JsonManagedReference
     private PetBio petBio;
 
-    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Medication> medications = new ArrayList<>();
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private Set<Medication> medications = new HashSet<>();
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "pet_event",
             joinColumns = @JoinColumn(name = "pet_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id"))
-    private List<Event> events = new ArrayList<>();
+    private Set<Event> events = new HashSet<>();
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.MERGE, orphanRemoval = true)
-    private List<Note> notes = new ArrayList<>();
+    private Set<Note> notes = new HashSet<>();
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.MERGE, orphanRemoval = true)
-    List<Mood> moods = new ArrayList<>();
+    Set<Mood> moods = new HashSet<>();
 
     public Pet() {
 
@@ -76,7 +89,7 @@ public class Pet {
 
     public Pet(String name, String type, String sex, String avatar, String userId,
                LocalDateTime addedAt, LocalDateTime lastUpdatedAt, PetBio petBio,
-               List<Medication> medications, List<Event> events, List<Note> notes, List<Mood> moods) {
+               Set<Medication> medications, Set<Event> events, Set<Note> notes, Set<Mood> moods) {
         this.name = name;
         this.type = type;
         this.sex = sex;
@@ -179,28 +192,36 @@ public class Pet {
         this.petBio = petBio;
     }
 
-    public List<Medication> getMedications() {
+    public Set<Medication> getMedications() {
         return medications;
     }
 
-    public void setMedications(List<Medication> medications) {
+    public void setMedications(Set<Medication> medications) {
         this.medications = medications;
     }
 
-    public List<Event> getEvents() {
+    public Set<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(List<Event> events) {
+    public void setEvents(Set<Event> events) {
         this.events = events;
     }
 
-    public List<Note> getNotes() {
+    public Set<Note> getNotes() {
         return notes;
     }
 
-    public void setNotes(List<Note> notes) {
+    public void setNotes(Set<Note> notes) {
         this.notes = notes;
+    }
+
+    public Set<Mood> getMoods() {
+        return moods;
+    }
+
+    public void setMoods(Set<Mood> moods) {
+        this.moods = moods;
     }
 
     public void addMedication(Medication medication) {
@@ -234,4 +255,37 @@ public class Pet {
         mood.setPet(null);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pet pet = (Pet) o;
+        return Objects.equals(id, pet.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", breed='" + breed + '\'' +
+                ", color='" + color + '\'' +
+                ", sex='" + sex + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", addedAt=" + addedAt +
+                ", lastUpdatedAt=" + lastUpdatedAt +
+                ", userId='" + userId + '\'' +
+                ", petBio=" + petBio +
+                ", medications=" + medications +
+                ", events=" + events +
+                ", notes=" + notes +
+                ", moods=" + moods +
+                '}';
+    }
 }

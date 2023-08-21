@@ -12,6 +12,7 @@ import ListboxField from '../ListboxField';
 import { Plus } from 'iconoir-react';
 import * as Yup from 'yup';
 import { Listbox } from '@headlessui/react';
+import PetAvatar from '../PetAvatar';
 
 interface InitialValues {
   name: string;
@@ -64,18 +65,30 @@ const breedsByAnimalType = {
 
 export default function NewPetFormModal() {
 
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     const { user } = useUser();
   
-    const initialValues: InitialValues = {
-      name: '',
-      type: '',
-      breed: '',
+    // const initialValues: InitialValues = {
+    //   name: '',
+    //   type: '',
+    //   breed: '',
+    //   color: '',
+    //   sex: '',
+    //   avatar: null,
+    //   userId: user?.id
+    // }
+
+     const initialValues: InitialValues = {
+      name: 'Pinot',
+      type: 'cat',
+      breed: 'American Shorthair',
       color: '',
-      sex: '',
-      avatar: null,
+      sex: 'M',
+      avatar: '',
       userId: user?.id
     }
+
+  
 
     const validationSchema = Yup.object().shape({
       name: Yup.string().required('Name is required'),
@@ -97,12 +110,14 @@ export default function NewPetFormModal() {
   
     async function handleSubmit(values: FormikValues | any) {
   
-      const img = await uploadImage(values.avatar);
+      // const img = await uploadImage(values.avatar);
   
-      const publicId = img.public_id;
+      // const publicId = img.public_id;
+      const publicId = "/pets/m1uqpdumgk9swlfwnqe8";
   
       const body = { name: values.name, type: values.type,
-        breed: values.breed, color: values.color, sex: values.sex, avatar: publicId, userId: values.userId }
+        breed: values.breed, color: values.color, sex: values.sex, 
+        avatar: publicId, userId: values.userId };
       
       console.log(body.userId);
       
@@ -139,15 +154,15 @@ export default function NewPetFormModal() {
                 <div className="grid grid-cols-1 sm:grid-cols-12 col-end-4 mb-8 p-10 gap-8">
                   <div className="sm:col-span-5 w-full sm:w-auto flex flex-row sm:flex-col items-center justify-center">
                       <div className="w-30 md:w-44">
-                          <PetAvatarField />
+                          {/* <PetAvatarField /> */}
+                          <PetAvatar imgId='/pets/m1uqpdumgk9swlfwnqe8' width={500} height={500} isRounded />
                       </div>
                   </div>
                   <div className="sm:col-span-7 flex flex-col md:items-center">
                       <div className="flex flex-col items-center [&>label]:w-full">
-                          <label>
-                            Name
-                            <Field type="text" name="name" className="input-text" placeholder="Fido" />
+                          <label htmlFor="name">
                             <ErrorMessage name="name" className="text-xs text-red-500" />
+                            <Field type="text" name="name" className="input-text" placeholder="" />
                           </label> 
                           <ListboxField type="type" options={animalTypes} label="Type" defaultValue="cat" />
                           <ListboxField type="breed" options={breedsByAnimalType[props.values.type]} label="Breed" />

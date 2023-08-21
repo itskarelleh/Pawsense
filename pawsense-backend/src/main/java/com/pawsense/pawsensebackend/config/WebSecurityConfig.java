@@ -15,9 +15,9 @@ public class WebSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //noinspection removal
         http.authorizeHttpRequests(auth ->
-                auth.requestMatchers("/api/v1/pets/**").permitAll()
-                .requestMatchers("/api/v1/events/**").permitAll()
-                .requestMatchers("/api/v1/medications/**").permitAll()
+                auth.requestMatchers("/api/v1/pets/**").authenticated()
+                .requestMatchers("/api/v1/events/**").authenticated()
+                .requestMatchers("/api/v1/medications/**").authenticated()
                 ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         return http.build();
     }

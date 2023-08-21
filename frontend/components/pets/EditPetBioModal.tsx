@@ -10,6 +10,7 @@ interface EditPetBioModalProps {
     title: string;
     bio: PetBio;
     handleSubmit: void | Promise<any>;
+    petId: string | number
 }
 
 interface PetAboutInitialValues {
@@ -21,22 +22,36 @@ interface PetAboutInitialValues {
     isFosterPet: boolean;
     traits: string[];
     photoIds: string[];
-    petId: string | number
+    petId: string | number;
 }
 
 export default function EditPetBioModal({ title, bio, petId, handleSubmit }: EditPetBioModalProps) {
+
     const { weight, size, about, birthDate, adoptionDate, isFosterPet } = bio;
-    const [isEditing, setIsEditing] = useState<boolean>(true);
+    
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const sizes: string[] = ["extra-small", "small", "average", "large", "extra-large"];
 
     const toggleEditing = () => setIsEditing(prev => !prev);
 
+    // const initialValues: PetAboutInitialValues = {
+    //     weight: weight || 0.00,
+    //     size: size || '',
+    //     about: about || '',
+    //     birthDate: birthDate || null,
+    //     adoptionDate: adoptionDate || null,
+    //     isFosterPet: isFosterPet || false,
+    //     traits: [],
+    //     photoIds: [],
+    //     petId: petId
+    // };
+
     const initialValues: PetAboutInitialValues = {
         weight: weight || 0.00,
         size: size || '',
-        about: about || '',
+        about: about || 'Pinot is a big baby who loves lots of food and lots of attention',
         birthDate: birthDate || null,
         adoptionDate: adoptionDate || null,
         isFosterPet: isFosterPet || false,
@@ -76,9 +91,9 @@ export default function EditPetBioModal({ title, bio, petId, handleSubmit }: Edi
                                         Biography:
                                         <Field
                                             as="textarea"
-                                            name="description"
+                                            name="about"
                                             rows={5}
-                                            className="" />
+                                            className="w-full" />
                                     </label>
                                 </div>
                                 <div className="flex flex-row justify-between space-x-2">
@@ -112,12 +127,18 @@ export default function EditPetBioModal({ title, bio, petId, handleSubmit }: Edi
                                 </div>
                             </div>
 
-                            <div>
-                                <button className="button rounded-r-none bg-green-400 hover:bg-neutral-800">
-                                    Save
+                            <div className="flex flex-row justify-end space-x-4">
+                                <button
+                                    className="button bg-red-400 hover:bg-neutral-800"
+                                    onClick={handleCancel}
+                                >
+                                    Discard
                                 </button>
-                                <button onClick={handleCancel} className="button rounded-l-none bg-red-400 hover:bg-neutral-800">
-                                    Cancel
+                                <button
+                                    type="submit"
+                                    className="button hover:bg-neutral-800"
+                                >
+                                    Update
                                 </button>
                             </div>
                         </form>
