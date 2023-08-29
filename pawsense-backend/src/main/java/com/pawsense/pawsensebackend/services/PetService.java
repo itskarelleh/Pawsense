@@ -67,7 +67,6 @@ public class PetService {
     public Pet findPetProfile(Long id) {
 
         return petRepository.findPetWithPetBioById(id);
-
     }
 
     @Transactional
@@ -89,9 +88,7 @@ public class PetService {
         petBio.setSize(requestBody.getSize());
         petBio.setBirthDate(requestBody.getBirthDate());
         petBio.setAdoptionDate(requestBody.getAdoptionDate());
-        petBio.setFosterPet(requestBody.isFosterPet());
         petBio.setTraits(requestBody.getTraits());
-        petBio.setPhotoIds(requestBody.getPhotoIds());
         petBio.setLastUpdatedAt(LocalDateTime.now());
 
         pet.setPetBio(petBio);

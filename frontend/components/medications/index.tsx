@@ -104,16 +104,24 @@ function AddNewMedicationModal({ pet } : { pet : Pet }) {
 
 function MedicationSummary({ medication } : { medication : Medication }) {
 
+    const [ isOpen, setIsOpen ] = useState<boolean>(false);
     return (
-        <div className='rounded-full w-full group hover:bg-neutral-300'>
-            <div className="flex flex-col justify-between ">
-                <div className="mb-4">
-                    <h3>Name: {medication.name}</h3>
-                    {medication.brand && <h4>Brand: {medication.brand}</h4>}
+        <>
+            <div className='rounded-full w-full'>
+                <div className="flex flex-col items-center justify-between p-4 w-5/6 mx-auto">
+                    <div className="mb-4">
+                        <h3 className="text-lg md:text-xl font-bold">Name: {medication.name}</h3>
+                        {medication.brand && <p>Brand: {medication.brand}</p>}
+                    </div>
+                    {medication.instructions && <button onClick={() => setIsOpen(true)} className="self-start font-bold">Instructions</button>}
                 </div>
-                {medication.instructions && <button className="hover">Instructions</button>}
             </div>
-        </div>
+            {medication.instructions && (
+                <Modal title={`Using ${medication.name}`} isOpen={isOpen} closeModal={() => setIsOpen(prev => !prev)}>
+                    <p>{medication.instructions}</p>
+                </Modal>
+            ) }
+        </>
     )
 }
 

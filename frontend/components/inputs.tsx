@@ -1,5 +1,5 @@
 import React, { useState, useRef, ReactNode, ButtonHTMLAttributes } from 'react';
-import { Formik, Field, useField, FormikValues, ErrorMessage } from 'formik';
+import { Formik, Field, useField, useFormikContext, FormikValues, ErrorMessage } from 'formik';
 import { RadioGroup, Listbox } from '@headlessui/react';
 import Intersex from './Intersex';
 import { Plus, Female, Male, QuestionMark, Cancel } from 'iconoir-react';
@@ -139,3 +139,102 @@ export function SexRadioGroup() {
     </div>
   );
 }
+
+
+export function MultiSelectListbox({ label, options, name } : { label: string, options: any[], name: string }) {
+  const [field] = useField(name);
+  const { setFieldValue } = useFormikContext();
+
+  const handleChange = (selectedOption: any) => {
+    const isSelected = field.value.some((option) => option.value === selectedOption.value);
+
+    if (isSelected) {
+      // Remove the option if it's already selected
+      const updatedOptions = field.value.filter((option) => option.value !== selectedOption.value);
+      setFieldValue(name, updatedOptions);
+    } else {
+      // Add the option if it's not selected
+      setFieldValue(name, [...field.value, selectedOption]);
+    }
+  };
+
+  return (
+    <Listbox as="div" className="space-y-2">
+      {({ open }) => (
+        <>
+          <Listbox.Label className="block text-sm font-medium text-gray-700">{label}</Listbox.Label>
+          <div className="relative">
+            <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white border rounded-md shadow-sm cursor-pointer focus:outline-none focus:ring focus:border-blue-300">
+              <span className="block truncate">
+                {field.value.length === 0 ? 'Select options...' : field.value.join(', ')}
+              </span>
+              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5 text-gray-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6.293 6.293a1 1 0 011.414 0L10 8.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </span>
+            </Listbox.Button>
+            <Listbox.Options
+              className={`${
+                open ? 'block' : 'hidden'
+              } absolute w-full py-1 mt-2 scroll bg-white border rounded-md shadow-lg focus:outline-none overflow-y-auto max-h-48`}
+            >
+              {options.map((option) => (
+                <Listbox.Option title={option.description} key={option.value} value={option.value}>
+                  {({ active, selected }) => (
+                    <div
+                      onClick={() => handleChange(selected ? field.value.filter((v) => v !== option) : [...field.value, option])}
+                      className={`${
+                        active ? 'text-white bg-blue-600' : ''
+                      } cursor-pointer select-none relative py-2 pl-10 pr-4`}
+                    >
+                      <span
+                        className={`${
+                          selected ? 'font-semibold' : 'font-normal'
+                        } block truncate`}
+                      >
+                        {option.icon}
+                        {option.value}
+                      </span>
+                      {selected && (
+                        <span
+                          className={`${
+                            active ? 'text-white' : 'text-blue-600'
+                          } absolute inset-y-0 left-0 flex items-center pl-3`}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-5 h-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M6.293 9.293a1 1 0 011.414 0L10 11.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          </div>
+        </>
+      )}
+    </Listbox>
+  );
+};

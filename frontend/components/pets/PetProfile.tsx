@@ -3,16 +3,17 @@ import { Tab } from '@headlessui/react';
 import Image from 'next/image';
 import classNames from 'classnames';
 import PetAvatar from '../PetAvatar';
-import AddNewEventModal from '../events/AddNewEventModal';
+import AddNewEventForPetModal from '../events/AddNewEventForPetModal';
 import { AddNewMedicationModal, Medication, MedicationSummary } from '../medications';
 import { Pet, PetSexAndTypeField, PetBio } from '.';
 import { Event, EventSummary } from '../events';
+import { Note, NotesList, AddNewNoteModal } from '../notes';
 import { FormikValues } from 'formik';
 import { updatePetBio } from '@/server_actions';
 import EditPetBioModal from './EditPetBioModal';
-import { Note, NotesList } from '../notes';
 import { toast } from 'react-toastify';
 
+  
 export default function PetProfile({ pet }: { pet: Pet }) {
 
     const { petBio, events, medications, notes, moods } = pet;
@@ -86,7 +87,7 @@ export default function PetProfile({ pet }: { pet: Pet }) {
                                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-pink-400 focus:outline-none focus:ring-2'
                             )}
                             >
-                                <EventsPanel events={events} petId={pet.id} />
+                                <EventsPanel events={events} pet={pet} />
                             </Tab.Panel>
                             <Tab.Panel className={classNames(
                                 'rounded-xl p-3',
@@ -100,7 +101,7 @@ export default function PetProfile({ pet }: { pet: Pet }) {
                                 'ring-white ring-opacity-60 ring-offset-2 ring-offset-pink-400 focus:outline-none focus:ring-2'
                             )}
                             >
-                                <NotesPanel notes={notes} name={pet.name} />
+                                <NotesPanel notes={notes} pet={pet} />
                             </Tab.Panel>
                         </Tab.Panels>
                     </Tab.Group>
@@ -150,12 +151,20 @@ function TabPanel({ title, actions, children } : { title: string, actions : Reac
     )
 }
 
-function NotesPanel({ notes, name } : { notes : Note[] | undefined | null, name : string }) {
+function NotesPanel({ notes, pet } : { notes : Note[] | undefined | null, pet: Pet }) {
+    if (!notes || notes.length == 0) return (
+        <TabPanel title="Notes" actions={
+        <>
+            <AddNewNoteModal pet={pet} />
+            </>}>
+            <h3>No events for this pet have been created yet.</h3>
+        </TabPanel>
+    );
 
     return (
-        <TabPanel title="Notes" actions={<></>}>
+        <TabPanel title="Notes" actions={<AddNewNoteModal pet={pet} />}>
             {notes === undefined || notes === null  ? (
-            <h3>No notes for {name}</h3>
+            <h3>No notes for {pet.name}</h3>
             ) : (
                 <NotesList notes={notes} />
             )}
@@ -188,7 +197,6 @@ function PetAboutPanel({ bio, name, id }: { bio?: PetBio, name: string, id: stri
                 <span className="flex flex-row">Adopted at: {adoptionDate ? adoptionDate : '?'}</span>
                 <span className="flex flex-row">Birthday: {birthDate ? birthDate : '?'}</span>
             </div>
-
             <div className="flex flex-row justify-between space-x-2">
                 <span className="flex flex-row">Weight: {weight ? `${weight} lbs` : '?'}</span>
                 <span className="flex flex-row">Size: {size ? size : '?'}</span>
@@ -197,28 +205,30 @@ function PetAboutPanel({ bio, name, id }: { bio?: PetBio, name: string, id: stri
     )
 }
 
-function EventsPanel({ events, petId }: { events: any, petId: string | number }) {
+function EventsPanel({ events, pet }: { events: any, pet : Pet }) {
 
     if (!events || events.length == 0) return (
         <TabPanel title="Events" actions={
         <>
-            <AddNewEventModal preselectedPets={[petId]} />
+            <AddNewEventForPetModal pet={pet} />
             </>}>
             <h3>No events for this pet have been created yet.</h3>
         </TabPanel>
     );
 
     return (
-        <TabPanel title={`Events`} actions={<></>}>
+        <TabPanel title={`Events`} actions={<><AddNewEventForPetModal pet={pet} /></>}>
+            <div>
             {events && events.map((event: Event) => (
                 <EventSummary key={event.id} event={event} />
             ))}
+            </div>
         </TabPanel>
     )
 }
 
 
-function MedicationsPanel({ medications, pet }: { medications: any, pet: Pet }) {
+function MedicationsPanel({ medications, pet } : { medications: any, pet: Pet }) {
 
     if (medications.length === 0) return (
         <div className="p-8">
@@ -228,10 +238,12 @@ function MedicationsPanel({ medications, pet }: { medications: any, pet: Pet }) 
     )
 
     return (
-        <TabPanel title="Medications" actions={<></>}> 
-            {medications && medications.map((medication: Medication) => (
-                <MedicationSummary key={medication.id} medication={medication} />
-            ))}
+        <TabPanel title="Medications" actions={<><AddNewMedicationModal pet={pet} /></>}> 
+            <div>
+                {medications && medications.map((medication: Medication) => (
+                    <MedicationSummary key={medication.id} medication={medication} />
+                ))}
+            </div>
         </TabPanel>
     )
 }

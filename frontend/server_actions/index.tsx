@@ -155,6 +155,27 @@ export async function addNewEvent(values : any) {
     return data;
 } 
 
+export async function addNewNote(values : any) {
+    
+    const { getToken } = auth();
+
+    const token = await getToken();
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/notes/add`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(values)
+    });
+
+    if(!response.ok) throw new Error('Failed to fetch data');
+    
+    const data = await response.json();
+
+    return data;
+} 
 
 //put/patch methods
 export async function updatePetBio(data : any) {

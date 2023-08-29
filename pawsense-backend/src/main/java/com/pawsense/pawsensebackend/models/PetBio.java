@@ -33,9 +33,6 @@ public class PetBio {
     @Column(name = "adoptionDate")
     private LocalDate adoptionDate;
 
-    @Column(name = " isFosterPet")
-    private boolean isFosterPet;
-
     @ElementCollection // Use ElementCollection for collections
     private Set<String> traits = new HashSet<>();
 
@@ -62,16 +59,13 @@ public class PetBio {
     }
 
     public PetBio(double weight, String size, String about, LocalDate birthDate, LocalDate adoptionDate,
-                  boolean isFosterPet, Set<String> traits, Set<String> photoIds,
-                  LocalDateTime addedAt, LocalDateTime lastUpdatedAt, Pet pet) {
+                  Set<String> traits, LocalDateTime addedAt, LocalDateTime lastUpdatedAt, Pet pet) {
         this.weight = weight;
         this.size = size;
         this.about = about;
         this.birthDate = birthDate;
         this.adoptionDate = adoptionDate;
-        this.isFosterPet = isFosterPet;
         this.traits = traits;
-        this.photoIds = photoIds;
         this.addedAt = addedAt;
         this.lastUpdatedAt = lastUpdatedAt;
         this.pet = pet;
@@ -125,28 +119,12 @@ public class PetBio {
         this.adoptionDate = adoptionDate;
     }
 
-    public boolean isFosterPet() {
-        return isFosterPet;
-    }
-
-    public void setFosterPet(boolean fosterPet) {
-        isFosterPet = fosterPet;
-    }
-
     public Set<String> getTraits() {
         return traits;
     }
 
     public void setTraits(Set<String> traits) {
         this.traits = traits;
-    }
-
-    public Set<String> getPhotoIds() {
-        return photoIds;
-    }
-
-    public void setPhotoIds(Set<String> photoIds) {
-        this.photoIds = photoIds;
     }
 
     public LocalDateTime getAddedAt() {
@@ -195,9 +173,7 @@ public class PetBio {
                 ", size='" + size + '\'' +
                 ", birthDate=" + birthDate +
                 ", adoptionDate=" + adoptionDate +
-                ", isFosterPet=" + isFosterPet +
                 ", traits=" + traits +
-                ", photoIds=" + photoIds +
                 ", addedAt=" + addedAt +
                 ", lastUpdatedAt=" + lastUpdatedAt +
                 '}';

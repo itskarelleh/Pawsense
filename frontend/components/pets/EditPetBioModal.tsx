@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Modal from '../Modal';
-import { PetBio } from ".";
+import { PetBio, traits } from ".";
 import { Formik, Field, FormikValues } from 'formik';
 import { EditPencil } from 'iconoir-react';
 import ListboxField from '../ListboxField';
-import { ActionButton } from '../inputs';
+import { ActionButton, MultiSelectListbox } from '../inputs';
 
 interface EditPetBioModalProps {
     title: string;
@@ -36,22 +36,10 @@ export default function EditPetBioModal({ title, bio, petId, handleSubmit }: Edi
 
     const toggleEditing = () => setIsEditing(prev => !prev);
 
-    // const initialValues: PetAboutInitialValues = {
-    //     weight: weight || 0.00,
-    //     size: size || '',
-    //     about: about || '',
-    //     birthDate: birthDate || null,
-    //     adoptionDate: adoptionDate || null,
-    //     isFosterPet: isFosterPet || false,
-    //     traits: [],
-    //     photoIds: [],
-    //     petId: petId
-    // };
-
     const initialValues: PetAboutInitialValues = {
         weight: weight || 0.00,
         size: size || '',
-        about: about || 'Pinot is a big baby who loves lots of food and lots of attention',
+        about: about || '',
         birthDate: birthDate || null,
         adoptionDate: adoptionDate || null,
         isFosterPet: isFosterPet || false,
@@ -59,6 +47,18 @@ export default function EditPetBioModal({ title, bio, petId, handleSubmit }: Edi
         photoIds: [],
         petId: petId
     };
+
+    // const initialValues: PetAboutInitialValues = {
+    //     weight: weight || 0.00,
+    //     size: size || '',
+    //     about: about || 'Pinot is a big baby who loves lots of food and lots of attention',
+    //     birthDate: birthDate || null,
+    //     adoptionDate: adoptionDate || null,
+    //     isFosterPet: isFosterPet || false,
+    //     traits: [],
+    //     photoIds: [],
+    //     petId: petId
+    // };
 
     // Track the form's dirty state
     const [isFormDirty, setIsFormDirty] = useState<boolean>(false);
@@ -124,6 +124,9 @@ export default function EditPetBioModal({ title, bio, petId, handleSubmit }: Edi
                                     <label>Size:
                                         <ListboxField type="size" options={sizes} label="Size" />
                                     </label>
+                                </div>
+                                <div className='grid grid-cols-1'>
+                                    <MultiSelectListbox options={traits} label='Traits' name="traits" />
                                 </div>
                             </div>
 

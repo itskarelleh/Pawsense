@@ -17,8 +17,7 @@ public class EventRequestBody {
 
     private String userId;
 
-//    private Set<Pet> attendees;
-    private Set<Long> attendeesIds;
+    private Long petId;
 
     private boolean isPublic;
 
@@ -74,12 +73,12 @@ public class EventRequestBody {
         this.userId = userId;
     }
 
-    public Set<Long> getAttendeesIds() {
-        return attendeesIds;
+    public Long getPetId() {
+        return petId;
     }
 
-    public void setAttendeesIds(Set<Long> attendeesIds) {
-        this.attendeesIds = attendeesIds;
+    public void setPetId(Long petId) {
+        this.petId = petId;
     }
 
     public boolean isPublic() {

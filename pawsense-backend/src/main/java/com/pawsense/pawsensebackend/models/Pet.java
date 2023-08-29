@@ -57,12 +57,11 @@ public class Pet {
     private PetBio petBio;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Medication> medications = new HashSet<>();
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "pet_event",
-            joinColumns = @JoinColumn(name = "pet_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id"))
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Event> events = new HashSet<>();
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.MERGE, orphanRemoval = true)
@@ -244,6 +243,16 @@ public class Pet {
     public void removeEvent(Event event) {
         events.remove(event);
     }
+
+    public void addNote(Note note) {
+        notes.add(note);
+    }
+
+    // Convenience method to remove an event from the pet
+    public void removeNote(Note note) {
+        notes.remove(note);
+    }
+
 
     public void addMood(Mood mood) {
         moods.add(mood);

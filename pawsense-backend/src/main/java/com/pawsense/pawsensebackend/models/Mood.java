@@ -1,5 +1,6 @@
 package com.pawsense.pawsensebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class Mood {
 
     @ManyToOne
     @JoinColumn(name = "pet_id")
+    @JsonBackReference
     private Pet pet;
 
     private String userId;

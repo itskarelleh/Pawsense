@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -18,8 +18,16 @@ public class WebSecurityConfig {
                 auth.requestMatchers("/api/v1/pets/**").authenticated()
                 .requestMatchers("/api/v1/events/**").authenticated()
                 .requestMatchers("/api/v1/medications/**").authenticated()
+                .requestMatchers("/api/v1/notes/**").authenticated()
                 ).oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         return http.build();
+    }
+
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        // Configure the converter as needed
+        return converter;
     }
 }
 

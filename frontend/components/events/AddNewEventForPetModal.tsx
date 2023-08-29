@@ -1,17 +1,16 @@
 "use client"
 import { useState } from "react";
-import { Loader } from "@googlemaps/js-api-loader";
 import { Plus } from "iconoir-react";
 import Modal from "../Modal";
 import { ActionButton } from "../inputs";
 import { Pet } from "../pets";
-import PetCombobox from "../pets/PetCombobox";
-import { Field, Formik, FormikHelpers, FormikValues, useField } from 'formik';
+import { Field, Formik,  FormikValues, useField } from 'formik';
 import { useUser } from "@clerk/nextjs";
 import { Listbox } from "@headlessui/react";
 import CustomToast from "../CustomToast";
 import { toast } from "react-toastify";
 import { addNewEvent } from "@/server_actions";
+import ListboxField from "../ListboxField";
 
 interface InitialValues {
     "title": string;
@@ -19,14 +18,13 @@ interface InitialValues {
     "type": string;
     "startsAt": string;
     "endsAt": string | null;
-    "attendees": Pet[] | null;
+    "petId": string | null;
     "userId": string | undefined;
     "isPublic": boolean;
 }
 
-export default function AddNewEventModal({ preselectedPets }: { preselectedPets: string[] }) {
+export default function AddNewEventForPetModal({ pet } : { pet: Pet}) {
 
-    //on load, get user location, if permission is granted
     const { user } = useUser();
     const [isOpen, setIsOpen ] = useState(false);
 
@@ -36,6 +34,8 @@ export default function AddNewEventModal({ preselectedPets }: { preselectedPets:
       
       try {
         const res = await addNewEvent(values);
+
+        console.log(res.json());
         toast.success(<CustomToast>
           New event added successfully!
           <a href="/event/${res.event-name}">View</a>
@@ -48,14 +48,13 @@ export default function AddNewEventModal({ preselectedPets }: { preselectedPets:
     }
 
     const initialValues: InitialValues = {
-        "title": "",
-        "description": "",
-        "type": "",
-        "startsAt": "",
-        "endsAt": "",
-        "attendees": [],
-        "userId": user?.id,
-        "isPublic": false
+        title: "",
+        description: "",
+        type: "",
+        startsAt: "",
+        endsAt: "",
+        petId: `${pet?.id}`,
+        userId: user?.id,
     }
 
     return (
@@ -74,8 +73,12 @@ export default function AddNewEventModal({ preselectedPets }: { preselectedPets:
                                     <span><span className="text-red-400 mr-2">*</span>Title</span>
                                     <Field className="input-text" name="title" type="text" />
                                 </label>
-                                <label htmlFor="eventType" className="flex flex-col">
+                                <ListboxField type="type" label="Type" options={["Vet", "Grooming", "Playdate", "Other"]} />
+                                <label className="flex flex-col">
                                     <span><span className="text-red-400 mr-2">*</span>Description</span>
+                                    <Field as="textarea" name="description" rows={5}
+                                            className=""
+                                        />
                                 </label>
                                 <div className="w-full grid grid-cols-12 gap-8">
                                     <label className="col-span-6">
@@ -85,22 +88,6 @@ export default function AddNewEventModal({ preselectedPets }: { preselectedPets:
                                     <label className="col-span-6">
                                         Ends At
                                         <CustomDateTimeField fieldName="endsAt"/>
-                                    </label>
-                                </div>
-                                {/* <label>
-                                    Location
-                                    <Map address="1148 Prospect Street, Ewing Township, NJ" />
-                                </label> */}
-                                <div className="grid grid-cols-12 gap-8">
-                                    <label htmlFor="description" className="col-span-6 flex flex-col">
-                                        Description / Details
-                                        <Field as="textarea" name="description" rows={5}
-                                            className=""
-                                        />
-                                    </label>
-                                    <label htmlFor="attendees" className="col-span-6">
-                                        Pets that are attending
-                                        <PetCombobox defaultIds={preselectedPets && preselectedPets} />
                                     </label>
                                 </div>
                                 <button className="button">Add Event</button>
@@ -121,10 +108,10 @@ function EventTypeSelectField() {
 
   return (
     <Listbox value={field.value} onChange={() => helpers.setValue(field.value)}>
-      <Listbox.Button>{field.value}</Listbox.Button>
+      <Listbox.Button>{field.value ? field.value : "Type"}</Listbox.Button>
       <Listbox.Options className="w-full">
-        {eventTypeOptions.map((eventTypeOption) => (
-          <Listbox.Option className="capitalize text-gray-900 dark:text-gray-100" value={eventTypeOption}>
+        {eventTypeOptions.map((eventTypeOption, index) => (
+          <Listbox.Option key={index} className="capitalize text-gray-900 dark:text-gray-100" value={eventTypeOption}>
             {eventTypeOption}
           </Listbox.Option>
         ))}

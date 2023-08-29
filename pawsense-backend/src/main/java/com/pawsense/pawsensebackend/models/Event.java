@@ -1,10 +1,12 @@
 package com.pawsense.pawsensebackend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -15,31 +17,28 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     private String type;
 
-    @Column(name="startsAt", columnDefinition = "timestamp")
+    @Column(name="startsAt", columnDefinition = "timestamp", nullable = false)
     private LocalDateTime startsAt;
+
     @Column(name="endsAt", columnDefinition = "timestamp")
     private LocalDateTime endsAt;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "pet_event",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "pet_id"))
-    private Set<Pet> attendees = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "pet_id")
+    @JsonBackReference
+    private Pet pet;
 
-    @Column(name="user_id")
+    @Column(name="user_id", nullable = false)
     private String userId;
-
-    @Column(name = "is_public")
-    private boolean isPublic;
 
     @Column(columnDefinition = "timestamp with time zone")
     private LocalDateTime createdAt;
@@ -49,17 +48,23 @@ public class Event {
 
     public Event() { }
 
-    public Event(String title, String description, String type, LocalDateTime startsAt, LocalDateTime endsAt, Set<Pet> attendees, String userId, boolean isPublic, LocalDateTime createdAt, LocalDateTime lastModifiedAt) {
+    public Event(String title, String description, String type, LocalDateTime startsAt, Pet pet, String userId, LocalDateTime createdAt, LocalDateTime lastModifiedAt) {
         this.title = title;
         this.description = description;
         this.type = type;
         this.startsAt = startsAt;
-        this.endsAt = endsAt;
-        this.attendees = attendees;
+        this.pet = pet;
         this.userId = userId;
-        this.isPublic = isPublic;
         this.createdAt = createdAt;
         this.lastModifiedAt = lastModifiedAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -102,12 +107,12 @@ public class Event {
         this.endsAt = endsAt;
     }
 
-    public Set<Pet> getAttendees() {
-        return attendees;
+    public Pet getPet() {
+        return pet;
     }
 
-    public void setAttendees(Set<Pet> attendees) {
-        this.attendees = attendees;
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
 
     public String getUserId() {
@@ -116,14 +121,6 @@ public class Event {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public boolean isPublic() {
-        return isPublic;
-    }
-
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -142,15 +139,4 @@ public class Event {
         this.lastModifiedAt = lastModifiedAt;
     }
 
-    // Helper method to add a pet to the attendees collection
-    public void addAttendee(Pet pet) {
-        attendees.add(pet);
-        pet.getEvents().add(this);
-    }
-
-    // Helper method to remove a pet from the attendees collection
-    public void removeAttendee(Pet pet) {
-        attendees.remove(pet);
-        pet.getEvents().remove(this);
-    }
 }

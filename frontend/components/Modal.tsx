@@ -30,7 +30,7 @@ export default function Modal({ title, isOpen, closeModal, children } : any) {
                 leave="ease-in duration-200"
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95">
-                <Dialog.Panel className="w-auto transform overflow-hidden box p-6 text-left align-middle transition-all">
+                <Dialog.Panel className="max-w-4/5 transform overflow-hidden box p-6 text-left align-middle transition-all">
                   <div className="flex flex-row justify-between items-center">
                   <Dialog.Title
                     as="h3"

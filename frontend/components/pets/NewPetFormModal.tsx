@@ -68,27 +68,15 @@ export default function NewPetFormModal() {
     const [isOpen, setIsOpen] = useState(false);
     const { user } = useUser();
   
-    // const initialValues: InitialValues = {
-    //   name: '',
-    //   type: '',
-    //   breed: '',
-    //   color: '',
-    //   sex: '',
-    //   avatar: null,
-    //   userId: user?.id
-    // }
-
-     const initialValues: InitialValues = {
-      name: 'Pinot',
-      type: 'cat',
-      breed: 'American Shorthair',
+    const initialValues: InitialValues = {
+      name: '',
+      type: '',
+      breed: '',
       color: '',
-      sex: 'M',
-      avatar: '',
+      sex: '',
+      avatar: null,
       userId: user?.id
     }
-
-  
 
     const validationSchema = Yup.object().shape({
       name: Yup.string().required('Name is required'),
@@ -154,15 +142,14 @@ export default function NewPetFormModal() {
                 <div className="grid grid-cols-1 sm:grid-cols-12 col-end-4 mb-8 p-10 gap-8">
                   <div className="sm:col-span-5 w-full sm:w-auto flex flex-row sm:flex-col items-center justify-center">
                       <div className="w-30 md:w-44">
-                          {/* <PetAvatarField /> */}
-                          <PetAvatar imgId='/pets/m1uqpdumgk9swlfwnqe8' width={500} height={500} isRounded />
+                          <PetAvatarField />
                       </div>
                   </div>
                   <div className="sm:col-span-7 flex flex-col md:items-center">
                       <div className="flex flex-col items-center [&>label]:w-full">
                           <label htmlFor="name">
                             <ErrorMessage name="name" className="text-xs text-red-500" />
-                            <Field type="text" name="name" className="input-text" placeholder="" />
+                            <Field type="text" name="name" className="input-text" placeholder="Name" />
                           </label> 
                           <ListboxField type="type" options={animalTypes} label="Type" defaultValue="cat" />
                           <ListboxField type="breed" options={breedsByAnimalType[props.values.type]} label="Breed" />

@@ -21,14 +21,10 @@ public class EventService {
     @Autowired
     private PetRepository petRepository;
 
-//    public List<Event> getPetEventsByUserId(String userId) {
-//        return eventRepository.findAllByUserId(userId);
-//    }
 
     public Set<Event> getEventsByPetId(Long petId) {
-        Pet pet = petRepository.findPetByPetId(petId);
 
-        return pet.getEvents();
+        return eventRepository.findAllByPetId(petId);
     }
 
     public Set<Event> getEventsCreatedByUser(String userId) {
@@ -41,21 +37,26 @@ public class EventService {
 
     public Event createNewEvent(EventRequestBody requestBody) {
 
-        Set<Long> attendeesIds = requestBody.getAttendeesIds();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm:ss");
+        Pet pet = petRepository.findPetById(requestBody.getPetId());
+
+        if(pet == null) return null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm");
 
         Event event = new Event(
-                requestBody.getTitle(), requestBody.getDescription(), requestBody.getType(),
-                LocalDateTime.parse(requestBody.getStartsAt(), formatter), LocalDateTime.parse(requestBody.getEndsAt(), formatter), new HashSet<>(), requestBody.getUserId(),
-                requestBody.isPublic(), LocalDateTime.now(), LocalDateTime.now()
+                requestBody.getTitle(),
+                requestBody.getDescription(),
+                requestBody.getType(),
+                LocalDateTime.parse(requestBody.getStartsAt(), formatter),
+                pet, requestBody.getUserId(),
+                LocalDateTime.now(), LocalDateTime.now()
         );
 
-        attendeesIds.forEach((Long id) -> {
-            Pet pet = petRepository.findPetByPetId(id);
-            pet.getEvents().add(event);
-            event.getAttendees().add(pet);
-            petRepository.save(pet);
-        });
+        if(requestBody.getEndsAt().length() > 0) {
+            event.setEndsAt(LocalDateTime.parse(requestBody.getEndsAt(), formatter));
+        }
+
+        pet.addEvent(event);
+        petRepository.save(pet);
 
         return eventRepository.save(event);
     }
