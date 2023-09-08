@@ -2,7 +2,8 @@ package com.pawsense.pawsensebackend.controllers;
 
 import com.pawsense.pawsensebackend.models.Pet;
 import com.pawsense.pawsensebackend.payload.request.NewPetRequestBody;
-import com.pawsense.pawsensebackend.payload.request.PetBioRequestBody;
+import com.pawsense.pawsensebackend.payload.request.PetStatsRequestBody;
+import com.pawsense.pawsensebackend.payload.request.UpdatePetRequestBody;
 import com.pawsense.pawsensebackend.payload.response.PetSummaryResponse;
 import com.pawsense.pawsensebackend.services.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +33,6 @@ public class PetController {
         }
     }
 
-    @GetMapping("/{petId}")
-    public ResponseEntity<Pet> getPetById(@PathVariable String petId) {
-        try {
-            Pet pet = petService.findPetById(Long.parseLong(petId));
-            return ResponseEntity.ok().body(pet);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     @GetMapping("/profile/{petId}")
     public ResponseEntity<?> getPetProfile(@PathVariable String petId) {
         try {
@@ -58,10 +48,16 @@ public class PetController {
         return ResponseEntity.ok().body(petService.addNewPet(petRequestBody));
     }
 
-    @PutMapping("/update-bio/{petId}")
-    public ResponseEntity<?> updatePetBio(@PathVariable String petId, @RequestBody PetBioRequestBody petBioRequestBody) {
+    @PutMapping("/update-pet/{petId}")
+    public ResponseEntity<?> updatePet(@PathVariable String petId, @RequestBody UpdatePetRequestBody requestBody) {
+        return ResponseEntity.ok().body(petService.updatePet(Long.parseLong(petId), requestBody));
+    }
 
-        return ResponseEntity.ok().body(petService.updatePetBio(Long.parseLong(petId), petBioRequestBody));
+
+    @PutMapping("/update-bio/{petId}")
+    public ResponseEntity<?> updatePetBio(@PathVariable String petId, @RequestBody PetStatsRequestBody petStatsRequestBody) {
+
+        return ResponseEntity.ok().body(petService.updatePetBio(Long.parseLong(petId), petStatsRequestBody));
     }
 
     @PutMapping("/edit/avatar/{petId}")

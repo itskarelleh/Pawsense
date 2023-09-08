@@ -23,7 +23,6 @@ public class Mood {
     @JoinColumn(name = "pet_id")
     @JsonBackReference
     private Pet pet;
-
     private String userId;
 
     private LocalDateTime createdAt;

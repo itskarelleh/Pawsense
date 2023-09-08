@@ -3,7 +3,7 @@ package com.pawsense.pawsensebackend.payload.request;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class PetBioRequestBody {
+public class PetStatsRequestBody {
 
     private double weight;
 

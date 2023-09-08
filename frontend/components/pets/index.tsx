@@ -85,7 +85,7 @@ function PetSexAndTypeField({ sex, type } : { sex: string, type: string }) {
     )
 }
 
-export interface PetBio {
+export interface PetStats {
     id: number | string | undefined;
     weight: number | undefined;
     size: string | undefined;
@@ -107,6 +107,7 @@ export interface Pet {
     avatar: string;
     userId: string;
     sex: string;
+    petStats: PetStats;
     medications: Medication[] | null | undefined;
     events: Event[] | null | undefined;
     notes: Note[] | null | undefined;

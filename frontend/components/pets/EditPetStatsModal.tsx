@@ -1,31 +1,28 @@
 import { useState } from 'react';
 import Modal from '../Modal';
-import { PetBio, traits } from ".";
+import { PetStats, traits } from ".";
 import { Formik, Field, FormikValues } from 'formik';
 import { EditPencil } from 'iconoir-react';
 import ListboxField from '../ListboxField';
 import { ActionButton, MultiSelectListbox } from '../inputs';
 
-interface EditPetBioModalProps {
+interface EditPetStatsModalProps {
     title: string;
-    bio: PetBio;
+    bio: PetStats;
     handleSubmit: void | Promise<any>;
     petId: string | number
 }
 
-interface PetAboutInitialValues {
+interface PetStatsInitialValues {
     weight: number;
     size: string;
-    about: string;
     birthDate: Date | string | null;
     adoptionDate: Date | string | null;
     isFosterPet: boolean;
-    traits: string[];
-    photoIds: string[];
     petId: string | number;
 }
 
-export default function EditPetBioModal({ title, bio, petId, handleSubmit }: EditPetBioModalProps) {
+export default function EditPetStatsModal({ title, bio, petId, handleSubmit }: EditPetStatsModalProps) {
 
     const { weight, size, about, birthDate, adoptionDate, isFosterPet } = bio;
     
@@ -36,29 +33,14 @@ export default function EditPetBioModal({ title, bio, petId, handleSubmit }: Edi
 
     const toggleEditing = () => setIsEditing(prev => !prev);
 
-    const initialValues: PetAboutInitialValues = {
+    const initialValues: PetStatsInitialValues = {
         weight: weight || 0.00,
         size: size || '',
-        about: about || '',
         birthDate: birthDate || null,
         adoptionDate: adoptionDate || null,
         isFosterPet: isFosterPet || false,
-        traits: [],
-        photoIds: [],
         petId: petId
     };
-
-    // const initialValues: PetAboutInitialValues = {
-    //     weight: weight || 0.00,
-    //     size: size || '',
-    //     about: about || 'Pinot is a big baby who loves lots of food and lots of attention',
-    //     birthDate: birthDate || null,
-    //     adoptionDate: adoptionDate || null,
-    //     isFosterPet: isFosterPet || false,
-    //     traits: [],
-    //     photoIds: [],
-    //     petId: petId
-    // };
 
     // Track the form's dirty state
     const [isFormDirty, setIsFormDirty] = useState<boolean>(false);

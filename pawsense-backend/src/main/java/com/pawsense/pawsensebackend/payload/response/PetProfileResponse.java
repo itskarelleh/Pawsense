@@ -2,17 +2,14 @@ package com.pawsense.pawsensebackend.payload.response;
 
 import com.pawsense.pawsensebackend.models.*;
 
-import java.time.LocalDate;
-import java.util.Set;
-
 public class PetProfileResponse {
    private Pet pet;
 
-   private PetBio petBio;
+   private PetStats petStats;
 
-   public PetProfileResponse(Pet pet, PetBio petBio) {
+   public PetProfileResponse(Pet pet, PetStats petStats) {
        this.pet = pet;
-       this.petBio = petBio;
+       this.petStats = petStats;
    }
 
     public Pet getPet() {
@@ -23,11 +20,11 @@ public class PetProfileResponse {
         this.pet = pet;
     }
 
-    public PetBio getPetBio() {
-        return petBio;
+    public PetStats getPetBio() {
+        return petStats;
     }
 
-    public void setPetBio(PetBio petBio) {
-        this.petBio = petBio;
+    public void setPetBio(PetStats petStats) {
+        this.petStats = petStats;
     }
 }

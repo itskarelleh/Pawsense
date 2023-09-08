@@ -12,7 +12,7 @@ export default async function Dashboard() {
 
     return (
         <div className="p-12 grid grid-cols-1 gap-8 bg-neutral-100 min-h-screen">
-            <DashboardSection title="Pets" actions={<NewPetFormModal/>}>
+            <DashboardSection title="Pets" actions={<NewPetFormModal />}>
                 <PetList pets={pets} />
                 {/* <PetAvatar imgId='/pets/m1uqpdumgk9swlfwnqe8' width="50" height="50" isRounded /> */}
             </DashboardSection>

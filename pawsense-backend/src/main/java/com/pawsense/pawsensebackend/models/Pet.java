@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "pets")
 @NamedEntityGraph(name = "pet-with-related-data",
     attributeNodes = {
-        @NamedAttributeNode("petBio"),
+        @NamedAttributeNode("petStats"),
         @NamedAttributeNode("medications"),
         @NamedAttributeNode("events"),
         @NamedAttributeNode("notes"),
@@ -54,7 +54,7 @@ public class Pet {
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     @JsonManagedReference
-    private PetBio petBio;
+    private PetStats petStats;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.MERGE, orphanRemoval = true)
     @JsonManagedReference
@@ -87,7 +87,7 @@ public class Pet {
     }
 
     public Pet(String name, String type, String sex, String avatar, String userId,
-               LocalDateTime addedAt, LocalDateTime lastUpdatedAt, PetBio petBio,
+               LocalDateTime addedAt, LocalDateTime lastUpdatedAt, PetStats petStats,
                Set<Medication> medications, Set<Event> events, Set<Note> notes, Set<Mood> moods) {
         this.name = name;
         this.type = type;
@@ -96,7 +96,7 @@ public class Pet {
         this.userId = userId;
         this.addedAt = addedAt;
         this.lastUpdatedAt = lastUpdatedAt;
-        this.petBio = petBio;
+        this.petStats = petStats;
         this.medications = medications;
         this.events = events;
         this.notes = notes;
@@ -183,12 +183,12 @@ public class Pet {
         this.userId = userId;
     }
 
-    public PetBio getPetBio() {
-        return petBio;
+    public PetStats getPetStats() {
+        return petStats;
     }
 
-    public void setPetBio(PetBio petBio) {
-        this.petBio = petBio;
+    public void setPetStats(PetStats petStats) {
+        this.petStats = petStats;
     }
 
     public Set<Medication> getMedications() {
@@ -290,7 +290,7 @@ public class Pet {
                 ", addedAt=" + addedAt +
                 ", lastUpdatedAt=" + lastUpdatedAt +
                 ", userId='" + userId + '\'' +
-                ", petBio=" + petBio +
+                ", petStats=" + petStats +
                 ", medications=" + medications +
                 ", events=" + events +
                 ", notes=" + notes +

@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
 import { uploadImage } from '@/functions';
 
-
 //get requests
 export async function getPets() {
   const { userId, getToken } = auth();
@@ -81,10 +80,6 @@ export async function getAllEventsForCurrentUser() {
     return data;
 }
 
-export async function getAllEventsForPet(petId : string) {
-
-}
-
 //post methods
 export async function addNewPet( values : any ) {
 
@@ -103,7 +98,6 @@ export async function addNewPet( values : any ) {
 
     const data = await res.json();
 
-    console.log(res.status);
     
     if(!res.ok) {
         throw new Error('There was a problem adding the pet. Please try again.');
@@ -127,6 +121,7 @@ export async function addNewMedication(values : any) {
     });
 
     if(!res.ok) throw new Error('Failed to fetch data');
+    
     const data = await res.json();
 
     return data;
@@ -175,10 +170,29 @@ export async function addNewNote(values : any) {
     const data = await response.json();
 
     return data;
-} 
+}
+
+export async function updatePet(data : any) {
+    const { getToken } = auth();
+
+    const token = await getToken();
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/update-pet/${data.petId}`, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(data) 
+    });
+
+    const d = await res.json();
+
+    return d;
+}
 
 //put/patch methods
-export async function updatePetBio(data : any) {
+export async function updatePetStats(data : any) {
 
     const { getToken } = auth();
 
@@ -203,7 +217,7 @@ export async function updatePetBio(data : any) {
 
 
 //delete methods
-export async function deletePet(petId : string) {
+export async function deletePet(petId : string | number) {
     
     const { getToken } = auth();
 

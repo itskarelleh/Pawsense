@@ -1,10 +1,10 @@
 package com.pawsense.pawsensebackend.services;
 
 import com.pawsense.pawsensebackend.models.Pet;
-import com.pawsense.pawsensebackend.models.PetBio;
+import com.pawsense.pawsensebackend.models.PetStats;
 import com.pawsense.pawsensebackend.payload.request.NewPetRequestBody;
-import com.pawsense.pawsensebackend.payload.request.PetBioRequestBody;
-import com.pawsense.pawsensebackend.payload.response.PetProfileResponse;
+import com.pawsense.pawsensebackend.payload.request.PetStatsRequestBody;
+import com.pawsense.pawsensebackend.payload.request.UpdatePetRequestBody;
 import com.pawsense.pawsensebackend.payload.response.PetSummaryResponse;
 import com.pawsense.pawsensebackend.repositories.*;
 import jakarta.transaction.Transactional;
@@ -21,16 +21,7 @@ public class PetService {
     PetRepository petRepository;
 
     @Autowired
-    PetBioRepository petBioRepository;
-
-    @Autowired
-    MedicationRepository medicationRepository;
-
-    @Autowired
-    EventRepository eventRepository;
-
-    @Autowired
-    NoteRepository noteRepository;
+    PetStatsRepository petStatsRepository;
 
     public Set<PetSummaryResponse> getAllPetsByUserId(String userId) {
         Set<Pet> pets = petRepository.findPetsByUserId(userId);
@@ -58,7 +49,7 @@ public class PetService {
 
         Pet pet = petRepository.findPetByPetId(id);
 
-        if (pet.getPetBio() != null) pet.setPetBio(petBioRepository.findBioById(pet.getPetBio().getId()));
+        if (pet.getPetStats() != null) pet.setPetStats(petStatsRepository.findBioById(pet.getPetStats().getId()));
 
         return petRepository.findPetByPetId(id);
     }
@@ -69,31 +60,43 @@ public class PetService {
         return petRepository.findPetWithPetBioById(id);
     }
 
+    public Pet updatePet(Long petId, UpdatePetRequestBody requestBody) {
+        Pet pet = findPetById(petId);
+
+        if(pet == null) return null;
+
+        pet.setName(requestBody.getName());
+        pet.setType(requestBody.getType());
+        pet.setAvatar(requestBody.getAvatar());
+        pet.setBreed(requestBody.getBreed());
+        pet.setColor(requestBody.getColor());
+        pet.setSex(requestBody.getSex());
+
+        return petRepository.save(pet);
+    }
+
     @Transactional
-    public Pet updatePetBio(Long petId, PetBioRequestBody requestBody) {
+    public Pet updatePetBio(Long petId, PetStatsRequestBody requestBody) {
         Pet pet = petRepository.findPetByPetId(petId);
 
         if (pet == null) return null;
 
-        PetBio petBio = new PetBio();
+        PetStats petStats = new PetStats();
 
-        if (pet.getPetBio() == null || petBio == null) {
-            petBio = new PetBio(LocalDateTime.now(), LocalDateTime.now(), pet);
+        if (pet.getPetStats() == null) {
+            petStats = new PetStats(LocalDateTime.now(), LocalDateTime.now(), pet);
         } else {
-            petBio = petBioRepository.findByPetId(pet.getId());
+            petStats = petStatsRepository.findByPetId(pet.getId());
         }
 
-        petBio.setWeight(requestBody.getWeight());
-        petBio.setAbout(requestBody.getAbout());
-        petBio.setSize(requestBody.getSize());
-        petBio.setBirthDate(requestBody.getBirthDate());
-        petBio.setAdoptionDate(requestBody.getAdoptionDate());
-        petBio.setTraits(requestBody.getTraits());
-        petBio.setLastUpdatedAt(LocalDateTime.now());
+        petStats.setWeight(requestBody.getWeight());
+        petStats.setSize(requestBody.getSize());
+        petStats.setBirthDate(requestBody.getBirthDate());
+        petStats.setAdoptionDate(requestBody.getAdoptionDate());
+        petStats.setLastUpdatedAt(LocalDateTime.now());
 
-        pet.setPetBio(petBio);
-
-        petBioRepository.save(petBio);
+        pet.setPetStats(petStats);
+        petStatsRepository.save(petStats);
 
         return petRepository.save(pet);
     }

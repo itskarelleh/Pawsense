@@ -19,17 +19,7 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     @Query("SELECT p FROM Pet p WHERE p.id = :id")
     Pet findPetByPetId(Long id);
 
-    @Query("SELECT DISTINCT pet " +
-            "FROM Pet pet " +
-            "LEFT JOIN FETCH pet.petBio " +
-            "LEFT JOIN FETCH pet.medications " +
-            "LEFT JOIN FETCH pet.events " +
-            "LEFT JOIN FETCH pet.moods " +
-            "LEFT JOIN FETCH pet.notes " +
-            "WHERE pet.id = :id")
-    Pet findPetProfileById(Long id);
-
-    @Query("SELECT p FROM Pet p LEFT JOIN FETCH p.petBio WHERE p.id = :id")
+    @Query("SELECT p FROM Pet p LEFT JOIN FETCH p.petStats WHERE p.id = :id")
     Pet findPetWithPetBioById(@Param("id") Long id);
 
 }
