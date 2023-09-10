@@ -98,3 +98,4 @@ graph LR
 ## Possible Future Features and Functionality
 - Curated articles recommended to users based on changes in their pet's personality and stats(lifestyle, age, diet)
 - Onboarding: It never hurts to ensure that a user understands the app and its features instead of letting them figure it out on their own
+- Share Pet Profile: Share certain information about your pet with caretakers, vets, and groomers.
