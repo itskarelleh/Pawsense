@@ -3,8 +3,7 @@ import Modal from '../Modal';
 import { PetStats, traits } from ".";
 import { Formik, Field, FormikValues } from 'formik';
 import { EditPencil } from 'iconoir-react';
-import ListboxField from '../ListboxField';
-import { ActionButton, MultiSelectListbox } from '../inputs';
+import { ActionButton, ListboxField, MultiSelectListbox } from '../inputs';
 
 interface EditPetStatsModalProps {
     title: string;

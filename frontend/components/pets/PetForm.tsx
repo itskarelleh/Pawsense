@@ -1,5 +1,4 @@
-import { PetAvatarField, SexRadioGroup } from "../inputs";
-import ListboxField from "../ListboxField";
+import { ListboxField, PetAvatarField, SexRadioGroup } from "../inputs";
 import * as Yup from 'yup';
 import { Listbox } from '@headlessui/react';
 import { Formik, Field, ErrorMessage, useField } from "formik";

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Plus } from "iconoir-react";
 import Modal from "../Modal";
-import { ActionButton } from "../inputs";
+import { ActionButton, ListboxField } from "../inputs";
 import { Pet } from "../pets";
 import { Field, Formik,  FormikValues, useField } from 'formik';
 import { useUser } from "@clerk/nextjs";
@@ -10,7 +10,6 @@ import { Listbox } from "@headlessui/react";
 import CustomToast from "../CustomToast";
 import { toast } from "react-toastify";
 import { addNewEvent } from "@/server_actions";
-import ListboxField from "../ListboxField";
 
 interface InitialValues {
     "title": string;
