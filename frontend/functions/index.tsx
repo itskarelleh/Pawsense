@@ -1,7 +1,29 @@
-import { auth } from "@clerk/nextjs";
+import { Image, Transformation, Cloudinary } from '@cloudinary/url-gen';
 
-// export async function replaceImage(file: any) {
-// }
+const cld = new Cloudinary({
+    cloud: {
+        cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+    }
+})
+
+export async function updateImage(file : File, existingImageId : string) {
+    if (!file) {
+        return;
+      }
+  
+      try {
+        // Upload the new image
+        const response = await cld.upload(file).toImage();
+        return response.image().publicId();
+  
+        // Update the existing image's public ID in your database
+        // Your database update logic goes here
+  
+      } catch (error) {
+        console.error('Error updating image:', error);
+      }
+
+}
 
 export async function uploadImage(file: any) {
 
@@ -20,27 +42,6 @@ export async function uploadImage(file: any) {
 
     const data = await res.json();
 
-    return data;
-}
-
-export async function addNewPet( values : any ) {
-    const { getToken } = auth();
-
-    const token = await getToken();
-
-    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/add`, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(values)
-    });
-
-    const data = await res.json();
-    
-    if(!res.ok) throw new Error('Failed to fetch data');
-    
     return data;
 }
 

@@ -8,7 +8,7 @@ interface PetFormProps {
   initialValues: any;
   onSubmit: any; 
   closeModal: any;
-  imageUrl?: string;
+  imageUrl?: string | undefined;
   onSubmitButtonLabel: string;
 }
 

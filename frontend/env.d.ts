@@ -13,5 +13,8 @@ namespace NodeJS {
         NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: string;
         NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: string;
         NEXT_PUBLIC_EXTERNAL_API: string;
+        NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: string;
+        NEXT_PUBLIC_UPLOAD_PRESET: string;
+        NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: string;
     }
 }

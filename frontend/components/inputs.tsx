@@ -36,6 +36,7 @@ export const PetAvatarField: React.FC<{ imageUrl: string }> = ({ imageUrl }) => 
 
   const clearFileInput = () => {
     if (inputRef.current) {
+      if(imageUrl) 
       inputRef.current.value = '';
       setAvatar(null);
       helpers.setValue(null); // Clear the field value in Formik as well
@@ -67,7 +68,11 @@ export const PetAvatarField: React.FC<{ imageUrl: string }> = ({ imageUrl }) => 
         <div className="relative cursor-pointer w-full h-full rounded-full overflow-hidden bg-neutral-400" onClick={handleClick}>
           <img
             className="absolute left-0 top-0 w-full"
-            src={avatar instanceof File ? URL.createObjectURL(avatar) : (imageUrl ? imageUrl : "/default-thumbnail.png")}
+            src={avatar instanceof File
+              ? URL.createObjectURL(avatar)
+              : avatar
+              ? avatar // Use the provided image URL if it exists
+              : "/default-thumbnail.png"}
             alt="Avatar"
           />
           <input

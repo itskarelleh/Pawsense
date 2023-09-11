@@ -16,8 +16,9 @@ import { Fragment, useState } from 'react';
 import { redirect } from 'next/navigation';
 import PetForm from './PetForm';
 import Modal from '../Modal';
-import { uploadImage } from '@/functions';
+import { updateImage } from '@/functions';
 import { Cloudinary } from '@cloudinary/url-gen';
+import { ArrowDown, NavArrowDown } from 'iconoir-react';
 
 const cld = new Cloudinary({ 
     cloud: {
@@ -44,8 +45,7 @@ export default function PetProfile({ pet }: { pet: Pet }) {
                                         ? 'tab-active'
                                         : ''
                                 )
-                            }
-                            >
+                            }>
                                 About
                             </Tab>
                             <Tab className={({ selected }) =>
@@ -140,7 +140,7 @@ function PetProfileHeader({ pet }: { pet: Pet }) {
     const onUpdate = async (values : any) => {
         try {
             if(values.avatar != pet.avatar) {
-                const avi = await uploadImage(values.avatar);
+                const avi = await updateImage(values.avatar);
                 values.avatar = avi;
             }
             const res = await updatePet(values);
@@ -163,10 +163,11 @@ function PetProfileHeader({ pet }: { pet: Pet }) {
     }
 
     const DropDown = () => (
-        <Menu as="div" className="absolute right-0 inline-block text-left">
+        <Menu as="div" className="absolute top-4 right-4 inline-block text-left">
             <div>
-                <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                Options
+                <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75
+                shadow-md">
+                    <NavArrowDown />
                 </Menu.Button>
             </div>
 
@@ -232,6 +233,7 @@ function PetProfileHeader({ pet }: { pet: Pet }) {
                 {pet.color}
             </div>
             <DropDown />
+            
         </header>
         <Modal title="Update Pet" isOpen={isOpen} closeModal={closeModal}>
             <PetForm 

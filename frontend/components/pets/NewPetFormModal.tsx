@@ -82,7 +82,7 @@ export default function NewPetFormModal() {
         </ActionButton>
       </div>
       <Modal title="Add New Pet" userId={user?.id} isOpen={isOpen} openModal={openModal} closeModal={closeModal}>
-        <PetForm closeModal={closeModal} initialValues={initialValues} onSubmit={handleSubmit} />
+        <PetForm onSubmitButtonLabel='Add New Pet' closeModal={closeModal} initialValues={initialValues} onSubmit={handleSubmit} />
       </Modal>
     </div>
     )
