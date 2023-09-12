@@ -1,10 +1,10 @@
 import './globals.css'
 import 'react-toastify/dist/ReactToastify.css';
-import { Outfit } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs';
 import { ToastContainer } from 'react-toastify';
-import { nunito_sans } from './fonts';
+import { nunito, nunito_sans } from './fonts';
 import Navbar from "@/components/nav/Navbar";
+
 export const metadata = {
   title: 'Pawsense',
   description: 'Ensuring that your pets live their best lives',
@@ -17,9 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-        <html lang="en">
+        <html lang="en" className={nunito.className}>
           <ToastContainer />
-          <body className={`${nunito_sans.className} min-h-screen`}>
+          <body className={`min-h-screen`}>
             <Navbar />
             <main>
               {children}
