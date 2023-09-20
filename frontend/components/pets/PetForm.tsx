@@ -2,6 +2,7 @@ import { ListboxField, PetAvatarField, SexRadioGroup } from "../inputs";
 import * as Yup from 'yup';
 import { Listbox } from '@headlessui/react';
 import { Formik, Field, ErrorMessage, useField } from "formik";
+import { PixelCrop } from 'react-image-crop';
 
 interface PetFormProps {
   initialValues: any;
@@ -111,6 +112,12 @@ export default function PetForm({ initialValues, onSubmit, closeModal, imageUrl,
     )
 
 }
+
+function CropImage({ file } : { file : File }) {
+
+
+}
+
 
 export function AnimalTypeField() {
 

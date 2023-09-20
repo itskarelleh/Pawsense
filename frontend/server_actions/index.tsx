@@ -1,7 +1,7 @@
 'use server'
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs';
-import { uploadImage } from '@/functions';
+import { uploadImage } from '../utils';
 
 //get requests
 export async function getPets() {
@@ -198,7 +198,7 @@ export async function updatePetStats(data : any) {
 
     const token = await getToken();
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/update-bio/${data.petId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_API}/api/v1/pets/update-stats/${data.petId}`, {
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',

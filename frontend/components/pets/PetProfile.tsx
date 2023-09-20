@@ -16,7 +16,7 @@ import { Fragment, useState } from 'react';
 import { redirect } from 'next/navigation';
 import PetForm from './PetForm';
 import Modal from '../Modal';
-import { updateImage } from '@/functions';
+import { updateImage } from '../../utils';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { ArrowDown, NavArrowDown } from 'iconoir-react';
 
@@ -34,7 +34,7 @@ export default function PetProfile({ pet }: { pet: Pet }) {
         <>
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 p-0 md:p-12">
                 <PetProfileHeader pet={pet} />
-                <section className='md:t-4 md:col-span-8 bg-white min-h-screen'>
+                <section className='md:col-span-8 bg-white min-h-screen'>
                     <Tab.Group>
                         <Tab.List className="pt-4 flex space-x-l  bg-neutral-100">
                             <Tab className={({ selected }) =>
@@ -216,7 +216,7 @@ function PetProfileHeader({ pet }: { pet: Pet }) {
         <>
             <header className="grid grid-cols-12 md:grid-cols-1 md:col-span-4 mb-8 md:mb-0 p-10 gap-8 md:gap-2 relative">
             <div className="col-span-5 md:col-span-1 flex flex-col items-center justify-center">
-                <div className="w-30 md:w-44">
+                <div className="w-28 md:w-44">
                     {pet.avatar ? 
                         <PetAvatar imgId={pet.avatar} width={500} height={500} format='jpg' isRounded />
                         :
@@ -225,12 +225,12 @@ function PetProfileHeader({ pet }: { pet: Pet }) {
                 </div>
             </div>
             <div className="col-span-7 md:col-span-1 md:flex md:flex-col md:items-center">
-                <div className="flex flex-row items-center space-x-4">
+                <div>
                     <h1>{pet.name}</h1>
                     <PetSexAndTypeField type={pet.type} sex={pet.sex} />
+                    {pet.breed}
+                    {pet.color}
                 </div>
-                {pet.breed}
-                {pet.color}
             </div>
             <DropDown />
             
@@ -287,7 +287,7 @@ function PetAboutPanel({ bio, name, id }: { bio?: PetStats, name: string, id: st
 
     const bioData: PetStats = bio || {};
 
-    const { about, adoptionDate, birthDate, weight, size } = bioData;
+    const { adoptionDate, birthDate, weight, size } = bioData;
     
     async function handleSubmit(values : FormikValues | any) {
         try {
@@ -300,15 +300,10 @@ function PetAboutPanel({ bio, name, id }: { bio?: PetStats, name: string, id: st
     }
 
     return (
-        <TabPanel title={`${name}'s Bio`} actions={<><EditPetStatsModal title={`Editing ${name}'s Details`} bio={bioData} petId={id} handleSubmit={handleSubmit} /></>}>
-            <p className='w-full'>
-                {about ? about : `${name} does not have a bio yet.`}
-            </p>
-            <div className="flex flex-row justify-between space-x-2">
+        <TabPanel title={`${name}'s Bio`} actions={<><EditPetStatsModal title={`Editing ${name}'s Details`} stats={bioData} petId={id} handleSubmit={handleSubmit} /></>}>
+            <div className="flex flex-col justify-between space-y-2">
                 <span className="flex flex-row">Adopted at: {adoptionDate ? adoptionDate : '?'}</span>
                 <span className="flex flex-row">Birthday: {birthDate ? birthDate : '?'}</span>
-            </div>
-            <div className="flex flex-row justify-between space-x-2">
                 <span className="flex flex-row">Weight: {weight ? `${weight} lbs` : '?'}</span>
                 <span className="flex flex-row">Size: {size ? size : '?'}</span>
             </div>

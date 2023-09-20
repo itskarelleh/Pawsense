@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useRef, ReactNode, ButtonHTMLAttributes } from 'react';
-import { Formik, Field, useField, useFormikContext, FormikValues, ErrorMessage } from 'formik';
+import { Field, useField, useFormikContext, ErrorMessage } from 'formik';
 import { RadioGroup, Listbox } from '@headlessui/react';
 import Intersex from './Intersex';
-import { Plus, Female, Male, QuestionMark, Cancel } from 'iconoir-react';
+import { Female, Male, QuestionMark, Cancel } from 'iconoir-react';
+import Image from 'next/image';
+import { Dialog } from '@headlessui/react';
+import { getCroppedImg} from "@/utils";
+import ReactCrop, { Crop } from "react-image-crop";
+import 'react-image-crop/dist/ReactCrop.css'
 
 type ActionButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: ReactNode;
@@ -34,7 +39,7 @@ export const ListboxField = ({
 
   return (
     <div className="w-full">
-      {errorMessageName && (<ErrorMessage className="text-xs text-red-500" name={errorMessageName} /> )}
+      {errorMessageName && (<ErrorMessage className="text-xs text-red-500" name={errorMessageName} />)}
       <Listbox value={field.value} onChange={(value) => helpers.setValue(value)}>
         {({ open }) => (
           <div className="input cursor-pointer relative w-full">
@@ -66,8 +71,9 @@ export const ListboxField = ({
         )}
       </Listbox>
     </div>
-);
+  );
 }
+
 
 export const PetAvatarField: React.FC<{ imageUrl: string }> = ({ imageUrl }) => {
   const [avatar, setAvatar] = useState<File | string | null>(null);
@@ -88,7 +94,7 @@ export const PetAvatarField: React.FC<{ imageUrl: string }> = ({ imageUrl }) => 
 
   const clearFileInput = () => {
     if (inputRef.current) {
-      if(imageUrl) 
+      if(imageUrl)
       inputRef.current.value = '';
       setAvatar(null);
       helpers.setValue(null); // Clear the field value in Formik as well
@@ -118,13 +124,22 @@ export const PetAvatarField: React.FC<{ imageUrl: string }> = ({ imageUrl }) => 
           </button>
         )}
         <div className="relative cursor-pointer w-full h-full rounded-full overflow-hidden bg-neutral-400" onClick={handleClick}>
-          <img
+          {/*<img*/}
+          {/*  className="absolute left-0 top-0 w-full"*/}
+          {/*  src={avatar instanceof File*/}
+          {/*    ? URL.createObjectURL(avatar)*/}
+          {/*    : avatar*/}
+          {/*    ? avatar // Use the provided image URL if it exists*/}
+          {/*    : "/default-thumbnail.png"}*/}
+          {/*  alt="Avatar"*/}
+          {/*/>*/}
+          <Image width={300} height={300}
             className="absolute left-0 top-0 w-full"
             src={avatar instanceof File
               ? URL.createObjectURL(avatar)
               : avatar
-              ? avatar // Use the provided image URL if it exists
-              : "/default-thumbnail.png"}
+                ? avatar // Use the provided image URL if it exists
+                : "/default-thumbnail.png"}
             alt="Avatar"
           />
           <input
@@ -197,8 +212,8 @@ export const SexRadioGroup: React.FC = () => {
   );
 };
 
-export const MultiSelectListbox: React.FC<{ label: string; options: any[]; name: string }> = ({ label, options, name }) => {
-  const [field] = useField(name);
+export const MultiSelectListbox: React.FC<{ label: string; options: string[]; name: string }> = ({ label, options, name }) => {
+  const [field] = useField<string>(name);
   const { setFieldValue } = useFormikContext();
 
   const handleChange = (selectedOption: any) => {
@@ -206,7 +221,7 @@ export const MultiSelectListbox: React.FC<{ label: string; options: any[]; name:
 
     if (isSelected) {
       // Remove the option if it's already selected
-      const updatedOptions = field.value.filter((option : any) => option.value !== selectedOption.value);
+      const updatedOptions = field.value.filter((option : string) => option.value !== selectedOption.value);
       setFieldValue(name, updatedOptions);
     } else {
       // Add the option if it's not selected

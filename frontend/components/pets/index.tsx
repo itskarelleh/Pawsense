@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PetAvatar from "../PetAvatar";
+import Image from 'next/image';
 import { getPets } from "@/server_actions";
 import { Female, Male, NavArrowRight, QuestionMark } from 'iconoir-react';
 import Link from 'next/link';
@@ -51,10 +52,11 @@ function PetSummary({ pet, selection, key } : { pet: Pet, selection: String[], k
                 <div className="w-[100px] h-[100px] rounded-full group-hover:p-2 transition-all ease-in bg-white group group-hover:bg-neutral-200">
                     {pet.avatar == '' || pet.avatar == null ? 
                     <figure className='w-[100px] h-[100px] rounded-full overflow-hidden'>
-                        <img src={placeholder} className='w-full' alt={pet.name} />
+                        {/*<img src={placeholder} className='w-full' alt={pet.name} />*/}
+                        <Image width={300} height={300} src={placeholder} className='w-full' alt={pet.name} />
                     </figure>
                     :
-                    <PetAvatar imgId={pet.avatar} width={100} height={100} format='jpg' isRounded />
+                    <PetAvatar imgId={pet.avatar} width={300} height={300} format='jpg' isRounded />
                     }
                 </div>
                 <h2 className="text-lg font-semibold group-hover:text-black">

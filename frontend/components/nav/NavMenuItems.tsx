@@ -13,8 +13,8 @@ export default function NavMenuItems({ items } : NavMenuItemsProps) {
 
     return (
         <>
-        {items.map((item) => (
-            <li>
+        {items.map((item, index) => (
+            <li key={index}>
                 <Link href={item.href}>
                     {item.label}
                 </Link>

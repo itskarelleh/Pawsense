@@ -1,4 +1,4 @@
-import { Image, Transformation, Cloudinary } from '@cloudinary/url-gen';
+import { Transformation, Cloudinary } from '@cloudinary/url-gen';
 
 const cld = new Cloudinary({
     cloud: {
@@ -33,7 +33,7 @@ export async function uploadImage(file: any) {
     const formData = new FormData();
 
     formData.append("file", file);
-    formData.append("upload_preset", `${process.env.NEXT_PUBLIC_UPLOAD_PRESET}`);
+    formData.append("upload_preset", `${process.env.NEXT_PUBLIC_UPLOAD_PRESET }`);
 
     const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
         method: "POST",

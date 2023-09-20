@@ -5,7 +5,7 @@ import Modal from '../Modal';
 import { useUser } from '@clerk/nextjs';
 import { ActionButton } from '../inputs';
 import { addNewPet } from '@/server_actions';
-import { uploadImage } from '@/functions';
+import { uploadImage } from '../../utils';
 import { toast } from 'react-toastify';
 import CustomToast from '../CustomToast';
 import { Plus } from 'iconoir-react';

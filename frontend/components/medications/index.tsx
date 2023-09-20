@@ -108,12 +108,13 @@ function MedicationSummary({ medication } : { medication : Medication }) {
     return (
         <>
             <div className='rounded-full w-full'>
-                <div className="flex flex-col items-center justify-between p-4 w-5/6 mx-auto">
+                <div className="flex flex-col justify-between p-4 w-5/6 mx-auto">
                     <div className="mb-4">
-                        <h3 className="text-lg md:text-xl font-bold">Name: {medication.name}</h3>
-                        {medication.brand && <p>Brand: {medication.brand}</p>}
+                        <h3 className="text-lg md:text-xl font-bold">{medication.name}</h3>
+                        {medication.brand && <p className="text-sm">{medication.brand}</p>}
                     </div>
-                    {medication.instructions && <button onClick={() => setIsOpen(true)} className="self-start font-bold">Instructions</button>}
+                    {medication.instructions && <button
+                                                        onClick={() => setIsOpen(true)} className="self-start font-bold hover:text-sky-500 transition-all ease-in-out">Instructions</button>}
                 </div>
             </div>
             {medication.instructions && (

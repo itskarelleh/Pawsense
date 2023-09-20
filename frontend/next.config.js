@@ -5,6 +5,15 @@ const nextConfig = {
     },
     serverRuntimeConfig: {
         maxRequestBodySize: '4mb',
+    },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com',
+                port: '',
+            }
+        ]
     }
 }
 
