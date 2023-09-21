@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "pet_bios")
+@Table(name = "pet_stats")
 public class PetStats {
 
     @Id

@@ -76,7 +76,7 @@ public class PetService {
     }
 
     @Transactional
-    public Pet updatePetBio(Long petId, PetStatsRequestBody requestBody) {
+    public Pet updatePetStats(Long petId, PetStatsRequestBody requestBody) {
         Pet pet = petRepository.findPetByPetId(petId);
 
         if (pet == null) return null;

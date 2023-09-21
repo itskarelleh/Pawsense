@@ -53,21 +53,9 @@ public class PetController {
         return ResponseEntity.ok().body(petService.updatePet(Long.parseLong(petId), requestBody));
     }
 
-
-    @PutMapping("/update-bio/{petId}")
-    public ResponseEntity<?> updatePetBio(@PathVariable String petId, @RequestBody PetStatsRequestBody petStatsRequestBody) {
-
-        return ResponseEntity.ok().body(petService.updatePetBio(Long.parseLong(petId), petStatsRequestBody));
-    }
-
-    @PutMapping("/edit/avatar/{petId}")
-    public ResponseEntity<?> updatePetAvatar(@PathVariable String petId, @RequestBody String avatarId) throws Exception {
-
-        Pet foundPet = petService.findPetById(Long.parseLong(petId));
-
-        foundPet.setAvatar(avatarId);
-
-        return ResponseEntity.ok().body(petService.updatePet(foundPet));
+    @PutMapping("/update-stats/{petId}")
+    public ResponseEntity<?> updatePetStats(@PathVariable String petId, @RequestBody PetStatsRequestBody requestBody) {
+        return ResponseEntity.ok().body(petService.updatePetStats(Long.parseLong(petId), requestBody));
     }
 
     @DeleteMapping("/delete/{petId}")
