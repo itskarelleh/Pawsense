@@ -2,13 +2,19 @@ package com.pawsense.pawsensebackend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "pet_stats")
+@Getter @Setter @NoArgsConstructor
 public class PetStats {
 
     @Id
@@ -16,8 +22,8 @@ public class PetStats {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "weight")
-    private double weight;
+    @OneToMany(mappedBy = "petStats", cascade = CascadeType.ALL)
+    private List<WeightHistory> weightHistory = new ArrayList<>();
 
     @Column(name = "size")
     private String size;
@@ -39,17 +45,14 @@ public class PetStats {
     @JsonBackReference
     private Pet pet;
 
-    public PetStats() { }
-
     public PetStats(LocalDateTime addedAt, LocalDateTime lastUpdatedAt, Pet pet) {
         this.addedAt = addedAt;
         this.lastUpdatedAt = lastUpdatedAt;
         this.pet = pet;
     }
 
-    public PetStats(double weight, String size, LocalDate birthDate, LocalDate adoptionDate,
-                    LocalDateTime addedAt, LocalDateTime lastUpdatedAt, Pet pet) {
-        this.weight = weight;
+    public PetStats(List<WeightHistory> weightHistory, String size, LocalDate birthDate, LocalDate adoptionDate, LocalDateTime addedAt, LocalDateTime lastUpdatedAt, Pet pet) {
+        this.weightHistory = weightHistory;
         this.size = size;
         this.birthDate = birthDate;
         this.adoptionDate = adoptionDate;
@@ -58,69 +61,10 @@ public class PetStats {
         this.pet = pet;
     }
 
-    public Long getId() {
-        return id;
+    public void addWeightHistory(double weight, LocalDate updateDate) {
+        WeightHistory weightHistory = new WeightHistory(weight, updateDate, this);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public LocalDate getAdoptionDate() {
-        return adoptionDate;
-    }
-
-    public void setAdoptionDate(LocalDate adoptionDate) {
-        this.adoptionDate = adoptionDate;
-    }
-
-    public LocalDateTime getAddedAt() {
-        return addedAt;
-    }
-
-    public void setAddedAt(LocalDateTime addedAt) {
-        this.addedAt = addedAt;
-    }
-
-    public LocalDateTime getLastUpdatedAt() {
-        return lastUpdatedAt;
-    }
-
-    public void setLastUpdatedAt(LocalDateTime lastUpdatedAt) {
-        this.lastUpdatedAt = lastUpdatedAt;
-    }
-
-    public Pet getPet() {
-        return pet;
-    }
-
-    public void setPet(Pet pet) {
-        this.pet = pet;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -139,7 +83,7 @@ public class PetStats {
     public String toString() {
         return "PetStats{" +
                 "id=" + id +
-                ", weight=" + weight +
+                ", weightHistory=" + weightHistory +
                 ", size='" + size + '\'' +
                 ", birthDate=" + birthDate +
                 ", adoptionDate=" + adoptionDate +

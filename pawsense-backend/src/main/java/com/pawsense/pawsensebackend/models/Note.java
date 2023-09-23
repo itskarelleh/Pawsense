@@ -2,11 +2,15 @@ package com.pawsense.pawsensebackend.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notes")
+@Getter @Setter @NoArgsConstructor
 public class Note {
 
     @Id
@@ -32,8 +36,6 @@ public class Note {
     @Column(name = "lastUpdatedAt")
     private LocalDateTime lastUpdated;
 
-    public Note() { }
-
     public Note(String title, String details, String userId, Pet pet,
                 LocalDateTime createdAt, LocalDateTime lastUpdated) {
         this.title = title;
@@ -41,62 +43,6 @@ public class Note {
         this.userId = userId;
         this.pet = pet;
         this.createdAt = createdAt;
-        this.lastUpdated = lastUpdated;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Pet getPet() {
-        return pet;
-    }
-
-    public void setPet(Pet pet) {
-        this.pet = pet;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 }

@@ -105,12 +105,13 @@ function AddNewMedicationModal({ pet } : { pet : Pet }) {
 function MedicationSummary({ medication } : { medication : Medication }) {
 
     const [ isOpen, setIsOpen ] = useState<boolean>(false);
+
     return (
         <>
-            <div className='rounded-full w-full'>
-                <div className="flex flex-col justify-between p-4 w-5/6 mx-auto">
+            <div className='summary-outer-container'>
+                <div className="summary-inner-container">
                     <div className="mb-4">
-                        <h3 className="text-lg md:text-xl font-bold">{medication.name}</h3>
+                        <h3>{medication.name}</h3>
                         {medication.brand && <p className="text-sm">{medication.brand}</p>}
                     </div>
                     {medication.instructions && <button

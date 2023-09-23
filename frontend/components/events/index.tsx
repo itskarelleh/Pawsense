@@ -1,6 +1,4 @@
-import PetAvatar from "../PetAvatar"
 import { Pet } from "../pets"
-import { H3 } from "../typography"
 
 export interface Event {
     id: number | string,
@@ -15,12 +13,23 @@ export interface Event {
     lastModifiedAt: Date 
 }
 
-
 function EventSummary({ event } : { event : Event }) {
     return (
-        <div>
-            {event.title}
-            {event.type}
+        <div className="summary-outer-container">
+
+           <div className="summary-inner-container">
+               <div className="flex flex-col-reverse">
+                   <h3>
+                       {event.title}
+                   </h3>
+                   <small>
+                       {event.type}
+                   </small>
+               </div>
+               <div>
+                   {event.startsAt} {event.endsAt && ` to ${event.endsAt}`}
+               </div>
+           </div>
         </div>
     )
 }

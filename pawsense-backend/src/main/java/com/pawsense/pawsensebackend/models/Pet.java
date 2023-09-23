@@ -2,6 +2,9 @@ package com.pawsense.pawsensebackend.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -10,6 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "pets")
+@Getter @Setter @NoArgsConstructor
 @NamedEntityGraph(name = "pet-with-related-data",
     attributeNodes = {
         @NamedAttributeNode("petStats"),
@@ -70,10 +74,6 @@ public class Pet {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.MERGE, orphanRemoval = true)
     Set<Mood> moods = new HashSet<>();
 
-    public Pet() {
-
-    }
-
     public Pet(String name, String type, String breed, String color, String sex, String avatar, String userId, LocalDateTime addedAt, LocalDateTime lastUpdatedAt) {
         this.name = name;
         this.type = type;
@@ -100,126 +100,6 @@ public class Pet {
         this.medications = medications;
         this.events = events;
         this.notes = notes;
-        this.moods = moods;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getBreed() {
-        return breed;
-    }
-
-    public void setBreed(String breed) {
-        this.breed = breed;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public LocalDateTime getAddedAt() {
-        return addedAt;
-    }
-
-    public void setAddedAt(LocalDateTime addedAt) {
-        this.addedAt = addedAt;
-    }
-
-    public LocalDateTime getLastUpdatedAt() {
-        return lastUpdatedAt;
-    }
-
-    public void setLastUpdatedAt(LocalDateTime lastUpdatedAt) {
-        this.lastUpdatedAt = lastUpdatedAt;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public PetStats getPetStats() {
-        return petStats;
-    }
-
-    public void setPetStats(PetStats petStats) {
-        this.petStats = petStats;
-    }
-
-    public Set<Medication> getMedications() {
-        return medications;
-    }
-
-    public void setMedications(Set<Medication> medications) {
-        this.medications = medications;
-    }
-
-    public Set<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(Set<Event> events) {
-        this.events = events;
-    }
-
-    public Set<Note> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(Set<Note> notes) {
-        this.notes = notes;
-    }
-
-    public Set<Mood> getMoods() {
-        return moods;
-    }
-
-    public void setMoods(Set<Mood> moods) {
         this.moods = moods;
     }
 
