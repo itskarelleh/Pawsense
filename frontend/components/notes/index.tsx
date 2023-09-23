@@ -88,11 +88,11 @@ export function AddNewNoteModal({ pet } : { pet : Pet }) {
     )
 }
 
-export function NoteSummary({ note, onClick } : { note : Note, onClick: any }) {
+export function NoteSummary({ note } : { note : Note }) {
 
     return (
-        <div className='rounded-full w-full group hover:bg-neutral-300'>
-            <div className="flex flex-col justify-between ">
+        <div className='summary-outer-container'>
+            <div className="summary-inner-container">
                 <div className="mb-4">
                     <h3>Name: {note.title}</h3>
                     
@@ -103,20 +103,12 @@ export function NoteSummary({ note, onClick } : { note : Note, onClick: any }) {
     )
 }
 
-
 export function NotesList({ notes } : { notes: Note[] }) {
 
     return (
         <div>
             {notes && notes.map((note : Note) => (
-                <div key={note.id} className="p-4 rounded-lg border-neutral-400">
-                    <h3 className='text-lg md:text-xl font-bold'>
-                        {note.title}
-                    </h3>
-                    <p>
-                        {note.details}
-                    </p>
-                </div>
+                <NoteSummary note={note} key={note.id} />
             ))}
         </div>
     )

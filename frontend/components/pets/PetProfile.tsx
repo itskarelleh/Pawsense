@@ -18,7 +18,7 @@ import PetForm from './PetForm';
 import Modal from '../Modal';
 import { updateImage } from '../../utils';
 import { Cloudinary } from '@cloudinary/url-gen';
-import { ArrowDown, NavArrowDown } from 'iconoir-react';
+import { ArrowDown, MoreHoriz, NavArrowDown } from "iconoir-react";
 
 const cld = new Cloudinary({ 
     cloud: {
@@ -165,9 +165,9 @@ function PetProfileHeader({ pet }: { pet: Pet }) {
     const DropDown = () => (
         <Menu as="div" className="absolute top-4 right-4 inline-block text-left">
             <div>
-                <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75
+                <Menu.Button className="font-bold shadow-none transition-all ease-in-out inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-transparent rounded-full hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-opacity-75
                 shadow-md">
-                    <NavArrowDown />
+                    <MoreHoriz />
                 </Menu.Button>
             </div>
 
@@ -285,7 +285,7 @@ function NotesPanel({ notes, pet } : { notes : Note[] | undefined | null, pet: P
 
 function PetAboutPanel({ bio, name, id }: { bio?: PetStats, name: string, id: string | number }) {
 
-    const bioData: PetStats = bio || {};
+    const bioData: any = bio || {};
 
     const { adoptionDate, birthDate, weight, size } = bioData;
     
