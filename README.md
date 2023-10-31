@@ -29,7 +29,7 @@ Once a user is authenticated, they are directed to a page on the app that shows 
 <a name="stack"></a>
 
 ## Stack
-The frontend and backend are separate from each other since both have different programming languages and frameworks.
+The frontend and back end are separate from each other since both have different programming languages and frameworks.
 
 ### Frontend
 - Next.js (Client)
@@ -63,7 +63,7 @@ graph LR
   C --> D(Show Pet Details)
 ```
 
-### Add new pet to household
+### Add a new pet to the household
 ```mermaid
 graph LR
   A((User)) -->|Adds new Pet| B(Create Pet)
@@ -94,6 +94,81 @@ graph LR
   D --> E(Delete Row from MySQL Table)
   C -->|No| E
 ```
+
+
+## Prerequisites and Running Locally
+Before running this project locally you'll need the following
+- Node.js (version 18+)
+- JDK 17
+- Maven
+- PostgreSQL(version 14+)
+- Clerk Dev account
+- Cloudinary account
+
+First, clone this repository
+
+Second open the pawsense-backend directory from the root directory of the project and added the following to application.properties:
+
+```application.properties
+
+# PostgreSQL configuration
+spring.datasource.url=jdbc:postgresql://localhost:5432/pawsense #this can stay the same or you can changing to what you want
+spring.datasource.username= 
+spring.datasource.password=
+spring.jpa.show-sql=true
+
+# Update the dialect for PostgreSQL
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+# Hibernate Settings
+spring.jpa.hibernate.ddl-auto=update
+
+spring.devtools.add-properties=false
+spring.security.user.password=none
+#spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
+-Djps.track.ap.dependencies=true
+
+
+# JWT - can be found under the clerk application you created for this project
+clerk.audience=
+spring.security.oauth2.resourceserver.jwt.issuer-uri=
+spring.security.oauth2.resourceserver.jwk-set-uri=
+
+spring.main.allow-bean-definition-overriding=true
+client.url=http://localhost:3000
+
+```
+
+You can now run and build by running the following command:
+```bash
+  mvn spring-boot:run
+```
+
+Now go to the frontend directory from the root directory and add the following to .env.local file:
+
+```.env.local
+#this variable should change to true when deploying to Vercel
+IS_PRODUCTION=false
+
+#can find both under API keys tab
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+# does not need to be changed but if you want to, you can update them here and under the Paths tab
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
+NEXT_PUBLIC_EXTERNAL_API=http://localhost:8080
+
+# find under the "Set Up Work Environment" section located on Get Started tab
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=dwvdml8mi
+# find and/or add an unsigned upload preset under the settings of your Cloudinary application
+NEXT_PUBLIC_UPLOAD_PRESET=jpttrz2h
+
+```
+  
 
 ## Possible Future Features and Functionality
 - Curated articles recommended to users based on changes in their pet's personality and stats(lifestyle, age, diet)
